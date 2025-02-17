@@ -1,0 +1,30 @@
+@import '../styles/variables.scss';
+
+.root {
+	position: relative;
+	width: 100%;
+	// padding: $GLOBAL-MARGIN 0;
+
+	.wrapper {
+		width: 100%;
+		margin: 0;
+		padding: 0;
+
+		@include lg {
+			// width: 80%;
+			max-width: $MAX-WIDTH;
+			margin: 0 auto;
+			font-size: 18px;
+		}
+
+	}
+}
+
+.box {
+	width: 100%;
+	aspect-ratio: 16 / 9;
+
+	@include lg {
+		aspect-ratio: 16 / 9;
+	}
+}

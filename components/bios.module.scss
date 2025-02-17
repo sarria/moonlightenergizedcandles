@@ -1,0 +1,214 @@
+@import '../styles/variables.scss';
+@import '../styles/shared-styles.scss';
+
+.root {
+	position: relative;
+	width: 100%;
+
+	@include md {
+		padding-bottom: $GLOBAL-MARGIN*2;
+	}
+		
+	.wrapper {
+		position: relative;
+		width: 100%;
+		
+		&.marginLeft {
+			@include sm {
+				width: 80%;
+				margin: 0 auto;
+			}
+		}
+
+		@include sm {
+			width: auto;
+			margin: 0 $GLOBAL-MARGIN;
+		}
+
+		@include lg {
+			max-width: $MAX-WIDTH;
+			margin: 0 auto;
+			padding: 0px;
+		}
+
+		.item {
+			position: absolute;
+			display: none;
+			top: 0;
+			z-index: 1;
+
+			@include md {
+				position: relative;
+				display: block;
+			}
+
+			&.showItem {
+				display: block;
+			}
+
+			.content {
+				display: flex;
+				flex-direction: column;
+				justify-content: right;
+				padding-top: 0;
+
+				@include md {
+					flex-direction: row;
+					padding-top: $GLOBAL-MARGIN;
+				}
+
+				.photo {
+					width: auto;
+					position: relative;
+
+					.closeBtn {
+						position: absolute;
+						z-index: 1;
+						top: 15px;
+						right: 15px; 
+						width: 30px; /* Button width */
+						height: 30px; 
+						background-color: black; 
+						color: white; 
+						border: 1px solid white;
+						border-radius: 50%; 
+						font-size: 20px;
+						line-height: 30px; 
+						text-align: center; 
+						cursor: pointer; 
+						box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for elevation */
+						transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover/active effects */
+					}
+
+					@include md {
+						width: 50%;
+
+						.closeBtn {
+							display: none;
+						}
+					}					  
+				}
+
+				.bio {
+					width: auto;
+					color: white;
+
+					@include md {
+						width: 50%;
+						display: flex;
+						flex-direction: column;						
+					}
+
+					.text {
+						text-align: left;
+						background-color: $BLUE-COLOR;
+						padding: 24px $GLOBAL-MARGIN/2;
+						margin: 0;
+
+
+						@include md {
+							padding: 24px 13% 13% 13%;
+						}
+
+						> p {
+							margin-top: 0;
+						}
+
+						.name {
+							text-transform: uppercase;
+							font-size: 40px;
+							font-family: 'Montserrat', sans-serif; /* or 'Montserrat  Poppins' */
+							font-weight: 600; /* Adjust weight for thickness */
+							letter-spacing: 0px;
+							margin: 0 0 30px 0;
+							line-height: 40px;
+
+							@include md {
+								
+							}							
+						}
+					}
+
+					.yellowBar {
+						@extend .labelYellowBar;
+						top: 0;
+					}
+				}
+			}
+		}
+
+		.thumbnails {
+			display: flex;
+			justify-content: center;
+			flex-direction: row;
+			flex-wrap: wrap;			
+			// margin-bottom: $GLOBAL-MARGIN * 2;
+		
+			.thumbnail {
+				cursor: pointer;
+				overflow: hidden;
+				transition: border 0.3s;
+				width: 50%;
+
+				@include md {
+					width: 17.11%; //11.11%;
+					border-bottom: solid 15px transparent;
+					margin-bottom: 15px;
+				}
+		
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+		
+					// Apply grayscale by default
+					transition: filter 0.3s ease;
+
+					@include md {
+						filter: grayscale(100%);
+					}					
+				}
+		
+				&:hover img {
+					// Remove grayscale on hover
+					filter: grayscale(0%);
+				}
+		
+				&.active img {
+					// Remove grayscale when selected
+					filter: grayscale(0%);
+				}
+		
+				&.active {
+					border-bottom-color: $DARKER-COLOR; // Use your defined darker color
+				}
+			}
+		}
+		
+			
+		
+	}
+
+	.next {
+		display: none;
+
+		@include md {
+			width: 80%;
+			margin: 0 auto;
+			display: flex;
+			justify-content: flex-end;
+			font-weight: 700;
+			  font-size: 16px;
+			color: $BLUE-COLOR;
+			
+			& > div:hover {
+				cursor: pointer;
+				text-decoration: underline;
+			}
+		}		
+	}
+
+	h2, h3, h4, h5, h6 {
+		margin-top: 0;
+	}	
+}

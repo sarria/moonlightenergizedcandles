@@ -1,0 +1,97 @@
+@import '../styles/BrandonGrotesque.scss';
+@import '../styles/Qeilab.scss';
+
+body {
+  scroll-behavior: smooth;
+  padding: 0;
+  margin: 0;
+  font-family: 'Brandon Grotesque', 'Poppins', sans-serif;
+  font-size: 18px;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.67;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000000; /* #707070; */
+  background-color: #FAFAFA;
+}
+
+/* .burger {
+  z-index: 99;
+  position: absolute;
+} */
+
+.grid-container {
+  display: inline-grid;
+}
+
+.hasLink .inner {
+  
+}
+
+@media (min-width: 768px) {
+  // .hasLink .inner {
+  //   -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+  //   filter: grayscale(100%);
+  // }
+}
+
+.hasLink .inner:hover {
+
+}
+
+@media (min-width: 768px) {
+  .hasLink .inner:hover {
+    -webkit-filter: grayscale(0%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(0%);
+  }
+}
+
+
+gold {
+  color: #f7b008;
+}
+
+.carousel .slick-arrow {
+  display: none !important;
+}
+
+.ratio_container .outer {
+  width: 100%;
+  padding-top: 100%; /* defines aspect ratio */
+  position: relative;
+}
+.ratio_container .outer .inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/*
+<div style={{"--aspect-ratio":16/9}} className={styles.box}></div>
+*/
+
+[style*="--aspect-ratio"] > :first-child {
+  width: 100%;
+}
+[style*="--aspect-ratio"] > img {  
+  height: auto;
+} 
+@supports (--custom:property) {
+  [style*="--aspect-ratio"] {
+    position: relative;
+  }
+  [style*="--aspect-ratio"]::before {
+    content: "";
+    display: block;
+    padding-bottom: calc(100% / (var(--aspect-ratio)));
+  }  
+  [style*="--aspect-ratio"] > :first-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+  }  
+}

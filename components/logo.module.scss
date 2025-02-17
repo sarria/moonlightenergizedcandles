@@ -1,0 +1,14 @@
+@import '../styles/variables.scss';
+
+.root {
+
+	.wrapper {
+		width: 250px;
+		cursor: pointer;
+
+		@include md {
+			width: 250px;
+		}
+	}
+
+}

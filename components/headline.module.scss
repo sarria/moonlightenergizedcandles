@@ -1,0 +1,42 @@
+@import '../styles/variables.scss';
+// @import '../styles/shared-styles.scss';
+
+.root {
+	position: relative;
+	width: 100%;
+	padding-top: $GLOBAL-MARGIN;
+	text-transform: uppercase;
+
+	.wrapper {
+		text-align: center;
+
+		h1 {
+			font-family: 'Qeilab';
+			font-weight: 300;
+			margin-top: 0;
+			font-size: 45px;
+			line-height: 55px;
+
+			@include md {
+				font-size: 60px;
+				line-height: 80px;
+			}
+
+			@include xl {
+				font-size: 70px;
+				margin: 35px 0 0 0;
+			}			
+		}
+
+		h2 {
+			font-size: 16px;
+			line-height: 30px;
+			font-weight: 300;
+
+			@include xl {
+				font-size: 22px;
+			}			
+		}
+
+	}	
+}

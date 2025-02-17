@@ -1,0 +1,63 @@
+@import '../styles/variables.scss';
+
+.root {
+	
+	.wrapper {
+		position: relative;
+	
+		&.padding {
+			padding: 7px;
+
+			@include xxl {
+				padding: 15px;
+			}
+		}
+
+		&.hasLink {
+			cursor: pointer;
+		}
+
+		.link {
+			position: absolute;
+			bottom: 0px;
+			right: 0px;
+			color: white;
+			font-size: 25px;
+			font-weight: 700;
+			text-align: right;
+			padding-right: 20px;
+
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
+
+		}
+		
+		.label {
+			padding: 10px 0;
+  			text-align: center;
+			font-size: 16px;
+		}
+
+		.ico {
+			position: absolute;
+			top: calc(50% - 30px);
+			left: calc(50% - 30px);
+			width: 60px;
+			color: white;
+			opacity: 0;
+			transition: opacity 0.3s ease-in-out;
+		}		
+	}
+
+	.wrapper:hover {
+		// -webkit-filter: grayscale(80%); /* Safari 6.0 - 9.0 */
+		// filter: grayscale(80%);
+
+		.ico {
+			opacity: 1;
+		}
+	}	
+	
+}

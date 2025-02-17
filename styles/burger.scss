@@ -1,0 +1,55 @@
+@import './breakpoints.scss';
+@import './variables.scss';
+
+/**
+Hamburger
+**/
+.hamburger {
+	cursor: pointer;
+	z-index: 10;
+}
+
+.hamburger div {
+	position: relative;
+	width: 44px;
+	height: 5px;
+	border-radius: 3px;
+	background-color: $FONT-BLACK;
+	margin-top: 5px;
+	/* transition: all 0.3s ease-in-out; */
+}
+
+/**
+Animations
+**/
+
+#toggle {
+	display: none;
+}
+
+// #toggle:checked + .hamburger .topBun {
+#toggle:checked + .navigation + .pageTop + .burger .hamburger .topBun {
+	transition: transform .2s ease-in-out;
+	transform: rotate(-45deg);
+	background-color: #000;
+	top: 14px;	
+}
+#toggle:checked + .navigation + .pageTop + .burger .hamburger .meat {
+	opacity: 0;
+}
+#toggle:checked + .navigation + .pageTop + .burger .hamburger .bottomBun {
+	transition: transform .2s ease-in-out;
+	transform: rotate(45deg);
+	background-color: #000;
+	top: -6px;
+}
+
+#toggle + .navigation {
+	display: none;
+}
+
+#toggle:checked + .navigation {
+	display: block;
+	top: 0;
+	opacity: 1;
+}

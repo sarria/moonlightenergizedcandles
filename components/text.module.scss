@@ -1,0 +1,28 @@
+@import '../styles/variables.scss';
+
+.root {
+	position: relative;
+	width: 100%;
+}
+
+.wrapper {
+	width: 100%;
+	margin: 0 auto;
+	padding: 0 $GLOBAL-MARGIN/2;
+	text-align: left;
+	font-size: 20px;
+	line-height: 25px;
+	font-weight: 300;
+
+	@include md {
+		width: 80%;
+		padding: 0 $GLOBAL-MARGIN;
+		max-width: $MAX-WIDTH;
+		margin: 0 auto;
+		padding: 0px;
+	}
+
+	a {
+		color: inherit;
+	}
+}

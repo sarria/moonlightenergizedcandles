@@ -1,0 +1,150 @@
+@import '../styles/variables.scss';
+
+.root {
+	// position: absolute;
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	z-index: 9;
+	color: black;
+
+	.wrapper {
+		// background-color: $GOLDEN-COLOR;
+		// opacity: 0.98;
+		background-color: rgba(247, 176, 8, 0.97);
+		font-size: 24px;
+		font-weight: 500;
+
+		@include lg {
+			width: 80%;
+			max-width: $MAX-WIDTH;
+			margin: 0 auto;
+		}
+
+		.content {
+			display: flex;
+			padding: 35px 0 64px 40px;			
+
+			@include md {
+				padding: $PAGETOP-HEIGHT 52px 64px 50px;
+			}
+
+			.navigation {
+				display: block;
+				width: auto;
+
+				@include lg {
+					display: flex;
+					width: 60%;
+				}
+
+				.item {
+					cursor: pointer;
+					padding-bottom: 7px;
+				}
+
+				.items {
+					display: flex;
+					flex-direction: column;
+				}
+
+				.items a {
+					color: black;
+					text-decoration: none;
+					font-weight: normal;
+				}
+
+				.active,
+				.items a:hover {
+					font-weight: 700;
+				}
+
+				.left {
+					width: auto;
+
+					@include md {
+						width: 50%;
+					}
+				}
+
+				.right {
+					width: fit-content;;
+
+					.top {
+						margin-bottom: 25px;
+						padding-bottom: 25px;
+						border-bottom: solid 1px black;
+					}
+				}
+			}
+
+			.picture {
+				display: none;
+
+				@include md {
+					display: block;
+					width: 40%;
+				}
+			}
+		}
+	
+	}
+}
+
+.root {
+
+	&.isFooter {
+		position: relative;
+		color: #f7f7f7;
+
+		.wrapper {
+			background-color: transparent;
+			font-size: unset;
+
+			.content {
+				display: flex;
+				padding: $GLOBAL-MARGIN 0 64px 45px;
+
+				@include md {
+					padding: 0;
+				}
+
+				.navigation {
+					width: 100%;
+					justify-content: space-around;
+
+					@include lg {
+						display: block;
+					}					
+
+					@include xl {
+						display: flex;
+					}					
+
+					.items {
+						width: fit-content;
+						width: 50%;
+					}
+
+					.item {
+						padding: 0px;
+					}
+
+					.right {
+						width: fit-content;
+
+						.top {
+							border-bottom-color: rgba(247,247,247,0.54);
+						}						
+					}
+
+					.items a {
+						color: #f7f7f7;
+						font-size: 18px;
+					}
+
+				}
+			}
+		}
+	}
+}

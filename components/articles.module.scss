@@ -1,0 +1,125 @@
+@import '../styles/variables.scss';
+@import '../styles/shared-styles.scss';
+
+.root {
+	position: relative;
+	width: 100%;
+
+	@include md {
+		padding-bottom: $GLOBAL-MARGIN*2;
+	}
+
+	.wrapper {
+		width: 100%;
+
+		@include md {
+			max-width: $MAX-WIDTH;
+			margin: 0 auto;
+			padding: 0px;
+		}
+
+		.item {
+
+			.content {
+				display: flex;
+				flex-direction: column-reverse;
+				justify-content: right;
+				width: 70%;
+				margin: 0 auto;
+
+				@include md {
+					flex-direction: row;
+				}
+
+				.photo {
+					display: flex;
+					flex-direction: column;
+
+					.image {
+						aspect-ratio: 16 / 9;
+					}
+
+					@include md {
+						width: 30%;
+					}					
+
+					.yellowBar {
+						@extend .labelYellowBar;
+						top: 0;
+						margin: 0 $GLOBAL-MARGIN/2;
+
+						@include md {
+							margin: 0;
+						}
+					}					
+				}
+
+				.textWrapper {
+								
+					@include md {
+						width: 70%;
+					}
+
+					.text {
+						padding-left: 50px;
+					}
+				}
+			}
+		}
+
+		.item:nth-child(even) {
+
+			.content {
+				justify-content: left;
+
+				@include md {
+					flex-direction: row-reverse;
+				}
+
+				.headline {
+					width: auto;
+
+					@include md {
+						width: 57%;
+					}
+
+					> h2 {
+						margin: 0 0 ($GLOBAL-MARGIN / 2) 35px;
+
+						@include md {
+							margin-left: 0;
+						}
+					}
+				}
+
+				.photo {
+					
+					.yellowBar {
+						@include md {
+							align-self: flex-end;
+						}
+					}						
+				}
+
+				.textWrap {
+					background-color: white;
+					
+					.text {
+
+						@include md {
+							padding-left: 0;
+							padding-right: 20%;
+							align-self: end;
+						}
+					}
+				}
+			}
+			
+		}
+	
+	}
+
+	h2, h3, h4, h5, h6 {
+		margin-top: 0;
+	}
+}

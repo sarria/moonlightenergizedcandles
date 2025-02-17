@@ -1,0 +1,53 @@
+@import '../styles/variables.scss';
+
+.root {
+	position: relative;
+	width: 100%;
+	padding-top: $GLOBAL-MARGIN;
+
+	.wrapper {
+		font-size: 18px;
+		font-weight: normal;
+		line-height: 1;
+		text-align: left;
+
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: space-between;
+		gap: ($GLOBAL-MARGIN * 2) 0;
+		
+		@include lg {
+			width: 80%;
+			max-width: $MAX-WIDTH;
+			margin: 0 auto;
+			padding: 0px;
+		}
+	
+		.item {
+			width: 100%;
+			padding: 0;
+
+			@include md {
+				width: 40%;
+				padding: 0 $GLOBAL-MARGIN;
+			}
+
+			@include lg {
+				width: 30%;
+				padding: 00;
+			}
+
+			.description {
+				padding: 20px $GLOBAL-MARGIN 0 25px;
+				line-height: 1.3;
+				text-align: center;
+
+				@include md {
+					padding: 20px 0 0 0;
+					text-align: left;
+				}
+			}
+		}
+
+	}	
+}

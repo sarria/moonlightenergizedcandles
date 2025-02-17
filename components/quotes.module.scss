@@ -1,0 +1,57 @@
+@import '../styles/variables.scss';
+
+.root {
+	position: relative;
+	width: 100%;
+	padding-top: $GLOBAL-MARGIN;
+	color: #a9a9a9;
+
+	.wrapper {
+		font-size: 18px;
+		line-height: 1.5;
+		font-weight: normal;
+		padding: 0 $GLOBAL-MARGIN;
+		border-top: solid 1px $FONT-BLACK;
+		border-bottom: solid 1px $FONT-BLACK;
+		padding-bottom: $GLOBAL-MARGIN;
+	
+		@include lg {
+			width: 80%;
+			max-width: $MAX-WIDTH;
+			margin: 0 auto;
+			font-size: 26px;
+			line-height: 40px;
+			padding: 0px;
+			padding-bottom: $GLOBAL-MARGIN;
+		}
+
+		.quote {
+		}
+
+		.authorLine1 {
+			color: white;
+			font-weight: 700;
+			line-height: 1;
+		}
+
+		.authorLine2 {
+			font-size: 20px;
+		}
+
+		.nextButton {
+			display: block;
+			top: unset;
+			right: 0px;
+			font-size: 18px;
+			line-height: 1;
+			width: auto;
+			height: auto;
+			color: #a9a9a9;
+
+			&::before {
+				content: '';
+			}
+		}
+	
+	}	
+}

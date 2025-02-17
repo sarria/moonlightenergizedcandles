@@ -1,0 +1,85 @@
+@import '../styles/variables.scss';
+
+.root {
+	position: relative;
+	width: 100%;
+
+	.wrapper {
+		width: 90%;
+		margin: 0 auto;
+		padding-top: $GLOBAL-MARGIN;
+
+		@include sm {
+			width: 80%;
+		}
+
+		@include lg {
+			width: 40%;
+		}
+
+
+		.field {
+			text-transform: uppercase;
+			margin-bottom: $GLOBAL-MARGIN;
+			font-weight: bold;
+
+			& > div {
+				padding-bottom: 10px;
+			}
+
+			input,
+			textarea { // Apply the same styles to both input and textarea
+				width: 100%;
+				border: solid 1px gray;
+				border-radius: 20px;
+				font-size: 18px;
+				padding: 10px 20px; // Adjust padding for better text spacing
+				box-sizing: border-box;
+				font-family: inherit;
+			}		
+
+			input {
+				height: 45px;
+			}
+
+			textarea {
+				height: 200px; // Adjust as needed
+				resize: vertical; // Allows user to resize only vertically
+			}
+		}
+
+		.buttons {
+			display: flex;
+  			justify-content: end;
+
+			.button {
+				display: block;
+				width: 200px;
+				padding: 20px;
+				background-color: #222;
+				color: white;
+				font-size: 18px;
+				font-weight: bold;
+				text-transform: uppercase;
+				border: none;
+				border-radius: 20px;
+				cursor: pointer;
+				transition: background-color 0.3s ease;
+			  
+				&:hover {
+				  background-color: #444; // Lighter shade on hover
+				}
+			  
+				&:disabled {
+				  background-color: #999;
+				  cursor: not-allowed;
+				}
+			}			
+
+		}
+
+	}
+
+
+	  
+}

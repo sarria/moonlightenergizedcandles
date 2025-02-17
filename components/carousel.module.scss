@@ -1,0 +1,56 @@
+@import '../styles/variables.scss';
+
+.root {
+	position: absolute;
+	width: 100%;
+	top: 92px;
+
+	@include md {
+		top: 0px;
+	}
+
+	.wrapper {
+	
+		.image {
+			position: relative;
+			height: 100vw;
+		}
+	}	
+}
+
+.topMargin {
+	height: 1px;
+	margin-top: 80%;
+
+	@include md {
+		margin-top: 50%;
+	}
+
+	@include lg {
+		margin-top: 40%;
+	}
+}
+
+.homePageWrapper {
+	display: none;
+
+	@include lg {
+		// background-color: bisque;		
+		display: block;
+		height: 100vw;
+		width: 100%;
+		position: absolute;
+		top: 0;
+		margin-top: 40%;
+
+		> div {
+			// background-color: aqua;
+			width: 80%;
+			max-width: $MAX-WIDTH;
+			height: 100vw;
+			background-color: black;
+			margin: calc(92px + $GLOBAL-MARGIN) auto 0;
+		}
+	}
+
+}

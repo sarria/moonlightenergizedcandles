@@ -1,0 +1,82 @@
+@import '../styles/variables.scss';
+
+.root {
+	display: none;
+	position: absolute;
+	background-color: black;
+	left: 0px;
+	top: 120px;
+	width: 100%;
+
+	&.isOpen {
+		display: block;
+	}
+
+	@include md {
+		position: relative;
+		display: block;
+		background-color: white;
+		width: fit-content;
+		left: auto;
+		top: auto;		
+	}	
+
+	.wrapper {
+		flex-direction: row;
+		gap: 50px;
+		text-transform: uppercase;
+		font-size: 15px;
+		font-weight: bold;
+		padding: 40px 50px;
+
+		@include md {
+			display: flex;
+			padding: 0 20px;
+			gap: 25px;
+		}
+
+		@include lg {
+			gap: 50px;
+		}
+
+		@include xl {
+			gap: 75px;
+			font-size: 20px;
+		}
+
+		.item {
+			cursor: pointer;
+			border-bottom: solid 5px transparent;
+			display: flex;
+			align-items: center;
+			height: 30px;
+			color: $FONT-WHITE;
+			padding: 10px;
+
+			@include md {
+				color: $FONT-BLACK;
+				padding: 0px;
+			}
+
+			a {
+				text-decoration: none;
+				color: $FONT-WHITE;
+
+				@include md {
+					color: $FONT-BLACK;
+				}
+			}
+
+			&:hover {
+				// border-bottom: solid 2px black;
+			}			
+	
+		}
+
+		.ico {
+			width: 25px;
+			height: 25px;;
+			margin-left: 10px;
+		}
+	}
+}

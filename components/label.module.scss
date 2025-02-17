@@ -1,0 +1,35 @@
+@import '../styles/variables.scss';
+@import '../styles/shared-styles.scss';
+
+.root {
+	position: relative;
+	width: 100%;
+	padding-top: $GLOBAL-MARGIN;
+
+	.wrapper {
+		padding: 0 $GLOBAL-MARGIN/2;
+
+		&.marginLeft {
+
+			@include md {
+				width: 80%;
+				margin: 0 auto;
+			}
+			
+		}
+
+		h2 {
+			@extend .labelHeader	
+		}
+
+		.yellowBar {
+			@extend .labelYellowBar;
+		}						
+
+		
+		@include md {
+
+		}
+
+	}	
+}

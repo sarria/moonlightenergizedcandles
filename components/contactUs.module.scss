@@ -1,0 +1,76 @@
+@import '../styles/variables.scss';
+
+.root {
+	position: relative;
+	width: 100%;
+
+	.wrapper {
+		margin: 0;
+		padding: $GLOBAL-MARGIN 0;
+		text-align: left;
+
+		.contactForm {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			// background-color: #f8f8f8; /* Light background */
+			// padding: 10px;
+			// border: 1px solid #ddd;
+		}
+		
+		// .contactForm label {
+		// 	font-size: 14px;
+		// 	font-weight: bold;
+		// 	margin-right: 10px;
+		// }
+		
+		.contactForm input[type="email"] {
+			flex: 1;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			// margin-right: 10px;
+			font-size: 14px;
+		}
+		
+		.contactForm button {
+			width: 200px;
+			background-color: #000; /* Black button */
+			color: #fff; /* White text */
+			border: none;
+			padding: 10px 20px;
+			font-size: 14px;
+			cursor: pointer;
+			border-radius: 4px;
+			transition: background-color 0.3s ease;
+		}
+		
+		.contactForm button:hover {
+			background-color: #444; /* Darker shade on hover */
+		}
+
+		.success {
+			color: green;
+			margin-top: 10px;
+			font-size: 14px;
+		}
+		
+		.error {
+			color: red;
+			margin-top: 10px;
+			font-size: 14px;
+		}
+		
+		
+
+		@include lg {
+			width: 80%;
+			max-width: $MAX-WIDTH;
+			margin: 0 auto;
+			padding: 0px;
+
+			
+		}
+
+	}
+}

@@ -1,0 +1,43 @@
+@import '../styles/variables.scss';
+
+.root {
+	
+	@include md {
+		display: none;
+	}
+
+	.wrapper {
+		.menuToggle {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			width: 30px; /* Width of the button */
+			height: 25px; /* Height to space out the lines */
+			cursor: pointer; /* Pointer cursor for interactivity */
+			position: relative;
+
+			span {
+				width: 100%;
+				height: 4px; /* Thickness of each line */
+				background-color: black; /* Color of the lines */
+				border-radius: 2px; /* Rounded edges for a polished look */
+				transition: all 0.3s ease; /* Smooth transition for all properties */
+			}
+
+			/* Transformations for the X */
+			&.open span:nth-child(1) {
+				transform: translateY(10px) rotate(45deg); /* Rotate and move the top line */
+			}
+
+			&.open span:nth-child(2) {
+				opacity: 0; /* Hide the middle line */
+			}
+
+			&.open span:nth-child(3) {
+				transform: translateY(-10px) rotate(-45deg); /* Rotate and move the bottom line */
+				top: -1px;
+				position: relative;
+			}
+		}
+	}
+}

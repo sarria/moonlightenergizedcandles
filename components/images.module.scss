@@ -1,0 +1,168 @@
+@import '../styles/variables.scss';
+
+.root {
+	width: 100%;
+
+	@include md {
+		padding-bottom: $GLOBAL-MARGIN*2;
+	}	
+
+	&.paddingTop {
+		// padding-top: $GLOBAL-MARGIN;
+	}
+
+	&.paddingBottom {
+		// padding-bottom: $GLOBAL-MARGIN;
+	}
+
+	.wrapper {
+		&.marginLeft {
+			@include lg {
+				width: 90%;
+				margin: 0 auto;
+			}
+		}
+
+		@include lg {
+			max-width: $MAX-WIDTH;
+			margin: 0 auto;
+			padding: 0px;
+		}
+
+	}
+
+	&.layout_3col, 
+	&.layout_5col {
+		// margin-top: $GLOBAL-MARGIN;
+		margin: $GLOBAL-MARGIN/2 auto 0 auto;
+  		width: 95%;
+
+		@include md {
+			width: 100%
+		}		
+
+		.wrapper {
+			margin: 0 auto;
+			display: flex;
+			flex-wrap: wrap;
+
+			@include md {
+				width: 80%
+			}			
+		}
+	}
+
+	&.layout_3col {
+		.image {
+			width: 50%;
+
+			@include sm {
+				width: 33.33%;
+			}
+
+		}		
+	}
+
+	&.layout_5col {
+		.image {
+			width: 50%;
+
+			@include lg {
+				width: 20%;
+			}
+
+		}
+	}	
+
+	&.layout_11 {
+		.wrapper {
+
+			.image1 {
+				width: 100%;
+			}
+		}
+	}
+
+	&.layout_23_13 {
+
+		.wrapper {
+
+			@include lg {
+				display: flex;
+
+				.image1 {
+					width: 65%;
+				}
+
+				.image23 {
+					width: 35%;
+				}
+			}
+		}
+	}
+
+	&.layout_13_23 {
+
+		.wrapper {
+
+			@include lg {
+				display: flex;
+
+				.image23 {
+					width: 35%;
+				}
+
+				.image1 {
+					width: 65%;
+				}
+			}
+		}
+	}
+
+	&.layout_13 {
+
+		.wrapper {
+
+			@include lg {
+				display: flex;
+
+				.image1 {
+					width: 35%;
+				}
+
+				.image2, .image3 {
+					width: 32.5%;
+				}
+			}
+		}
+	}
+
+	&.layout_14_14_12,
+	&.layout_12_14_14 {
+
+		.wrapper {
+
+			@include lg {
+				display: flex;
+
+				.image1 {
+					width: 52%;
+				}
+
+				.image2, .image3 {
+					width: 24%;
+				}
+			}
+		}
+	}
+
+	&.layout_14_14_12 {
+		.wrapper {
+
+			@include lg {
+				flex-direction: row-reverse;
+			}
+		}
+	}
+
+}
