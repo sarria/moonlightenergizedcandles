@@ -39,7 +39,7 @@
     "rollup-plugin-buble": "^0.19.8",
     "rollup-plugin-uglify": "^6.0.2",
     "sass": "^1.49.9"
-  }
+  },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   }
