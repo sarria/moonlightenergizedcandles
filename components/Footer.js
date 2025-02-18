@@ -6,8 +6,8 @@ import Text from './Text'
 import Images from './Images'
 import Logo from './Logo'
 import LogoImage from '../images/Moonlight Logo-02.svg'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInstagram } from '@fortawesome/free-brands-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 const Footer = ({global, buttons}) => {
 	const textData =                 {
@@ -21,7 +21,7 @@ const Footer = ({global, buttons}) => {
 			"linkPage": {
 				"slug": item.link
 			},
-			"hoverIco": <FontAwesomeIcon icon={faInstagram} />
+			// "hoverIco": <FontAwesomeIcon icon={faInstagram} />
 		}
 	})
 
@@ -40,7 +40,7 @@ const Footer = ({global, buttons}) => {
 				
 				<div className={styles.ico}>
 					<a href={global.instagram} target='_blank'>
-						<FontAwesomeIcon icon={faInstagram} size="2x" />
+						{/* <FontAwesomeIcon icon={faInstagram} size="2x" /> */}
 					</a>
 				</div>
 				
