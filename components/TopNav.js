@@ -4,9 +4,10 @@ import parse from 'html-react-parser';
 import Link from 'next/link'
 import { handleScrollToSection } from './utils/shared';
 import { useRouter } from "next/router";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faInstagram } from '@fortawesome/free-brands-svg-icons';
-// import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
+import Image from "next/image";
+import faInstagram from '../public/icons/instagram-brands.svg'
+import faCartShopping from '../public/icons/cart-shopping-solid.svg'
+
 	
 const handleClick = () => {
 	document.getElementById('toggle').checked = false;
@@ -45,7 +46,7 @@ const Shop = () => {
 		<div className={styles.item}>
 			SHOP
 			<div className={styles.ico}>
-				{/* <FontAwesomeIcon icon={faCartShopping} /> */}
+				<Image src={faCartShopping} alt="Star" layout='fill' />
 			</div>
 		</div>
 	)
@@ -56,7 +57,7 @@ const Instagram = ({link}) => {
 		<div className={styles.item}>
 			<div className={styles.ico}>
 				<a href={link} target='_blank'>
-					{/* <FontAwesomeIcon icon={faInstagram} size="2x" /> */}
+					<Image src={faInstagram} alt="Star" layout='fill' />
 				</a>
 			</div>
 		</div>

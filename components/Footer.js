@@ -4,10 +4,10 @@ import styles from './footer.module.scss'
 import Link from 'next/link'
 import Text from './Text'
 import Images from './Images'
+import Image from "next/image";
 import Logo from './Logo'
 import LogoImage from '../images/Moonlight Logo-02.svg'
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faInstagram } from '@fortawesome/free-brands-svg-icons';
+import faInstagram from '../public/icons/instagram-brands.svg'
 
 const Footer = ({global, buttons}) => {
 	const textData =                 {
@@ -40,7 +40,7 @@ const Footer = ({global, buttons}) => {
 				
 				<div className={styles.ico}>
 					<a href={global.instagram} target='_blank'>
-						{/* <FontAwesomeIcon icon={faInstagram} size="2x" /> */}
+						<Image src={faInstagram} alt="Star" layout='fill' />
 					</a>
 				</div>
 				
