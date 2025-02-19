@@ -31,7 +31,7 @@ const Products = ({ data, global }) => {
 												{item.title}
 											</div>
 											<div className={styles.date}>
-												{item.price}
+												${item.price}
 											</div>
 										</div>
 										<div className={styles.line2}>
