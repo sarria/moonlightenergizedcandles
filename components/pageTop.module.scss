@@ -8,20 +8,23 @@
 
 	.wrapper {
 		display: flex;
-		max-width: $MAX-WIDTH;
 		margin: 0 auto;
 		background-color: white;
-		padding: 10px 0;
+		padding: 12px $GLOBAL-MARGIN/2;
 		justify-content: center;
+
+		@include md {
+			padding: 12px 0px
+		}
 
 		.header {
 			display: flex;
 			justify-content: space-between;
-			width: 80%;
+			width: 100%;
 			align-items: center;
 
 			@include md {
-				width: 90%;
+				width: 80%;
 			}
 
 			.navigation {

@@ -78,6 +78,15 @@
 				}
 
 			}
+
+			.shop {
+				display: none;
+				padding-top: 50px;
+
+				@include lg {
+					display: block;
+				}
+			}
 		}
 
 	}

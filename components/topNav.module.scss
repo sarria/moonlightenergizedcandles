@@ -18,7 +18,7 @@
 		background-color: white;
 		width: fit-content;
 		left: auto;
-		top: auto;		
+		top: auto;
 	}	
 
 	.wrapper {
@@ -68,8 +68,12 @@
 			}
 
 			&:hover {
-				// border-bottom: solid 2px black;
-			}			
+				border-bottom: solid 4px black;
+			}
+			
+			&.instagram:hover {
+				border-bottom: solid 4px transparent;
+			}
 	
 		}
 

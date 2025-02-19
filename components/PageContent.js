@@ -21,6 +21,7 @@ import Images from './Images'
 // import ImageSlider from './ImageSlider'
 import Contact from './Contact'
 // import ContactUs from './ContactUs'
+import Shop from './Shop'
 import PageTop from './PageTop'
 
 function PageContent({page, global}) {
@@ -78,7 +79,7 @@ function PageContent({page, global}) {
 						
 						switch(module.moduleType) {
 							case 'hero':
-								ele = <Hero data={module} />
+								ele = <Hero data={module} shoppingPage={global.shoppingPage} />
 								break;							
 							case 'text':
 								ele = <Text data={module} />
@@ -116,6 +117,9 @@ function PageContent({page, global}) {
 							case 'contactUs':
 								ele = <Contact data={module} />
 								break;
+							case 'shop':
+								ele = <Shop data={module} global={global} />
+								break;								
 							default:
 								// code block
 						}

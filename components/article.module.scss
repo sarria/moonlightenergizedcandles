@@ -30,7 +30,6 @@
 
 		@include lg {
 			max-width: $MAX-WIDTH;
-			// margin-bottom: 100px;
 			padding: 0px;
 			flex-direction: row;
 		}
@@ -41,11 +40,11 @@
 
 		.left {
 			width: auto;
-			padding: $GLOBAL-MARGIN $GLOBAL-MARGIN 0 $GLOBAL-MARGIN; 
+			// padding: $GLOBAL-MARGIN $GLOBAL-MARGIN 0 $GLOBAL-MARGIN; 
 
 			@include lg {
 				width: 35%;
-				padding: $GLOBAL-MARGIN 0 $GLOBAL-MARGIN $GLOBAL-MARGIN;
+				padding-top: $GLOBAL-MARGIN;
 			}
 		}
 

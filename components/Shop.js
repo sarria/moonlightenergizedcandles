@@ -1,52 +1,42 @@
-import Image from 'next/image';
 import Link from 'next/link'
-import parse from 'html-react-parser';
+import Image from "next/image";
+// import faCartShopping from '../public/icons/cart-shopping-solid.svg'
+import styles from './shop.module.scss'
 import cx from 'classnames'
-import styles from './events.module.scss'
 
-const Events = ({data}) => {
-	console.log('Events data ::', data.events)
+const Products = ({ data, global }) => {
+	console.log("shop candels", global.candles)
 	
 	return (
 		<div className={styles.root}>
 			<div className={styles.wrapper}>
-				{data.text && 
-					<div className={styles.text}>
-						{parse(data.text)}
-					</div>
-				}
+
 				<div className={cx(styles.items)}>
-					{data.events && data.events.map((item, index) =>{
+					{global.candles && global.candles.map((item, index) =>{
 						return (
 							<div key={index} className={cx(styles.item)}>
 								<div className={cx(styles.innerItem)}>
 									<div className={cx(styles.image)}>
 										<Image
 											alt="Hero Image"
-											src={item.image.sourceUrl}
+											src={item.image}
 											// width={199} // Provide explicit width
 											// height={83} // Provide explicit height
 											layout="fill" // Optional: Adjust layout as needed
-											objectFit='cover'
 										/>
 									</div>
 									<div className={styles.info}>
 										<div className={styles.line1}>
 											<div className={styles.name}>
-												{item.name}
+												{item.title}
 											</div>
 											<div className={styles.date}>
-												{item.date}
+												{item.price}
 											</div>
 										</div>
 										<div className={styles.line2}>
-											<div className={styles.location}>
-												{item.linkToMap ? <Link href={item.linkToMap} passHref>
-													<a target="_blank" rel="noopener noreferrer">
-														{item.location}
-													</a>
-												</Link> : <div>{item.location}</div>}
-												
+											<div className={styles.headline}>
+												{item.headline}
 											</div>
 										</div>
 									</div>
@@ -60,4 +50,4 @@ const Events = ({data}) => {
 	)
 }
 
-export default Events;
+export default Products;

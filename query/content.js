@@ -4,24 +4,30 @@ export default function query(slug) {
 		query {
 			acfOptionsGlobalOptions {
 				global {
-				  address
-				  copyRight
-				  email
-				  telephone
-				  facebook
-				  twitter
-				  instagram
-				  youtube
-				  navigation {
-					page {
-					  ... on Page {
-						slug
-						title
-					  }
-					},
-					label,
-					id
-				  }
+					address
+					copyRight
+					email
+					telephone
+					facebook
+					twitter
+					instagram
+					youtube
+					navigation {
+						page {
+						... on Page {
+							slug
+							title
+						}
+						},
+						label,
+						id
+					}
+					shoppingPage{
+						... on Page {
+							slug
+							title
+						}
+					}
 					instagramFeedHeader
 					instagramFeed {
 						link
@@ -30,6 +36,26 @@ export default function query(slug) {
 							sourceUrl
 						}
 					}
+				    candles {
+						... on Product {
+							image
+							title
+							price
+							headline
+							description
+							type
+						}
+					}
+					accessories {
+						... on Product {
+							image
+							title
+							price
+							headline
+							description
+							type
+						}
+					}						
 				}
 			}
 			content: pages(where: {name: "${slug}"}) {

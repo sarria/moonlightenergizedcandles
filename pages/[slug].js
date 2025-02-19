@@ -3,7 +3,7 @@ import queryContent from '../query/content'
 import NotFound from '../components/404'
 import PageContent from '../components/PageContent'
 
-function Page({ global, page }) {
+function Page({ global, page}) {
   // console.log("global :: ", global)
   // console.log("Page :: ", page)
   // console.log("Query ::", queryContent('about-us'))
@@ -18,6 +18,8 @@ export async function getStaticProps(context) {
   const data = await res.json()
   const global = data.data?.acfOptionsGlobalOptions?.global || null
   const page = data.data?.content?.edges[0]?.node || null
+  
+	console.log("data ==>", data)  
 
   return {
     props: {
