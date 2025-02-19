@@ -16,6 +16,24 @@
 			width: calc(80% + 120px);
 		}
 
+		&.shop {
+			
+			.item {
+				width: 50%;
+
+				@include lg {
+					width: 33%;
+				}
+
+				.innerItem {
+					padding: 0 10px 60px;
+
+					.info {
+						padding: 0px;
+					}
+				}
+			}
+		}
 	}
 
 	.text {
@@ -31,11 +49,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		padding-top: 50px;
-		flex-direction: column;
-
-		@include lg {
-			flex-direction: row;
-		}
+		flex-direction: row;
 
 		.item {
 			width: 100%;

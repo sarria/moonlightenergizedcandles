@@ -85,3 +85,19 @@
 		}
 	}
 }
+
+.mobile {
+	display: block;
+
+	@include md {
+		display: none;
+	}	
+}
+
+.desktop {
+	display: none;
+
+	@include md {
+		display: block;
+	}	
+}

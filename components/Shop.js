@@ -9,7 +9,7 @@ const Products = ({ data, global }) => {
 	
 	return (
 		<div className={styles.root}>
-			<div className={styles.wrapper}>
+			<div className={cx(styles.wrapper, styles.shop)}>
 
 				<div className={cx(styles.items)}>
 					{global.candles && global.candles.map((item, index) =>{

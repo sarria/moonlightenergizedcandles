@@ -23,7 +23,7 @@ const Item = ({item, toggleMenu}) => {
 			{(!item.page && item.label && item.id) &&
 			<div key={item.id} className={cx(styles.item)}>
 				<a onClick={() => {
-					handleScrollToSection(item.id)
+					// handleScrollToSection(item.id)
 					toggleMenu()
 				}}>
 					{item.label}
@@ -55,7 +55,12 @@ function TopNav({global, isOpen, toggleMenu}) {
 		<div className={cx(styles.root, {[styles.isOpen]:isOpen})}>
 			<div className={styles.wrapper}>
 				{navigation.map((item, index) => <Item key={index} item={item} toggleMenu={toggleMenu} />)}
-				<ShopIco shoppingPage={shoppingPage} />
+				<div onClick={() => {toggleMenu()}} className={styles.mobile}>
+					<ShopIco shoppingPage={shoppingPage} />
+				</div>
+				<div className={styles.desktop}>
+					<ShopIco shoppingPage={shoppingPage} />
+				</div>
 				<Instagram link={instagram} />
 			</div>
 		</div>
