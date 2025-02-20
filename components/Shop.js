@@ -5,6 +5,15 @@ import cx from 'classnames'
 import Headline from './Headline'
 import AddToCartButton from './AddToCartButton'
 
+function formatCurrency(price, currency = 'USD', locale = 'en-US') {
+	return new Intl.NumberFormat(locale, {
+		style: 'currency',
+		currency: currency,
+		minimumFractionDigits: 0, // No decimals
+		maximumFractionDigits: 0  // No decimals
+	}).format(price);
+}
+
 const Items = ({items}) => {
 
 	const setLabel = (type) => {
@@ -54,7 +63,7 @@ const Items = ({items}) => {
 										{item.title}
 									</div>
 									<div className={styles.date}>
-										${item.price}
+										{formatCurrency(item.price)}
 									</div>
 								</div>
 								<div className={styles.line2}>
