@@ -83,7 +83,7 @@ const Items = ({items}) => {
 	)
 }
 
-const Products = ({ data, global }) => {
+const Shop = ({ data, global }) => {
 	console.log("shop candels", global.candles)
 	
 	return (
@@ -109,4 +109,4 @@ const Products = ({ data, global }) => {
 	)
 }
 
-export default Products;
+export default Shop;
