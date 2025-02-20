@@ -2,7 +2,7 @@ import cx from 'classnames'
 import styles from './topNav.module.scss'
 import parse from 'html-react-parser';
 import Link from 'next/link'
-import ShopIco from './ShopIco'
+import ShopButton from './ShopButton'
 import { handleScrollToSection } from './utils/shared';
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -39,7 +39,7 @@ const Instagram = ({link}) => {
 		<div className={cx(styles.item, styles.instagram)}>
 			<div className={styles.ico}>
 				<a href={link} target='_blank'>
-					<Image src={faInstagram} alt="Star" layout='fill' />
+					<Image src={faInstagram} layout='fill' />
 				</a>
 			</div>
 		</div>
@@ -56,10 +56,10 @@ function TopNav({global, isOpen, toggleMenu}) {
 			<div className={styles.wrapper}>
 				{navigation.map((item, index) => <Item key={index} item={item} toggleMenu={toggleMenu} />)}
 				<div onClick={() => {toggleMenu()}} className={styles.mobile}>
-					<ShopIco shoppingPage={shoppingPage} />
+					<ShopButton shoppingPage={shoppingPage} />
 				</div>
 				<div className={styles.desktop}>
-					<ShopIco shoppingPage={shoppingPage} />
+					<ShopButton shoppingPage={shoppingPage} />
 				</div>
 				<Instagram link={instagram} />
 			</div>

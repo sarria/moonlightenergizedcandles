@@ -15,10 +15,10 @@ const Images = ({data}) => {
 				<div className={cx(styles.wrapper, {[styles.marginLeft]: imagePadding })}>
 				{images.map((image, index) => {
 					const ratio = image.ratio ? image.ratio : '75.4%';
-					const hoverIco = image.hoverIco ? image.hoverIco : null;
+					const instagram = image.instagram ? image.instagram : false;
 					return (
 						<div key={index} className={cx(styles.image)}>
-							<ImageCard index={index} image={image} ratio={ratio} hoverIco={hoverIco} hasPadding={hasPadding} linkPage={linkPage} imagesLayout={imagesLayout} />
+							<ImageCard index={index} image={image} ratio={ratio} instagram={instagram} hasPadding={hasPadding} linkPage={linkPage} imagesLayout={imagesLayout} />
 						</div>
 					)
 				})}

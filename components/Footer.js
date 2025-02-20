@@ -21,7 +21,7 @@ const Footer = ({global, buttons}) => {
 			"linkPage": {
 				"slug": item.link
 			},
-			// "hoverIco": <FontAwesomeIcon icon={faInstagram} />
+			"instagram": true
 		}
 	})
 
@@ -40,7 +40,7 @@ const Footer = ({global, buttons}) => {
 				
 				<div className={styles.ico}>
 					<a href={global.instagram} target='_blank'>
-						<Image src={faInstagram} alt="Star" layout='fill' />
+						<Image src={faInstagram} layout='fill' />
 					</a>
 				</div>
 				

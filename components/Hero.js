@@ -2,7 +2,7 @@ import Image from 'next/image';
 import parse from 'html-react-parser';
 import styles from './hero.module.scss';
 import cx from 'classnames';
-import ShopIco from './ShopIco'
+import ShopButton from './ShopButton'
 
 const Hero = ({ data, shoppingPage }) => {
 
@@ -25,7 +25,7 @@ const Hero = ({ data, shoppingPage }) => {
 							<div className={cx(styles.text, {[styles.dark]: data.dark})}>
 								{parse(data.text)}
 								<div className={styles.shop}>
-									<ShopIco shoppingPage={shoppingPage} isButton={true} />
+									<ShopButton shoppingPage={shoppingPage} isButton={true} />
 								</div>
 							</div>
 						</div>

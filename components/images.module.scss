@@ -45,6 +45,7 @@
 			margin: 0 auto;
 			display: flex;
 			flex-wrap: wrap;
+			justify-content: center;
 
 			@include md {
 				width: calc(80% + 30px);

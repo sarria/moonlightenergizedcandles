@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import Image from "next/image";
-// import faCartShopping from '../public/icons/cart-shopping-solid.svg'
 import styles from './shop.module.scss'
 import cx from 'classnames'
 import Headline from './Headline'
+import AddToCartButton from './AddToCartButton'
 
 const Items = ({items}) => {
 
@@ -36,6 +36,9 @@ const Items = ({items}) => {
 										{item.headline}
 									</div>
 								</div>
+							</div>
+							<div className={styles.addToCart}>
+								<AddToCartButton />
 							</div>
 						</div>
 					</div>
