@@ -37,13 +37,13 @@
 
     .ico {
         position: relative;
-        width: 25px;
-        height: 25px;;
+        width: 15px;
+        height: 15px;
         margin-left: 10px;
-        display: none;
 
         @include md {
-            display: block;
+            width: 25px;
+            height: 25px;
         }
     }
 

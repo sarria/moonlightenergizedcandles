@@ -7,9 +7,35 @@ import AddToCartButton from './AddToCartButton'
 
 const Items = ({items}) => {
 
+	const setLabel = (type) => {
+		switch (true) {
+			case type.includes('zodiac'):
+			  return 'SELECT SIGN';
+			case type.includes('custom'):
+			  return 'CUSTOMIZE';
+			default:
+			  return 'ADD TO CART';
+	  	}
+	};
+
+	const setIcon = (type) => {
+		switch (true) {
+			case type.includes('zodiac'):
+				return 'zodiac';
+			case type.includes('custom'):
+				return 'custom';
+			default:
+				return 'cart';
+	  	}
+	};	
+
 	return (
 		<div className={cx(styles.items)}>
 			{items && items.map((item, index) =>{
+				const addToCartInfo = {
+					'label' : setLabel(item.type),
+					'icon' : setIcon(item.type)
+				}
 				return (
 					<div key={index} className={cx(styles.item)}>
 						<div className={cx(styles.innerItem)}>
@@ -38,7 +64,7 @@ const Items = ({items}) => {
 								</div>
 							</div>
 							<div className={styles.addToCart}>
-								<AddToCartButton />
+								<AddToCartButton data={addToCartInfo} />
 							</div>
 						</div>
 					</div>
