@@ -9,7 +9,11 @@ export default function query(slug) {
 					logo {
 						altText
 						sourceUrl
-					}		
+						mediaDetails {
+							width
+							height
+						}
+					}
 					address
 					copyRight
 					email

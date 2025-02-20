@@ -18,8 +18,8 @@ const Header = ({seo}) => {
 		<meta property="og:title" content={seo.title} />
 		<meta property="og:description" content={seo.description} />
 		<meta property="og:image" content={seo.logo.sourceUrl} />
-		<meta property="og:image:width" content="1200" />
-		<meta property="og:image:height" content="630" />
+		<meta property="og:image:width" content={seo.logo.mediaDetails.width} />
+		<meta property="og:image:height" content={seo.logo.mediaDetails.height} />
 		<meta property="og:url" content="https://www.moonlightenergizedcandles.com/" />
 		<meta property="og:site_name" content={seo.title} />
 
@@ -28,7 +28,7 @@ const Header = ({seo}) => {
 		<meta name="twitter:title" content={seo.title} />
 		<meta name="twitter:description" content={seo.description} />
 		<meta name="twitter:image" content={seo.logo.sourceUrl} />
-		<meta name="twitter:site" content="@YourTwitterHandle" /> {/* Replace with your X (Twitter) handle */}
+		{/* <meta name="twitter:site" content="@YourTwitterHandle" /> */}
 
 		{/* Additional Meta Tags for SEO */}
 		<meta name="robots" content="index, follow" />
