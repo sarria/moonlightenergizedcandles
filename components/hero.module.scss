@@ -16,8 +16,8 @@
 		}
 
 		.textWrapper {
-			position: unset;
-			position: absolute;
+			// position: absolute;
+			position: relative;
 			display: flex;
 			width: 100%;
 			z-index: 2;
