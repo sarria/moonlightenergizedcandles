@@ -4,6 +4,12 @@ export default function query(slug) {
 		query {
 			acfOptionsGlobalOptions {
 				global {
+					title
+					description
+					logo {
+						altText
+						sourceUrl
+					}		
 					address
 					copyRight
 					email
@@ -55,115 +61,112 @@ export default function query(slug) {
 							description
 							type
 						}
-					}						
+					}
+				
 				}
 			}
 			content: pages(where: {name: "${slug}"}) {
 				edges {
 					node {
-					slug
-					title
-					content_blocks {
-						modules {
-							moduleType
-							text
-							videoUrl
-							imagesLayout
-							imagePadding
-							images {
+						slug
+						title
+						content_blocks {
+							modules {
+								moduleType
+								text
+								videoUrl
+								imagesLayout
+								imagePadding
+								images {
+									image {
+										altText
+										databaseId
+										sourceUrl
+										mediaDetails {
+											width
+											height
+										}
+									}
+									linkLabel
+									linkPage {
+										... on Page {
+										slug
+										title
+										}
+									}
+								}
+								thumbnails {
+									image {
+										altText
+										sourceUrl
+										mediaDetails {
+											width
+											height
+										}
+									}
+									description
+								}
+								bios {
+									photo {
+										altText
+										sourceUrl
+										mediaDetails {
+											width
+											height
+										}
+									}
+									name
+									bio
+								}
+								articles {
+									photo {
+										altText
+										sourceUrl
+										mediaDetails {
+											width
+											height
+										}
+									}
+									headline
+									text
+								}
+								events {
+									name
+									location
+									linkToMap
+									date
+									image {
+										altText
+										sourceUrl
+									}
+								}											
 								image {
 									altText
-									databaseId
 									sourceUrl
 									mediaDetails {
-										width
-										height
-									}
-								}
-								linkLabel
-								linkPage {
-									... on Page {
-									  slug
-									  title
-									}
-								}
-							}
-							thumbnails {
-								image {
-									altText
-									sourceUrl
-									mediaDetails {
-										width
-										height
-									}
-								}
-								description
-							}
-							bios {
-								photo {
-									altText
-									sourceUrl
-									mediaDetails {
-										width
-										height
-									}
-								}
-								name
-								bio
-							}
-							articles {
-								photo {
-									altText
-									sourceUrl
-									mediaDetails {
-										width
-										height
+									width
+									height
 									}
 								}
 								headline
-								text
-							}
-							events {
-								name
-								location
-								linkToMap
-								date
-								image {
-									altText
-									sourceUrl
+								linkLabel
+								linkPage {
+									... on Page {
+									slug
+									title
+									}
 								}
-							}											
-							image {
-								altText
-								sourceUrl
-								mediaDetails {
-								  width
-								  height
+								quotes {
+									quote
+									authorLine1
+									authorLine2
 								}
+								line1
+								line2
+								dark							
 							}
-							headline
-							linkLabel
-							linkPage {
-								... on Page {
-								  slug
-								  title
-								}
-							}
-							quotes {
-								quote
-								authorLine1
-								authorLine2
-							}
-							line1
-							line2
-							dark							
 						}
-					}
-					seo {
-						title
-						metaDesc
-						metaKeywords
-					}
+
 
 					}
 				}

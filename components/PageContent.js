@@ -57,7 +57,11 @@ function PageContent({page, global}) {
 
 	return page ? (
 		<>
-			<Header seo={page.seo} />
+			<Header seo={{
+				title : global.title,
+				description : global.description,
+				logo : global.logo
+			}} />
 			<PageTop className={styles.pageTop} global={global} />
 
 			<div className={cx(styles.root, {[styles.homePage]: isHomePage}, {[styles.innerPage]: !isHomePage})} id='pageContent'>
