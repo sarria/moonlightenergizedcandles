@@ -54,6 +54,29 @@ export default function query(slug) {
 							headline
 							description
 							type
+							buttonLink
+						}
+					}
+				    zodiacCandles {
+						... on Product {
+							image
+							title
+							price
+							headline
+							description
+							type
+							buttonLink
+						}
+					}
+					purposeCandles {
+						... on Product {
+							image
+							title
+							price
+							headline
+							description
+							type
+							buttonLink
 						}
 					}
 					accessories {
@@ -64,9 +87,21 @@ export default function query(slug) {
 							headline
 							description
 							type
+							buttonLink
 						}
 					}
-				
+				    zodiacBracelets {
+						... on Product {
+							image
+							title
+							price
+							headline
+							description
+							type
+							buttonLink
+						}
+					}
+
 				}
 			}
 			content: pages(where: {name: "${slug}"}) {
@@ -77,6 +112,7 @@ export default function query(slug) {
 						content_blocks {
 							modules {
 								moduleType
+								shopProducts
 								text
 								videoUrl
 								imagesLayout

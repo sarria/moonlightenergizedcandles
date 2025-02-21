@@ -16,7 +16,7 @@ function Index({ global, page }) {
 export async function getStaticProps() {
 	const res = await fetch(process.env.GRAPHQL + queryContent('home-page'))
 	const data = await res.json()
-  console.log("===>", data)
+  // console.log("===>", data)
 	const global = data.data?.acfOptionsGlobalOptions?.global || null
   const page = data.data?.content?.edges[0]?.node || null
 

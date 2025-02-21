@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from "next/image";
 import styles from './shop.module.scss'
 import cx from 'classnames'
-import Headline from './Headline'
+// import Headline from './Headline'
 import AddToCartButton from './AddToCartButton'
 
 function formatCurrency(price, currency = 'USD', locale = 'en-US') {
@@ -16,35 +16,10 @@ function formatCurrency(price, currency = 'USD', locale = 'en-US') {
 
 const Items = ({items}) => {
 
-	const setLabel = (type) => {
-		switch (true) {
-			case type.includes('zodiac'):
-			  return 'SELECT SIGN';
-			case type.includes('custom'):
-			  return 'CUSTOMIZE';
-			default:
-			  return 'ADD TO CART';
-	  	}
-	};
-
-	const setIcon = (type) => {
-		switch (true) {
-			case type.includes('zodiac'):
-				return 'zodiac';
-			case type.includes('custom'):
-				return 'custom';
-			default:
-				return 'cart';
-	  	}
-	};	
-
 	return (
 		<div className={cx(styles.items)}>
 			{items && items.map((item, index) =>{
-				const addToCartInfo = {
-					'label' : setLabel(item.type),
-					'icon' : setIcon(item.type)
-				}
+
 				return (
 					<div key={index} className={cx(styles.item)}>
 						<div className={cx(styles.innerItem)}>
@@ -52,9 +27,7 @@ const Items = ({items}) => {
 								<Image
 									alt="Hero Image"
 									src={item.image}
-									// width={199} // Provide explicit width
-									// height={83} // Provide explicit height
-									layout="fill" // Optional: Adjust layout as needed
+									layout="fill"
 								/>
 							</div>
 							<div className={styles.info}>
@@ -73,7 +46,7 @@ const Items = ({items}) => {
 								</div>
 							</div>
 							<div className={styles.addToCart}>
-								<AddToCartButton data={addToCartInfo} />
+								<AddToCartButton item={item} />
 							</div>
 						</div>
 					</div>
@@ -84,26 +57,13 @@ const Items = ({items}) => {
 }
 
 const Shop = ({ data, global }) => {
-	console.log("shop candels", global.candles)
+	// console.log("shop candels", global.candles)
+	console.log("shopProducts", data.shopProducts)
 	
 	return (
 		<div className={styles.root}>
 			<div className={cx(styles.wrapper, styles.shop)}>
-
-				<Headline data={{
-					'line1': 'OUR STORE',
-					'line2': 'CANDLES'
-				}} />
-
-				<Items items={global.candles} />
-
-				<Headline data={{
-					'line1': '',
-					'line2': 'accessories'
-				}} />
-
-				<Items items={global.accessories} />
-
+				<Items items={global[data.shopProducts]} />
 			</div>
 		</div>
 	)

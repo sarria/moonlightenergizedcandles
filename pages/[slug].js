@@ -19,7 +19,7 @@ export async function getStaticProps(context) {
   const global = data.data?.acfOptionsGlobalOptions?.global || null
   const page = data.data?.content?.edges[0]?.node || null
   
-	console.log("data ==>", data)  
+	// console.log("data ==>", data)  
 
   return {
     props: {
