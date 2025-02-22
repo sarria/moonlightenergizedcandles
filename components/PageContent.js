@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { CartProvider, useCart } from '../context/CartContext';
 import styles from './pageContent.module.scss'
 import cx from 'classnames'
 import Header from './Header'
@@ -22,10 +23,21 @@ import Images from './Images'
 import Contact from './Contact'
 // import ContactUs from './ContactUs'
 import Shop from './Shop'
+import Cart from './Cart';
 import PageTop from './PageTop'
 
-function PageContent({page, global}) {
+function PageContent({ page, global }) {
+	return page ? (
+		<CartProvider> {/* Move this wrapper up */}
+			<PageContentWithCart page={page} global={global} />
+		</CartProvider>
+	) : <></>;
+}
+
+function PageContentWithCart({page, global}) {
 	const router = useRouter()
+	const { getTotalItems, isCartVisible } = useCart()
+	const totalItems = getTotalItems()
 	// console.log("page ::", page)
 
 	useEffect(() => {
@@ -65,83 +77,92 @@ function PageContent({page, global}) {
 			<PageTop className={styles.pageTop} global={global} />
 
 			<div className={cx(styles.root, {[styles.homePage]: isHomePage}, {[styles.innerPage]: !isHomePage})} id='pageContent'>
-				<div className={styles.wrapper}>
-					{/* <Navigation
-						navigationPicture={global.burgerNavigationPicture}
-						navigationLeft={global.burgerNavigationLeft}
-						navigationRightTop={global.burgerNavigationRightTop}
-						navigationRightBottom={global.burgerNavigationRightBottom}
-					/> */}
-					{/* <Burger /> */}
-					{/* {isHomePage  && <Carousel carousel={page.homePage.carousel} />} */}
-					{/* {!isHomePage && <Hero title={page.title} mobileHeaderImage={page.content_blocks.mobileHeaderImage} desktopHeaderImage={page.content_blocks.desktopHeaderImage} />} */}
-					
-					{page.content_blocks.modules && page.content_blocks.modules.map((module, idx) => {
-						let ele = null; //<>{module.moduleType}</>
-						let prevModuleType = idx > 0 ? page.content_blocks.modules[idx-1].moduleType : '';
-						let nextModuleType = idx < page.content_blocks.modules.length-1 ? page.content_blocks.modules[idx+1].moduleType : '';
+				<div className={cx(styles.wrapper, {[styles.showCart] : totalItems !== 0 && isCartVisible})}>
+					<div className={styles.page}>
+						<div className={styles.content}>
+							{/* <Navigation
+								navigationPicture={global.burgerNavigationPicture}
+								navigationLeft={global.burgerNavigationLeft}
+								navigationRightTop={global.burgerNavigationRightTop}
+								navigationRightBottom={global.burgerNavigationRightBottom}
+							/> */}
+							{/* <Burger /> */}
+							{/* {isHomePage  && <Carousel carousel={page.homePage.carousel} />} */}
+							{/* {!isHomePage && <Hero title={page.title} mobileHeaderImage={page.content_blocks.mobileHeaderImage} desktopHeaderImage={page.content_blocks.desktopHeaderImage} />} */}
+							
+							{page.content_blocks.modules && page.content_blocks.modules.map((module, idx) => {
+								let ele = null; //<>{module.moduleType}</>
+								let prevModuleType = idx > 0 ? page.content_blocks.modules[idx-1].moduleType : '';
+								let nextModuleType = idx < page.content_blocks.modules.length-1 ? page.content_blocks.modules[idx+1].moduleType : '';
+								
+								switch(module.moduleType) {
+									case 'hero':
+										ele = <Hero data={module} shoppingPage={global.shoppingPage} />
+										break;							
+									case 'text':
+										ele = <Text data={module} />
+										break;
+									case 'headline':
+										ele = <Headline data={module} />
+										break;
+									case 'video':
+										ele = <Video data={module} />
+										break;
+									case 'thumbnails':
+										// ele = <Thumbnails data={module} />
+										break;
+									case 'bios':
+										ele = <Bios data={module} />
+										break;
+									case 'events':
+										ele = <Events data={module} />
+										break;
+									case 'article':
+										ele = <Article data={module} />
+										break;								
+									case 'images':
+										ele = <Images data={{...module, prevModuleType, nextModuleType}} />
+										break;
+									case 'quotes':
+										// ele = <Quotes data={module} />
+										break;
+									case 'slider':
+										// ele = <ImageSlider data={module} />
+										break;
+									case 'contact':
+										// ele = <Contact data={module} />
+										break;
+									case 'contactUs':
+										ele = <Contact data={module} />
+										break;
+									case 'shop':
+										ele = <Shop data={module} global={global} />
+										break;								
+									default:
+										// code block
+								}
 						
-						switch(module.moduleType) {
-							case 'hero':
-								ele = <Hero data={module} shoppingPage={global.shoppingPage} />
-								break;							
-							case 'text':
-								ele = <Text data={module} />
-								break;
-							case 'headline':
-								ele = <Headline data={module} />
-								break;
-							case 'video':
-								ele = <Video data={module} />
-								break;
-							case 'thumbnails':
-								// ele = <Thumbnails data={module} />
-								break;
-							case 'bios':
-								ele = <Bios data={module} />
-								break;
-							case 'events':
-								ele = <Events data={module} />
-								break;
-							case 'article':
-								ele = <Article data={module} />
-								break;								
-							case 'images':
-								ele = <Images data={{...module, prevModuleType, nextModuleType}} />
-								break;
-							case 'quotes':
-								// ele = <Quotes data={module} />
-								break;
-							case 'slider':
-								// ele = <ImageSlider data={module} />
-								break;
-							case 'contact':
-								// ele = <Contact data={module} />
-								break;
-							case 'contactUs':
-								ele = <Contact data={module} />
-								break;
-							case 'shop':
-								ele = <Shop data={module} global={global} />
-								break;								
-							default:
-								// code block
-						}
-				
-						return (
-							<div key={idx} className={cx({[styles.grayBg]:module.grayBackground})}>
-								{ele}
-							</div>
-						)
-					})}
-
-					<Footer 
-						global={global} buttons={page.buttons}
-					/>
+								return (
+									<div key={idx} className={cx({[styles.grayBg]:module.grayBackground})}>
+										{ele}
+									</div>
+								)
+							})}
+						</div>
+						<Footer 
+							global={global} buttons={page.buttons}
+						/>
+					</div>
+					{totalItems !== 0 && isCartVisible && 
+					<div className={styles.cart}>
+						<Cart />
+					</div>
+					}									
 				</div>
+				
 			</div>	
 		
-		</>		
+		</>
 	) : <></>
 }
 

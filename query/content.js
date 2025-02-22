@@ -48,6 +48,7 @@ export default function query(slug) {
 					}
 				    candles {
 						... on Product {
+							id
 							image
 							title
 							price
@@ -59,6 +60,7 @@ export default function query(slug) {
 					}
 				    zodiacCandles {
 						... on Product {
+							id
 							image
 							title
 							price
@@ -70,6 +72,7 @@ export default function query(slug) {
 					}
 					purposeCandles {
 						... on Product {
+							id
 							image
 							title
 							price
@@ -81,6 +84,7 @@ export default function query(slug) {
 					}
 					accessories {
 						... on Product {
+							id
 							image
 							title
 							price
@@ -92,6 +96,7 @@ export default function query(slug) {
 					}
 				    zodiacBracelets {
 						... on Product {
+							id
 							image
 							title
 							price

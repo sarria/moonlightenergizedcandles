@@ -16,7 +16,7 @@
     transition: background-color 0.3s ease;
     font-size: 12px;
 
-    @include md {
+    @include xl {
         padding: 15px 60px;        
         font-size: 18px;
     }    

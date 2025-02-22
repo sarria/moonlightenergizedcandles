@@ -1,2 +1,10 @@
+DESIGN
 https://app.zeplin.io/project/672a32c83305fc0ee39240f3
+
+API DOC
+https://developer.squareup.com/explorer/square/checkout-api/create-payment-link
+https://developer.squareup.com/explorer/square_2025-02-20/orders-api/create-order
+
+SQUARE_PROD_ACCESS_TOKEN=EAAAl9eUqQ69DcsP6zX2VN1UXJvpd96UIIz0cHRYbuhSSvJGhZrRoPvkH5eWX5S9
+
 

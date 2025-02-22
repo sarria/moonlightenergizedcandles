@@ -1,3 +1,4 @@
+import { useCart } from '../context/CartContext';
 import Link from 'next/link'
 import Image from "next/image";
 import faCartWhite from '../public/icons/cart-plus-white.svg'
@@ -28,10 +29,10 @@ const setIcon = (type) => {
 	  }
 };	
 
-const InnerButton = ({buttonInfo, icon}) => {
+const InnerButton = ({buttonInfo, icon, onClick}) => {
 
 	return (
-		<div className={styles.root}>
+		<div className={styles.root} onClick={onClick}>
 			<div className={styles.label}>
 				{buttonInfo.label}
 			</div>
@@ -43,6 +44,7 @@ const InnerButton = ({buttonInfo, icon}) => {
 }
 
 const AddToCartButton = ({item}) => {
+	const { addToCart, toggleCart } = useCart();
 
 	const buttonInfo = {
 		'label' : setLabel(item.type),
@@ -54,6 +56,13 @@ const AddToCartButton = ({item}) => {
 		'cart' : faCartWhite,
 		'custom' : faPaletteWhite,
 	}
+
+	const handleAddToCart = () => {
+		// console.log('Adding item', item)
+		toggleCart()
+		addToCart(item);
+	};
+
 	return (
 		<>
 		{item.buttonLink !== '' ? 
@@ -61,7 +70,7 @@ const AddToCartButton = ({item}) => {
 				<a>
 					<InnerButton buttonInfo={buttonInfo} icon={icon} />
 				</a>
-			</Link> : <InnerButton buttonInfo={buttonInfo} icon={icon} />
+			</Link> : <InnerButton buttonInfo={buttonInfo} icon={icon} onClick={handleAddToCart} />
 		}
 
 		</>

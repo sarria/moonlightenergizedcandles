@@ -1,0 +1,55 @@
+curl https://connect.squareup.com/v2/online-checkout/payment-links \
+  -X POST \
+  -H 'Square-Version: 2025-02-20' \
+  -H 'Authorization: Bearer EAAAl9eUqQ69DcsP6zX2VN1UXJvpd96UIIz0cHRYbuhSSvJGhZrRoPvkH5eWX5S9' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "idempotency_key": "PROD-KEY-5",
+    "checkout_options": {
+      "allow_tipping": false,
+      "ask_for_shipping_address": true,
+      "enable_coupon": false,
+      "merchant_support_email": "Moonlight.Energized.Candles@gmail.com",
+      "redirect_url": "https://www.moonlightenergizedcandles.com/",
+      "shipping_fee": {
+        "name": "SHIPPING TO YOU",
+        "charge": {
+          "amount": 1000,
+          "currency": "USD"
+        }
+      }
+    },
+    "order": {
+      "line_items": [
+        {
+          "quantity": "2",
+          "item_type": "ITEM",
+          "name": "Aries Candle",
+          "base_price_money": {
+            "amount": 3600,
+            "currency": "USD"
+          },
+          "note": "9 OZ. Energized Candle"
+        },
+        {
+          "quantity": "1",
+          "base_price_money": {
+            "amount": 1500,
+            "currency": "USD"
+          },
+          "item_type": "ITEM",
+          "name": "Zodiac Bracelete",
+          "note": "A note about rhe Bracelete can go here"
+        }
+      ],
+      "location_id": "LKCZJ71QE1RMY",
+      "taxes": [
+        {
+          "type": "ADDITIVE",
+          "percentage": "6",
+          "scope": "ORDER",
+          "name": "PA 6% o algo asi"
+        }
+      ]
+    }
+  }'

@@ -1,0 +1,54 @@
+import { SquareClient, SquareEnvironments } from "square";
+
+async function main() {
+    const client = new SquareClient({
+        environment: SquareEnvironments.Production,
+        token: "EAAAl9eUqQ69DcsP6zX2VN1UXJvpd96UIIz0cHRYbuhSSvJGhZrRoPvkH5eWX5S9",
+    });
+    await client.orders.create({
+        idempotencyKey: "UNIQUE_KEY-9",
+        order: {
+            locationId: "LKCZJ71QE1RMY",
+            lineItems: [
+                {
+                    quantity: "2",
+                    name: "Aries Candles Name",
+                    itemType: "ITEM",
+                    basePriceMoney: {
+                        amount: BigInt(3600),
+                        currency: "USD",
+                    },
+                },
+                {
+                    quantity: "1",
+                    basePriceMoney: {
+                        amount: BigInt(15),
+                        currency: "USD",
+                    },
+                    name: "Zodiac Bracelets Name here",
+                },
+            ],
+            taxes: [
+                {
+                    type: "ADDITIVE",
+                    percentage: "6",
+                    name: "Los taxes aqui",
+                    scope: "ORDER",
+                },
+            ],
+            fulfillments: [
+                {
+                    type: "SHIPMENT",
+                    shipmentDetails: {
+                        recipient: {
+                            displayName: "Recipient Name",
+                            emailAddress: "recipient@email.com",
+                            phoneNumber: "484-123-4567",
+                        },
+                    },
+                },
+            ],
+        },
+    });
+}
+main();

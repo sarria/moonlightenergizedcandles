@@ -1,4 +1,5 @@
 @use '../styles/events_shop.scss' as shared;
+//@import '../styles/variables.scss';
 
 .root {
 	@include shared.shared-root;
@@ -8,4 +9,5 @@
 		display: flex;
   		justify-content: center;
 	}
+
 }
