@@ -79,7 +79,7 @@ function TopNav({global, isOpen, toggleMenu}) {
 					<Instagram link={instagram} />
 				</div>
 			</div>
-			<div className={styles.wrapper}>
+			<div className={cx(styles.wrapper, styles.mobile)}>
 				<div className={styles.shopPage}>
 					{productsNavigation.map((item, index) => <ShopPageItem key={index} item={item} toggleMenu={toggleMenu} />)}
 				</div>
