@@ -2,4 +2,20 @@
 
 .root {
 	@include shared.shared-root;
+
+	.location {
+		a {
+			display: flex;
+			align-items: center;
+		}
+	}
+	
+	.ico {
+		position: relative;
+		width: 25px;
+		height: 25px;;
+		margin-right: 10px;
+	}
+
+
 }

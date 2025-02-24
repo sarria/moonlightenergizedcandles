@@ -27,6 +27,7 @@
 
 				.innerItem {
 					padding: 0 10px 60px;
+					border-bottom-color: transparent;
 
 					@include xxl {
 						padding: 0 60px 60px;
@@ -69,19 +70,25 @@
 			}				
 
 			@include lg {
-				width: 33%;
+				width: 50%;
 			}
 
 			.innerItem {
-				padding: 0 0 60px 0;
+				padding: 0 0 30px 0;
+				margin-bottom: 30px;
+				border-bottom: solid 2px lightgray;
 
 				@include sm {
-					padding: 0 30px 60px;
+					padding: 0 30px 30px;
 				}				
 
-				@include xl {
-					padding: 0 60px 60px;
+				@include lg {
+					border-bottom-color: transparent;
 				}	
+
+				@include xl {
+					padding: 0 60px 30px;
+				}
 
 				.image {
 					position: relative;

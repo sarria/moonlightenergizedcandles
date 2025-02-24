@@ -3,6 +3,7 @@ import Link from 'next/link'
 import parse from 'html-react-parser';
 import cx from 'classnames'
 import styles from './events.module.scss'
+import faLocationDot from '../public/icons/location-dot-red.svg';
 
 const Events = ({data}) => {
 	console.log('Events data ::', data.events)
@@ -24,10 +25,8 @@ const Events = ({data}) => {
 										<Image
 											alt="Hero Image"
 											src={item.image.sourceUrl}
-											// width={199} // Provide explicit width
-											// height={83} // Provide explicit height
-											layout="fill" // Optional: Adjust layout as needed
-											objectFit='cover'
+											layout="fill"
+											objectFit='contain'
 										/>
 									</div>
 									<div className={styles.info}>
@@ -43,7 +42,7 @@ const Events = ({data}) => {
 											<div className={styles.location}>
 												{item.linkToMap ? <Link href={item.linkToMap} passHref>
 													<a target="_blank" rel="noopener noreferrer">
-														{item.location}
+														<div className={styles.ico}><Image src={faLocationDot} layout="fill" /></div> {item.location}
 													</a>
 												</Link> : <div>{item.location}</div>}
 												
