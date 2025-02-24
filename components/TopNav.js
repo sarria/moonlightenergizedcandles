@@ -3,10 +3,9 @@ import styles from './topNav.module.scss'
 import parse from 'html-react-parser';
 import Link from 'next/link'
 import ShopButton from './ShopButton'
-import { handleScrollToSection } from './utils/shared';
 import { useRouter } from "next/router";
 import Image from "next/image";
-import faInstagram from '../public/icons/instagram-brands.svg'
+import faInstagramBlack from '../public/icons/instagram-black.svg'
 
 const Item = ({item, toggleMenu}) => {
 	const router = useRouter();
@@ -34,12 +33,26 @@ const Item = ({item, toggleMenu}) => {
 	)
 }
 
+const ShopPageItem = ({item, toggleMenu}) => {
+	const router = useRouter();
+
+	return (
+		<>
+			<div key={item.slug} className={cx(styles.item, styles.isShopPage, {[styles.active]: router.asPath === "/" + item.slug})}>
+				<Link href={"/" + item.slug} >
+					<a onClick={() => toggleMenu()}>{item.title}</a>
+				</Link>
+			</div>
+		</>
+	)
+}
+
 const Instagram = ({link}) => {
 	return (
 		<div className={cx(styles.item, styles.instagram)}>
 			<div className={styles.ico}>
 				<a href={link} target='_blank'>
-					<Image src={faInstagram} layout='fill' />
+					<Image src={faInstagramBlack} layout='fill' className={styles.desktop} />
 				</a>
 			</div>
 		</div>
@@ -49,6 +62,7 @@ const Instagram = ({link}) => {
 function TopNav({global, isOpen, toggleMenu}) {
 	const navigation = global.navigation
 	const shoppingPage = global.shoppingPage
+	const productsNavigation = global.productsNavigation
 	const instagram = global.instagram
 
 	return (
@@ -61,7 +75,14 @@ function TopNav({global, isOpen, toggleMenu}) {
 				<div className={styles.desktop}>
 					<ShopButton shoppingPage={shoppingPage} />
 				</div>
-				<Instagram link={instagram} />
+				<div className={styles.desktop}>
+					<Instagram link={instagram} />
+				</div>
+			</div>
+			<div className={styles.wrapper}>
+				<div className={styles.shopPage}>
+					{productsNavigation.map((item, index) => <ShopPageItem key={index} item={item} toggleMenu={toggleMenu} />)}
+				</div>
 			</div>
 		</div>
 	)

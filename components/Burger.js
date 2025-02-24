@@ -1,9 +1,12 @@
 import styles from './burger.module.scss';
-import { useState } from 'react';
+import { useCart } from '../context/CartContext';
 
 const Burger = ({isOpen, toggleMenu}) => {
-  const toggleButton = () => {
-	toggleMenu();
+  const { toggleCart } = useCart();
+
+  const toggleButton = (status) => {
+    toggleCart(false);
+	  toggleMenu(status);
   };
 
   return (

@@ -25,6 +25,7 @@ import Contact from './Contact'
 import Shop from './Shop'
 import Cart from './Cart';
 import PageTop from './PageTop'
+import ShopNav from './ShopNav'
 
 function PageContent({ page, global }) {
 	return page ? (
@@ -80,20 +81,13 @@ function PageContentWithCart({page, global}) {
 				<div className={cx(styles.wrapper, {[styles.showCart] : totalItems !== 0 && isCartVisible})}>
 					<div className={styles.page}>
 						<div className={styles.content}>
-							{/* <Navigation
-								navigationPicture={global.burgerNavigationPicture}
-								navigationLeft={global.burgerNavigationLeft}
-								navigationRightTop={global.burgerNavigationRightTop}
-								navigationRightBottom={global.burgerNavigationRightBottom}
-							/> */}
-							{/* <Burger /> */}
-							{/* {isHomePage  && <Carousel carousel={page.homePage.carousel} />} */}
-							{/* {!isHomePage && <Hero title={page.title} mobileHeaderImage={page.content_blocks.mobileHeaderImage} desktopHeaderImage={page.content_blocks.desktopHeaderImage} />} */}
-							
+
 							{page.content_blocks.modules && page.content_blocks.modules.map((module, idx) => {
 								let ele = null; //<>{module.moduleType}</>
 								let prevModuleType = idx > 0 ? page.content_blocks.modules[idx-1].moduleType : '';
 								let nextModuleType = idx < page.content_blocks.modules.length-1 ? page.content_blocks.modules[idx+1].moduleType : '';
+
+								// console.log("module.moduleType", module.moduleType)
 								
 								switch(module.moduleType) {
 									case 'hero':
@@ -119,7 +113,7 @@ function PageContentWithCart({page, global}) {
 										break;
 									case 'article':
 										ele = <Article data={module} />
-										break;								
+										break;
 									case 'images':
 										ele = <Images data={{...module, prevModuleType, nextModuleType}} />
 										break;
@@ -137,7 +131,10 @@ function PageContentWithCart({page, global}) {
 										break;
 									case 'shop':
 										ele = <Shop data={module} global={global} />
-										break;								
+										break;
+									case 'shopNav':
+										ele = <ShopNav global={global} />
+										break;
 									default:
 										// code block
 								}

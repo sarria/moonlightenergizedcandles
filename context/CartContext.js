@@ -55,10 +55,12 @@ export const CartProvider = ({ children }) => {
     const getTotalCost = () => cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
     // Toggle cart visibility
-    const toggleCart = () => {
-        // console.log('Cart visibility toggled:', !isCartVisible);
-        setIsCartVisible((prev) => !prev);
+    const toggleCart = (visible) => {
+        setIsCartVisible((prev) => 
+            visible !== undefined && visible !== null ? visible : !prev
+        );
     };
+    
 
     return (
         <CartContext.Provider value={{ 

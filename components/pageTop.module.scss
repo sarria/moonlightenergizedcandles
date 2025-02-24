@@ -32,6 +32,14 @@
 				display: flex;
 			}
 		}
+
+		.shopButton {
+			padding-right: 30px;
+
+			@include md {
+				display: none;
+			}
+		}
 		
 	}
 }

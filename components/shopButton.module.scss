@@ -11,6 +11,12 @@
     padding: 10px;
     border-bottom: solid 5px transparent;
 
+    .label {
+        padding-left: 15px;
+        text-transform: capitalize;
+        font-family: "Poppins", sans-serif;
+    }
+
     @include md {
         color: black;
         padding: 0px;
@@ -59,4 +65,20 @@
             box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
     }
+}
+
+.mobile {
+	display: block;
+
+	@include md {
+		display: none;
+	}	
+}
+
+.desktop {
+	display: none;
+
+	@include md {
+		display: block;
+	}	
 }

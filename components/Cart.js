@@ -7,7 +7,7 @@ const Cart = () => {
 	return (
 		<div className={styles.root}>
 			<div className={styles.wrapper}>
-				<div onClick={toggleCart}>CLOSE</div>
+				<div onClick={() => toggleCart(false)}>CLOSE</div>
 				<h2>Shopping Cart</h2>
 				{cart.length === 0 ? (
 					<p>Your cart is empty.</p>

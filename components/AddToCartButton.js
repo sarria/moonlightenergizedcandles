@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from "next/image";
 import faCartWhite from '../public/icons/cart-plus-white.svg'
 import faMoonWhite from '../public/icons/moon-white.svg'
+import faMoonBlack from '../public/icons/moon-black.svg'
 import faPaletteWhite from '../public/icons/palette-white.svg'
 import styles from './addToCartButton.module.scss'
 import cx from 'classnames'
@@ -29,10 +30,10 @@ const setIcon = (type) => {
 	  }
 };	
 
-const InnerButton = ({buttonInfo, icon, onClick}) => {
+const InnerButton = ({buttonInfo, icon, isPage, onClick}) => {
 
 	return (
-		<div className={styles.root} onClick={onClick}>
+		<div className={cx(styles.root, {[styles.isPage] : isPage})} onClick={onClick}>
 			<div className={styles.label}>
 				{buttonInfo.label}
 			</div>
@@ -52,14 +53,14 @@ const AddToCartButton = ({item}) => {
 	}
 
 	const icon = {
-		'zodiac': faMoonWhite,
+		'zodiac': item.buttonLink === '' ? faMoonWhite : faMoonBlack,
 		'cart' : faCartWhite,
 		'custom' : faPaletteWhite,
 	}
 
 	const handleAddToCart = () => {
 		// console.log('Adding item', item)
-		toggleCart()
+		toggleCart(true)
 		addToCart(item);
 	};
 
@@ -68,7 +69,7 @@ const AddToCartButton = ({item}) => {
 		{item.buttonLink !== '' ? 
 			<Link href={item.buttonLink} passHref>
 				<a>
-					<InnerButton buttonInfo={buttonInfo} icon={icon} />
+					<InnerButton buttonInfo={buttonInfo} icon={icon} isPage={true} />
 				</a>
 			</Link> : <InnerButton buttonInfo={buttonInfo} icon={icon} onClick={handleAddToCart} />
 		}

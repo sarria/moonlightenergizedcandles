@@ -46,6 +46,13 @@ export default function query(slug) {
 							sourceUrl
 						}
 					}
+					productsNavigation {
+						... on Page {
+							id
+							title
+							slug
+						}
+					}						
 				    candles {
 						... on Product {
 							id

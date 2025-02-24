@@ -16,13 +16,23 @@
     transition: background-color 0.3s ease;
     font-size: 12px;
 
+    &.isPage {
+        background-color: rgb(236, 234, 234);
+        border: solid 2px black;
+        color: black;
+
+        &:hover {
+            background-color: white;
+        }       
+    }    
+
     @include xl {
         padding: 15px 60px;        
         font-size: 18px;
     }    
 
     &:hover {
-        background-color: #444; // Lighter shade on hover
+        background-color: #575656; // Lighter shade on hover
     }
 
     a {
@@ -46,6 +56,5 @@
             height: 25px;
         }
     }
-
 
 }
