@@ -23,6 +23,10 @@
 		.cart {
 			position: relative;
 			z-index: 50;
+
+			@include md {
+				padding-top: 70px;
+			}
 		}		
 
 		&.showCart {

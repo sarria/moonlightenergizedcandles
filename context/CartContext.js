@@ -54,6 +54,11 @@ export const CartProvider = ({ children }) => {
     // Get total cost of items in the cart
     const getTotalCost = () => cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
+    const getTotalQuantityById = (id) => {
+        const item = cart.find((cartItem) => cartItem.id === id);
+        return item ? item.quantity : 0;
+    };
+
     // Toggle cart visibility
     const toggleCart = (visible) => {
         setIsCartVisible((prev) => 
@@ -70,6 +75,7 @@ export const CartProvider = ({ children }) => {
             updateQuantity, 
             getTotalItems, 
             getTotalCost, 
+            getTotalQuantityById,
             toggleCart, 
             isCartVisible 
         }}>

@@ -13,10 +13,67 @@
     padding: 10px 30px;
     border-radius: 40px;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
     font-size: 12px;
 
-    &.isPage {
+    /* Quantity Selector */
+    &.quantitySelector {
+        background-color: white;
+        border: 2px solid gold;
+        padding: 4px 15px;
+        color: black;
+        width: 110px;
+        justify-content: space-between;
+        cursor: unset;
+
+        @include xl {
+            padding: 8px 25px;
+            width: 150px;
+        }
+
+        .quantityButton {
+            position: relative;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 15px;
+            height: 15px;
+
+            @include xl {
+                width: 20px;
+                height: 20px;
+            }    
+        }
+
+        .quantity {
+            font-weight: bold;
+            font-size: 18px;
+
+            @include xl {
+                font-size: 25px;
+            }
+        }
+
+        &:hover {
+            background-color: white;
+        }        
+    }
+
+    &.isMobile {
+        display: flex;
+        @include lg {
+            display: none;
+        }
+    }
+
+    &.isDesktop {
+        display: none;
+        @include lg {
+            display: flex;
+        }
+    }
+
+    &.hasLinkToPage {
         background-color: rgb(236, 234, 234);
         border: solid 2px black;
         color: black;
@@ -33,6 +90,14 @@
 
     &:hover {
         background-color: #575656; // Lighter shade on hover
+    }
+
+    &:active {
+        transform: scale(0.95); /* Button press effect */
+    }
+
+    &.added {
+        animation: pulse 0.4s ease-in-out;
     }
 
     a {
@@ -58,3 +123,17 @@
     }
 
 }
+
+/* Pulse animation */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
