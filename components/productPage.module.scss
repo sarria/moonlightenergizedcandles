@@ -1,0 +1,108 @@
+@import '../styles/variables.scss';
+
+.root {
+	position: relative;
+	width: 100%;
+
+	.wrapper {
+		position: relative;
+		width: 100%;
+		margin: 0 auto;
+        padding-top: 50px;
+
+        @include md {
+            width: 80%;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+
+            @include md {
+                flex-direction: row;
+            }
+
+            .left {
+                position: relative;
+
+                @include md {
+                    width: 50%;
+                }
+                
+                .image {
+                    position: relative;
+                    height: 400px;
+                    margin-bottom: 50px;
+
+                    @include md {
+                        width: 100%;
+                        height: 100%;
+                        margin-bottom: 0;                        
+                    }
+                }
+                
+            }
+
+            .right {
+                position: relative;
+                font-family: "Brandon Grotesque", "Poppins", sans-serif;
+
+                @include md {
+                    width: 50%;
+                }                
+
+                .info {
+                    padding: 0 20px;
+
+                    @include md {
+                        padding-left: 30px;
+                    }                    
+
+                    .title {
+                        font-family: "Qeilab";
+                        font-weight: 300;
+                        font-size: 40px;
+                        line-height: 45px;
+                        text-transform: capitalize;
+                        margin: 0;
+
+                        @include xl {
+                            font-size: 70px;
+                            line-height: 75px;
+                        }
+    
+                    }
+                    
+                    .headline {
+                        font-size: 20px;
+                        text-transform: uppercase;
+                        
+                        @include xl {
+                            font-size: 30px;
+                        }
+                    }
+
+                    .price {
+                        display: flex;
+                        padding-top: 10px;
+                        font-size: 30px;
+
+                        & > span {
+                            font-weight: bold;
+                            padding-right: 20px;
+                        }
+                    }
+
+                    .description {
+                        padding-top: 30px;
+                        font-weight: 300;
+                        font-size: 28px;
+                        line-height: 40px;
+                        text-align: left;                
+                        color: #000000;
+                    }
+                }
+            }
+        }
+    }
+}

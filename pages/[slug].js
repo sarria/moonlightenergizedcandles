@@ -17,9 +17,9 @@ export async function getStaticProps(context) {
   const res = await fetch(process.env.GRAPHQL + queryContent(context.params.slug))
   const data = await res.json()
   const global = data.data?.acfOptionsGlobalOptions?.global || null
-  const page = data.data?.content?.edges[0]?.node || null
-  
-	// console.log("data ==>", data)  
+  // const page = data.data?.content?.edges[0]?.node || {data.data?.product?.edges[0]?.node || null}
+  // console.log("data ==>", data)  
+  const page = data.data?.content?.edges[0] ? data.data?.content?.edges[0]?.node : data.data?.product?.edges[0]?.node
 
   return {
     props: {

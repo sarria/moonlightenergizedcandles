@@ -56,11 +56,11 @@ export default function query(slug) {
 				    candles {
 						... on Product {
 							id
+							slug
 							image
 							title
 							price
 							headline
-							description
 							type
 							buttonLink
 						}
@@ -68,11 +68,11 @@ export default function query(slug) {
 				    zodiacCandles {
 						... on Product {
 							id
+							slug
 							image
 							title
 							price
 							headline
-							description
 							type
 							buttonLink
 						}
@@ -80,11 +80,11 @@ export default function query(slug) {
 					purposeCandles {
 						... on Product {
 							id
+							slug
 							image
 							title
 							price
 							headline
-							description
 							type
 							buttonLink
 						}
@@ -92,11 +92,11 @@ export default function query(slug) {
 					accessories {
 						... on Product {
 							id
+							slug
 							image
 							title
 							price
 							headline
-							description
 							type
 							buttonLink
 						}
@@ -104,11 +104,11 @@ export default function query(slug) {
 				    zodiacBracelets {
 						... on Product {
 							id
+							slug
 							image
 							title
 							price
 							headline
-							description
 							type
 							buttonLink
 						}
@@ -116,9 +116,27 @@ export default function query(slug) {
 
 				}
 			}
+			product: products(where: {name: "${slug}"}) {
+				edges {
+					node {
+						__typename
+						id
+						slug
+						title
+						image
+						type
+						price
+						headline
+						description
+						seoTitle
+						seoDescription						
+					}
+				}
+			}
 			content: pages(where: {name: "${slug}"}) {
 				edges {
 					node {
+						__typename
 						slug
 						title
 						content_blocks {

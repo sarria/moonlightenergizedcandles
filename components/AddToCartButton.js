@@ -34,13 +34,14 @@ const setIcon = (type) => {
 	}
 };	
 
-const InnerButton = ({ buttonInfo, icon, hasLinkToPage, isMobile, handleUpdate, onClick, isAdded, quantity }) => {
+const InnerButton = ({ buttonInfo, icon, hasLinkToPage, isMobile, handleUpdate, onClick, isAdded, quantity, small }) => {
 	const Button = (
 		<div 
 			className={cx(styles.root, 
 				{ [styles.hasLinkToPage]: hasLinkToPage }, 
 				{ [styles.isMobile]: isMobile && isMobile !== undefined }, 
 				{ [styles.isDesktop]: !isMobile && isMobile !== undefined },
+				{ [styles.small]: small && small !== undefined },
 				{ [styles.added]: isAdded } // Apply animation class when added
 			)} 
 			onClick={() => onClick ? onClick(isMobile) : {}}
@@ -58,7 +59,8 @@ const InnerButton = ({ buttonInfo, icon, hasLinkToPage, isMobile, handleUpdate, 
 		<div 
 			className={cx(styles.root, styles.quantitySelector,
 				{ [styles.isMobile]: isMobile && isMobile !== undefined }, 
-				{ [styles.isDesktop]: !isMobile && isMobile !== undefined }
+				{ [styles.isDesktop]: !isMobile && isMobile !== undefined },
+				{ [styles.small]: small && small !== undefined },				
 			)} 
 		>
 			<button className={styles.quantityButton} onClick={() => handleUpdate(-1)}>
@@ -74,8 +76,8 @@ const InnerButton = ({ buttonInfo, icon, hasLinkToPage, isMobile, handleUpdate, 
 	return quantity > 0 ? QtyButton : Button
 }
 
-const AddToCartButton = ({ item }) => {
-	const { addToCart, getTotalQuantityById, toggleCart, removeFromCart, updateQuantity } = useCart();
+const AddToCartButton = ({ item, small }) => {
+	const { addToCart, getTotalQuantityById, removeFromCart, updateQuantity } = useCart();
 	const [isAdded, setIsAdded] = useState(false);
 
 	const quantity = getTotalQuantityById(item.id)
@@ -93,7 +95,6 @@ const AddToCartButton = ({ item }) => {
 
 	const handleAddToCart = (isMobile) => {
 		addToCart(item);
-		if (!isMobile) toggleCart(true);
 
 		// Trigger pulse animation
 		setIsAdded(true);
@@ -113,7 +114,7 @@ const AddToCartButton = ({ item }) => {
 		
 	return (
 		<>
-			{item.buttonLink !== '' ? 
+			{item.buttonLink !== '' && item.buttonLink !== undefined ? 
 				<Link href={item.buttonLink} passHref>
 					<a>
 						<InnerButton buttonInfo={buttonInfo} icon={icon} hasLinkToPage={true} />
@@ -121,7 +122,7 @@ const AddToCartButton = ({ item }) => {
 				</Link> : 
 				<>
 					<InnerButton buttonInfo={buttonInfo} icon={icon} isMobile={true} onClick={handleAddToCart} handleUpdate={handleUpdate} isAdded={isAdded} quantity={quantity} />
-					<InnerButton buttonInfo={buttonInfo} icon={icon} isMobile={false} onClick={handleAddToCart} handleUpdate={handleUpdate} isAdded={isAdded} quantity={quantity} />
+					<InnerButton buttonInfo={buttonInfo} icon={icon} isMobile={false} onClick={handleAddToCart} handleUpdate={handleUpdate} isAdded={isAdded} quantity={quantity} small={small} />
 				</>
 			}
 		</>

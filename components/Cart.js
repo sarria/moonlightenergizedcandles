@@ -1,4 +1,5 @@
 import { useCart } from '../context/CartContext';
+import { formatCurrency } from './utils/shared'
 import styles from './cart.module.scss';
 
 const Cart = () => {
@@ -18,7 +19,7 @@ const Cart = () => {
 								<li key={item.id} className={styles.cartItem}>
 									<div className={styles.itemInfo}>
 										<span>{item.title}</span>
-										<span>{item.price} USD</span>
+										<span>{formatCurrency(item.price)} USD</span>
 									</div>
 									<div className={styles.actions}>
 										<button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>

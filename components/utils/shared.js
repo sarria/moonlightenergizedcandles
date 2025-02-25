@@ -15,4 +15,11 @@ export function handleScrollToSection(id) {
 	}
 }
 
-  
+export function formatCurrency(price, currency = 'USD', locale = 'en-US') {
+	return new Intl.NumberFormat(locale, {
+		style: 'currency',
+		currency: currency,
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 0  
+	}).format(price);
+}

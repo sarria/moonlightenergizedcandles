@@ -23,7 +23,7 @@ const Events = ({data}) => {
 								<div className={cx(styles.innerItem)}>
 									<div className={cx(styles.image)}>
 										<Image
-											alt="Hero Image"
+											alt={item.image.alt}
 											src={item.image.sourceUrl}
 											layout="fill"
 											objectFit='contain'

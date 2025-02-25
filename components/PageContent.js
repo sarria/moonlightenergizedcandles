@@ -26,6 +26,7 @@ import Shop from './Shop'
 import Cart from './Cart';
 import PageTop from './PageTop'
 import ShopNav from './ShopNav'
+import ProductPage from './ProductPage'
 
 function PageContent({ page, global }) {
 	return page ? (
@@ -39,7 +40,7 @@ function PageContentWithCart({page, global}) {
 	const router = useRouter()
 	const { getTotalItems, isCartVisible } = useCart()
 	const totalItems = getTotalItems()
-	// console.log("page ::", page)
+	console.log("page ::", page)
 
 	useEffect(() => {
 		// ALL THIS JUST TO BE ABLE TO JUMP TO A HASH IN A PAGE. WOW
@@ -71,9 +72,9 @@ function PageContentWithCart({page, global}) {
 	return page ? (
 		<>
 			<Header seo={{
-				title : global.title,
-				description : global.description,
-				logo : global.logo
+				title : (page.title || global.title) + ' | ' + page.seoTitle,
+				description : page.seoDescription || global.description,
+				image : page.image || global.logo
 			}} />
 			<PageTop className={styles.pageTop} global={global} />
 
@@ -82,7 +83,7 @@ function PageContentWithCart({page, global}) {
 					<div className={styles.page}>
 						<div className={styles.content}>
 
-							{page.content_blocks.modules && page.content_blocks.modules.map((module, idx) => {
+							{page.content_blocks && page.content_blocks.modules && page.content_blocks.modules.map((module, idx) => {
 								let ele = null; //<>{module.moduleType}</>
 								let prevModuleType = idx > 0 ? page.content_blocks.modules[idx-1].moduleType : '';
 								let nextModuleType = idx < page.content_blocks.modules.length-1 ? page.content_blocks.modules[idx+1].moduleType : '';
@@ -145,6 +146,12 @@ function PageContentWithCart({page, global}) {
 									</div>
 								)
 							})}
+							{page.__typename === "Product" && 
+								<>
+									<ShopNav global={global} />
+									<ProductPage global={global} product={page}/>
+								</>
+							}
 						</div>
 						<Footer 
 							global={global} buttons={page.buttons}

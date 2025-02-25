@@ -3,15 +3,7 @@ import Image from "next/image";
 import styles from './shop.module.scss'
 import cx from 'classnames'
 import AddToCartButton from './AddToCartButton'
-
-function formatCurrency(price, currency = 'USD', locale = 'en-US') {
-	return new Intl.NumberFormat(locale, {
-		style: 'currency',
-		currency: currency,
-		minimumFractionDigits: 0,
-		maximumFractionDigits: 0  
-	}).format(price);
-}
+import { formatCurrency } from './utils/shared'
 
 const Items = ({ items }) => {
 	return (
@@ -20,11 +12,16 @@ const Items = ({ items }) => {
 				<div key={index} className={cx(styles.item)}>
 					<div className={cx(styles.innerItem)}>
 						<div className={cx(styles.image)}>
-							<Image
-								alt={item.title}
-								src={item.image}
-								layout="fill"
-							/>
+						<Link href={item.slug ? '/' + item.slug : 'javascript:void(0)'} passHref>
+							<a>
+								<Image
+									alt={item.title}
+									src={item.image}
+									layout="fill"
+								/>
+							</a>
+						</Link>
+
 						</div>
 						<div className={styles.info}>
 							<div className={styles.line1}>

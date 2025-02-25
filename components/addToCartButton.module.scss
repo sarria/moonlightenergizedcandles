@@ -26,9 +26,11 @@
         justify-content: space-between;
         cursor: unset;
 
-        @include xl {
-            padding: 8px 25px;
-            width: 150px;
+        &:not(.small) {
+            @include xl {
+                padding: 8px 25px;
+                width: 150px;
+            }
         }
 
         .quantityButton {
@@ -45,12 +47,25 @@
             }    
         }
 
+        &.small {
+            .quantityButton {
+                width: 15px;
+                height: 15px;                
+            }
+        }
+
         .quantity {
             font-weight: bold;
             font-size: 18px;
 
             @include xl {
                 font-size: 25px;
+            }
+        }
+
+        &.small {
+            .quantity {
+                font-size: 18px;
             }
         }
 
@@ -83,10 +98,12 @@
         }       
     }    
 
-    @include xl {
-        padding: 15px 60px;        
-        font-size: 18px;
-    }    
+    &:not(.small) {
+        @include xl {
+            padding: 15px 60px;        
+            font-size: 18px;
+        }    
+    }
 
     &:hover {
         background-color: #575656; // Lighter shade on hover
@@ -119,6 +136,15 @@
         @include md {
             width: 25px;
             height: 25px;
+        }
+    }
+
+    &.small {
+        .ico {
+            @include md {
+                width: 15px;
+                height: 15px;
+            }
         }
     }
 
