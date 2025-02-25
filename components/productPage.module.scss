@@ -75,7 +75,6 @@
                     
                     .headline {
                         font-size: 20px;
-                        text-transform: uppercase;
                         
                         @include xl {
                             font-size: 30px;
@@ -84,11 +83,12 @@
 
                     .price {
                         display: flex;
+                        align-items: center;
                         padding-top: 10px;
-                        font-size: 30px;
+                        font-size: 23px;
 
                         & > span {
-                            font-weight: bold;
+                            font-weight: 300;
                             padding-right: 20px;
                         }
                     }

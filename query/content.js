@@ -129,7 +129,7 @@ export default function query(slug) {
 						headline
 						description
 						seoTitle
-						seoDescription						
+						seoDescription
 					}
 				}
 			}
