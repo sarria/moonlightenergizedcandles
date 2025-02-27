@@ -28,33 +28,31 @@ const Cart = () => {
 				{cart.length === 0 ? (
 					<p>Your cart is empty.</p>
 				) : (
-					<>
-						<ul>
-							{cart.map((item) => (
-								<li key={item.id} className={styles.cartItem}>
-									<div className={styles.left}>
-										<ImageRatio 
-											image={{
-												altText: item.title,
-												sourceUrl: item.image
-											}} 
-											ratio='120%' 
-										/>
+					<ul>
+						{cart.map((item) => (
+							<li key={item.id} className={styles.cartItem}>
+								<div className={styles.left}>
+									<ImageRatio 
+										image={{
+											altText: item.title,
+											sourceUrl: item.image
+										}} 
+										ratio='120%' 
+									/>
+								</div>
+								<div className={styles.right}>
+									<h1 className={styles.title}>{item.title}</h1>
+									<div className={styles.headline}>
+										{parse(item.headline)}
 									</div>
-									<div className={styles.right}>
-										<h1 className={styles.title}>{item.title}</h1>
-										<div className={styles.headline}>
-											{parse(item.headline)}
-										</div>
-										<div className={styles.price}>
-											<span>{formatCurrency(item.price)}</span>
-											<span><AddToCartButton item={item} small={true} /></span>
-										</div>
+									<div className={styles.price}>
+										<span>{formatCurrency(item.price)}</span>
+										<span><AddToCartButton item={item} small={true} /></span>
 									</div>
-								</li>
-							))}
-						</ul>
-					</>
+								</div>
+							</li>
+						))}
+					</ul>
 				)}
 			</div>
 		</div>
