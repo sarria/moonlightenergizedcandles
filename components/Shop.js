@@ -12,25 +12,28 @@ const Items = ({ items }) => {
 				<div key={index} className={cx(styles.item)}>
 					<div className={cx(styles.innerItem)}>
 						<div className={cx(styles.image)}>
-						<Link href={item.slug ? '/' + item.slug : 'javascript:void(0)'} passHref>
-							<a>
-								<Image
-									alt={item.title}
-									src={item.image}
-									layout="fill"
-								/>
-							</a>
-						</Link>
-
+							<Link href={item.slug ? '/' + item.slug : 'javascript:void(0)'} passHref>
+								<a>
+									<Image
+										alt={item.title}
+										src={item.image}
+										layout="fill"
+									/>
+								</a>
+							</Link>
 						</div>
 						<div className={styles.info}>
-							<div className={styles.line1}>
-								<div className={styles.name}>{item.title}</div>
-								<div className={styles.date}>{formatCurrency(item.price)}</div>
-							</div>
-							<div className={styles.line2}>
-								<div className={styles.headline}>{item.headline}</div>
-							</div>
+							<Link href={item.slug ? '/' + item.slug : 'javascript:void(0)'} passHref>
+								<a>
+									<div className={styles.line1}>
+										<div className={styles.name}>{item.title}</div>
+										<div className={styles.date}>{formatCurrency(item.price)}</div>
+									</div>
+									<div className={styles.line2}>
+										<div className={styles.headline}>{item.headline}</div>
+									</div>
+								</a>
+							</Link>
 						</div>
 						<div className={styles.addToCart}>
 							<AddToCartButton item={item} />

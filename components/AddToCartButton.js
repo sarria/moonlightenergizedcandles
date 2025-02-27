@@ -121,7 +121,7 @@ const AddToCartButton = ({ item, small }) => {
 					</a>
 				</Link> : 
 				<>
-					<InnerButton buttonInfo={buttonInfo} icon={icon} isMobile={true} onClick={handleAddToCart} handleUpdate={handleUpdate} isAdded={isAdded} quantity={quantity} />
+					<InnerButton buttonInfo={buttonInfo} icon={icon} isMobile={true} onClick={handleAddToCart} handleUpdate={handleUpdate} isAdded={isAdded} quantity={quantity} small={small} />
 					<InnerButton buttonInfo={buttonInfo} icon={icon} isMobile={false} onClick={handleAddToCart} handleUpdate={handleUpdate} isAdded={isAdded} quantity={quantity} small={small} />
 				</>
 			}

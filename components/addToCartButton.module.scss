@@ -16,6 +16,10 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
     font-size: 12px;
 
+    &.small {
+        padding: 0px 30px !important;
+    }
+
     /* Quantity Selector */
     &.quantitySelector {
         background-color: white;
