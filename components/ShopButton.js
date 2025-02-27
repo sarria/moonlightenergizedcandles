@@ -21,7 +21,7 @@ const ShopButton = ({ shoppingPage, isButton, isMobilePageTop }) => {
 				</div>
 				{totalItems > 0 && <span className={styles.badge}>{totalItems}</span>}
 			</div>
-			{shoppingPage && !isButton && <div className={styles.label} onClick={() => toggleCart(true)}>Cart</div>}
+			{getTotalItems() !== 0 && shoppingPage && !isButton && <div className={styles.label} onClick={() => toggleCart(true)}>Cart</div>}
 		</div>
 	);
 };

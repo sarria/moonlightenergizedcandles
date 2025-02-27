@@ -1,0 +1,43 @@
+{
+  "idempotency_key": "PROD-KEY-15",
+  "checkout_options": {
+    "allow_tipping": false,
+    "ask_for_shipping_address": false,
+    "enable_coupon": false,
+    "redirect_url": "https://www.moonlightenergizedcandles.com/",
+    "merchant_support_email": "Moonlight.Energized.Candles@gmail.com"
+  },
+  "order": {
+    "line_items": [
+      {
+        "quantity": "2",
+        "item_type": "ITEM",
+        "name": "Aries Candle",
+        "base_price_money": {
+          "amount": 3600,
+          "currency": "USD"
+        },
+        "note": "9 OZ. Energized Candle",
+        "modifiers": []
+      },
+      {
+        "quantity": "1",
+        "base_price_money": {
+          "amount": 1500,
+          "currency": "USD"
+        },
+        "item_type": "ITEM",
+        "name": "Zodiac Bracelet",
+        "note": "A note about the Bracelet can go here"
+      }
+    ],
+    "location_id": "LKCZJ71QE1RMY",
+    "taxes": [
+      {
+        "scope": "ORDER",
+        "catalog_object_id": "RN3FBUQ3JGACAPKHNEWNKHHA"
+      }
+    ],
+    "fulfillments": []
+  }
+}

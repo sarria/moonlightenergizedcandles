@@ -2,7 +2,7 @@ import Image from 'next/image'
 import cx from 'classnames'
 import styles from './ImageRatio.module.scss'
 
-const ImageRatio = ({image, ratio}) => {
+const ImageRatio = ({image, ratio, objectFit}) => {
 	return (
 		<div className={cx('ratio_container', {[styles.large_container]: !ratio})}>
 			<div className='outer' style={{'paddingTop': ratio}}>
@@ -12,7 +12,7 @@ const ImageRatio = ({image, ratio}) => {
 						alt={image.altText}
 						src={image.sourceUrl}
 						layout="fill"
-						objectFit="cover"
+						objectFit={objectFit ? objectFit : "cover"}
 						objectPosition="center"
 					/>}
 				</div>

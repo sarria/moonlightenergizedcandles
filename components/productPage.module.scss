@@ -33,10 +33,6 @@
 			flex-direction: row;
 		}
 
-		@include xl {
-			width: 65%;
-		}
-
 		.left {
 			width: auto;
 			// padding: $GLOBAL-MARGIN $GLOBAL-MARGIN 0 $GLOBAL-MARGIN; 

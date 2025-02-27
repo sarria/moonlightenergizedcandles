@@ -68,6 +68,7 @@ function PageContentWithCart({page, global}) {
 	}, [])	
 
 	const isHomePage = page.slug === 'home-page';
+	const showCart = totalItems !== 0 && isCartVisible;
 
 	return page ? (
 		<>
@@ -79,7 +80,7 @@ function PageContentWithCart({page, global}) {
 			<PageTop className={styles.pageTop} global={global} />
 
 			<div className={cx(styles.root, {[styles.homePage]: isHomePage}, {[styles.innerPage]: !isHomePage})} id='pageContent'>
-				<div className={cx(styles.wrapper, {[styles.showCart] : totalItems !== 0 && isCartVisible})}>
+				<div className={cx(styles.wrapper, {[styles.showCart] : showCart})}>
 					<div className={styles.page}>
 						<div className={styles.content}>
 
@@ -134,7 +135,7 @@ function PageContentWithCart({page, global}) {
 										ele = <Shop data={module} global={global} />
 										break;
 									case 'shopNav':
-										ele = <ShopNav global={global} />
+										ele = <ShopNav global={global} showCart={showCart} />
 										break;
 									default:
 										// code block
@@ -148,7 +149,7 @@ function PageContentWithCart({page, global}) {
 							})}
 							{page.__typename === "Product" && 
 								<>
-									<ShopNav global={global} />
+									<ShopNav global={global} showCart={showCart} />
 									<ProductPage global={global} product={page}/>
 								</>
 							}
@@ -157,7 +158,7 @@ function PageContentWithCart({page, global}) {
 							global={global} buttons={page.buttons}
 						/>
 					</div>
-					{totalItems !== 0 && isCartVisible && 
+					{showCart && 
 					<div className={styles.cart}>
 						<Cart />
 					</div>

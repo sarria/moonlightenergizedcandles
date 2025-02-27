@@ -17,9 +17,9 @@ const Item = ({item}) => {
 	)
 }
 
-function ShopNav({global, isTopNav}) {
+function ShopNav({global, showCart}) {
     return (
-		<div className={cx(styles.root, {[styles.isTopNav] : isTopNav})}>
+		<div className={cx(styles.root, {[styles.showCart] : showCart})}>
 			<div className={styles.wrapper}>
 				{global.productsNavigation.map((item, index) => <Item key={index} item={item} />)}
 			</div>

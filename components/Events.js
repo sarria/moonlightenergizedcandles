@@ -4,6 +4,8 @@ import parse from 'html-react-parser';
 import cx from 'classnames'
 import styles from './events.module.scss'
 import faLocationDot from '../public/icons/location-dot-red.svg';
+import ImageRatio from './elements/ImageRatio'
+
 
 const Events = ({data}) => {
 	console.log('Events data ::', data.events)
@@ -18,16 +20,22 @@ const Events = ({data}) => {
 				}
 				<div className={cx(styles.items)}>
 					{data.events && data.events.map((item, index) =>{
+						const image = {
+							altText: item.image.alt,
+							sourceUrl: item.image.sourceUrl
+						}
+
 						return (
 							<div key={index} className={cx(styles.item)}>
 								<div className={cx(styles.innerItem)}>
 									<div className={cx(styles.image)}>
-										<Image
+										{/* <Image
 											alt={item.image.alt}
 											src={item.image.sourceUrl}
 											layout="fill"
 											objectFit='contain'
-										/>
+										/> */}
+										<ImageRatio image={image} ratio='100%' objectFit='contain' />
 									</div>
 									<div className={styles.info}>
 										<div className={styles.line1}>

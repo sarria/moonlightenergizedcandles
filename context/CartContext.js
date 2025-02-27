@@ -61,9 +61,11 @@ export const CartProvider = ({ children }) => {
 
     // Toggle cart visibility
     const toggleCart = (visible) => {
-        setIsCartVisible((prev) => 
-            visible !== undefined && visible !== null ? visible : !prev
-        );
+        if (getTotalItems() !== 0) {
+            setIsCartVisible((prev) => 
+                visible !== undefined && visible !== null ? visible : !prev
+            )
+        }
     };
     
 
