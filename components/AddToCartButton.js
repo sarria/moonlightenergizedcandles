@@ -64,11 +64,11 @@ const InnerButton = ({ buttonInfo, icon, hasLinkToPage, isMobile, handleUpdate, 
 			)} 
 		>
 			<button className={styles.quantityButton} onClick={() => handleUpdate(-1)}>
-				{quantity > 1 ? <Image src={faMinus} alt="Decrease" layout='fill' /> : <Image src={faTrash} alt="Remove" layout='fill' />}
+				{quantity > 1 ? <Image src={faMinus} alt="Decrease" layout='fill' title="Remove item" /> : <Image src={faTrash} alt="Remove" layout='fill' title="Remove item" />}
 			</button>
 			<span className={styles.quantity}>{quantity}</span>
 			<button className={styles.quantityButton} onClick={() => handleUpdate(1)}>
-				<Image src={faPlus} alt="Decrease" layout='fill' />
+				<Image src={faPlus} alt="Increase" layout='fill' title="Add item"/>
 			</button>
 		</div>
 	)

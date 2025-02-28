@@ -30,9 +30,12 @@ export const CartProvider = ({ children }) => {
 
     // Save customizations to localStorage whenever it changes
     useEffect(() => {
-        if (customizations.length > 0) {
+        console.log("customizations.length", customizations ? 'si' : 'no')
+        if (customizations) {
+            console.log('localStorage customForms', customizations)
             localStorage.setItem('customForms', JSON.stringify(customizations));
         } else {
+            console.log("Remove customForms")
             localStorage.removeItem('customForms');
         }
     }, [customizations]);    
@@ -82,17 +85,61 @@ export const CartProvider = ({ children }) => {
         }
     };
     
-    const handleCustomizationChange = (formId, field, value) => {
-        setCustomizations(prev => {
-            const updated = {
-                ...prev,
-                [formId]: { ...prev[formId], [field]: value }
+    const handleCustomizationChange = (id, index, field, value) => {
+        console.log("id, index, field, value :: ", id, index, field, value);
+
+        setCustomizations((prev) => {
+            const existingEntries = prev[id] || []; // Ensure an array exists
+            const updatedEntries = [...existingEntries];
+    
+            // Ensure the correct entry exists in the array
+            updatedEntries[index] = {
+                ...(updatedEntries[index] || {}), // Preserve existing fields
+                [field]: value, // Update only the changed field
             };
-            console.log("Updated customizations:", updated); // Log the updated state
-            return updated;
+
+            console.log("updatedEntries", updatedEntries)
+    
+            return { ...prev, [id]: updatedEntries };
         });
     };
+
+    const handleRemoveCustomCandle = (id, index) => {
+        console.log("Removing customization:", id, index);
+
+        setCustomizations((prev) => {
+            if (!prev[id]) return prev; // If no customizations exist, return unchanged
+            const updatedEntries = prev[id].filter((_, i) => i !== index); // Remove the specific entry
+            return { ...prev, [id]: updatedEntries };
+        });
+
+        const newQty = getTotalQuantityById(id) - 1
+
+        if (newQty == 0) {
+            removeFromCart(id)
+        } else {
+            updateQuantity(id, getTotalQuantityById(id) - 1)
+        }
+    };
     
+    const isCheckoutValid = () => {
+        for (const item of cart) {
+            if (item.type.includes("candle") && item.type.includes("custom")) {
+                for (let index = 0; index < item.quantity; index++) {
+					const formData = customizations[item.id] ? customizations[item.id][index] || {} : {}
+                    if (
+                        !(formData.date || formData.words) || // Must have either a date or three words
+                        !formData.name1 || !formData.zodiac1 || // First name & zodiac required
+                        !formData.name2 || !formData.zodiac2   // Second name & zodiac required
+                    ) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     return (
         <CartContext.Provider value={{ 
             cart, 
@@ -105,7 +152,9 @@ export const CartProvider = ({ children }) => {
             toggleCart, 
             isCartVisible,
             customizations,
-            handleCustomizationChange
+            handleCustomizationChange,
+            handleRemoveCustomCandle,
+            isCheckoutValid
         }}>
             {children}
         </CartContext.Provider>

@@ -1,10 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useCart } from '../context/CartContext';
+// import { useCart } from '../context/CartContext';
+import faTrash from '../public/icons/trash.svg';
+import Image from 'next/image';
 import styles from './customCandleForm.module.scss';
 
-const CustomCandleForm = ({ formId, customizationData, onCustomizationChange, onRemove, itemId }) => {
-    const { cart, addToCart } = useCart();
+const CustomCandleForm = ({ id, candleNum, customizationData, onCustomizationChange, onRemove }) => {
+    // const { cart, addToCart } = useCart();
     const [wordError, setWordError] = useState('');
+
+    console.log("customizationData", customizationData)
 
     const handleWordChange = (e) => {
         const value = e.target.value;
@@ -13,21 +17,26 @@ const CustomCandleForm = ({ formId, customizationData, onCustomizationChange, on
             setWordError("Only up to 3 words allowed.");
         } else {
             setWordError('');
-            onCustomizationChange(formId, 'words', value);
+            onCustomizationChange(id, candleNum, 'words', value)
         }
     };
     
 
     return (
         <div className={styles.custom}>
-            <div className={styles.header}>Customization Form</div>
+            <div className={styles.header}>
+                <div className={styles.label}>Customization Candle # {candleNum+1}</div>
+                <div className={styles.deleteIco} onClick={() => onRemove()}>
+                    <Image src={faTrash} layout="fill" title="Remove candle" />
+                </div>
+            </div>
             {!customizationData.words && (
                 <label>
                     Date (if no words):
                     <input
                         type="date"
                         value={customizationData.date || ''}
-                        onChange={(e) => onCustomizationChange(formId, 'date', e.target.value)}
+                        onChange={(e) => onCustomizationChange(id, candleNum, 'date', e.target.value)}
                     />
                 </label>
             )}
@@ -37,7 +46,7 @@ const CustomCandleForm = ({ formId, customizationData, onCustomizationChange, on
                     Three words (if no date):
                     <input
                         type="text"
-                        placeholder="Love, Strength, Peace"
+                        placeholder="I Love You"
                         value={customizationData.words || ''}
                         onChange={handleWordChange}
                     />
@@ -52,7 +61,7 @@ const CustomCandleForm = ({ formId, customizationData, onCustomizationChange, on
                         <input
                             type="text"
                             value={customizationData.name1 || ''}
-                            onChange={(e) => onCustomizationChange(formId, 'name1', e.target.value)}
+                            onChange={(e) => onCustomizationChange(id, candleNum, 'name1', e.target.value)}
                         />
                     </label>
                     <label>
@@ -60,7 +69,7 @@ const CustomCandleForm = ({ formId, customizationData, onCustomizationChange, on
                         <input
                             type="text"
                             value={customizationData.zodiac1 || ''}
-                            onChange={(e) => onCustomizationChange(formId, 'zodiac1', e.target.value)}
+                            onChange={(e) => onCustomizationChange(id, candleNum, 'zodiac1', e.target.value)}
                         />
                     </label>
                 </div>
@@ -70,7 +79,7 @@ const CustomCandleForm = ({ formId, customizationData, onCustomizationChange, on
                         <input
                             type="text"
                             value={customizationData.name2 || ''}
-                            onChange={(e) => onCustomizationChange(formId, 'name2', e.target.value)}
+                            onChange={(e) => onCustomizationChange(id, candleNum, 'name2', e.target.value)}
                         />
                     </label>
                     <label>
@@ -78,15 +87,15 @@ const CustomCandleForm = ({ formId, customizationData, onCustomizationChange, on
                         <input
                             type="text"
                             value={customizationData.zodiac2 || ''}
-                            onChange={(e) => onCustomizationChange(formId, 'zodiac2', e.target.value)}
+                            onChange={(e) => onCustomizationChange(id, candleNum, 'zodiac2', e.target.value)}
                         />
                     </label>
                 </div>
             </div>
-
+            {/* 
             <button className={styles.removeBtn} onClick={() => onRemove()}>
                 Remove Candle
-            </button>
+            </button> */}
         </div>
     );
 };

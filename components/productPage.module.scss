@@ -44,7 +44,7 @@
 
 		.right {
 			width: auto;
-			padding: $GLOBAL-MARGIN;
+			padding: $GLOBAL-MARGIN 0 0 $GLOBAL-MARGIN;
 
 			@include lg {
 				width: 50%;

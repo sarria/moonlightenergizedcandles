@@ -13,44 +13,9 @@ import CustomCandleForm from './CustomCandleForm';
 const Cart = () => {
     const { 
 		cart, removeFromCart, updateQuantity, getTotalItems, getTotalCost, toggleCart,
-		customizations, handleCustomizationChange
+		customizations, handleCustomizationChange, handleRemoveCustomCandle, isCheckoutValid
 	} = useCart();
     const [validationError, setValidationError] = useState(false);
-
-    const handleRemoveCustomCandle = (id) => {
-        // const existingItem = cart.find((item) => item.id === id);
-        // if (existingItem.quantity > 1) {
-        //     updateQuantity(id, existingItem.quantity - 1);
-        // } else {
-        //     removeFromCart(id);
-        // }
-
-        // setCustomizations((prev) => {
-        //     const updatedForms = { ...prev };
-        //     const formKeys = Object.keys(updatedForms).filter((key) => key.startsWith(id));
-        //     if (formKeys.length > 0) delete updatedForms[formKeys[0]];
-        //     return updatedForms;
-        // });
-    };
-
-    const isCheckoutValid = () => {
-        for (const item of cart) {
-            if (item.type.includes("candle") && item.type.includes("custom")) {
-                for (let i = 0; i < item.quantity; i++) {
-                    const formId = `${item.id}-${i}`;
-                    const formData = customizations[formId] || {};
-                    if (
-                        !(formData.date || formData.words) || // Must have either a date or three words
-                        !formData.name1 || !formData.zodiac1 || // First name & zodiac required
-                        !formData.name2 || !formData.zodiac2   // Second name & zodiac required
-                    ) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
-    };
 
     const handleCheckout = () => {
         if (!isCheckoutValid()) {
@@ -65,7 +30,7 @@ const Cart = () => {
         <div className={styles.root}>
             <div className={styles.wrapper}>
                 <div className={styles.closeIco} onClick={() => toggleCart(false)}>
-                    <Image src={faXmark} layout="fill" />
+                    <Image src={faXmark} layout="fill" title="Close cart" />
                 </div>
                 <div className={styles.subtotal}>
                     <div className={styles.label}>
@@ -120,14 +85,14 @@ const Cart = () => {
 
                                     {isCustomCandle &&
                                         Array.from({ length: item.quantity }).map((_, index) => {
-                                            const formId = `${item.id}-${index}`;
                                             return (
                                                 <CustomCandleForm
-                                                    key={formId}
-                                                    formId={formId}
-                                                    customizationData={customizations[formId] || {}}
+                                                    key={`${item.id}-${index}`}
+                                                    id={item.id}
+													candleNum={index}
+                                                    customizationData={customizations[item.id] ? customizations[item.id][index] || {} : {}}
                                                     onCustomizationChange={handleCustomizationChange}
-                                                    onRemove={() => handleRemoveCustomCandle(item.id)}
+                                                    onRemove={() => handleRemoveCustomCandle(item.id, index)}
                                                 />
                                             );
                                         })}
