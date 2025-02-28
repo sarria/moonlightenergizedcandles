@@ -16,8 +16,21 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
     font-size: 12px;
 
+    &.actionButton {
+        &.small {
+            justify-content: center;
+            width: 115px;
+            
+        }
+    }
+
     &.small {
-        padding: 0px 30px !important;
+        padding: 0px 10px !important;
+
+        .label {
+            line-height: 30px;
+            // width: 90px;
+        }
     }
 
     /* Quantity Selector */

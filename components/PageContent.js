@@ -40,7 +40,7 @@ function PageContentWithCart({page, global}) {
 	const router = useRouter()
 	const { getTotalItems, isCartVisible } = useCart()
 	const totalItems = getTotalItems()
-	console.log("page ::", page)
+	// console.log("page ::", page)
 
 	useEffect(() => {
 		// ALL THIS JUST TO BE ABLE TO JUMP TO A HASH IN A PAGE. WOW

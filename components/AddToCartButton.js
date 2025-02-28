@@ -37,7 +37,7 @@ const setIcon = (type) => {
 const InnerButton = ({ buttonInfo, icon, hasLinkToPage, isMobile, handleUpdate, onClick, isAdded, quantity, small }) => {
 	const Button = (
 		<div 
-			className={cx(styles.root, 
+			className={cx(styles.root, styles.actionButton,
 				{ [styles.hasLinkToPage]: hasLinkToPage }, 
 				{ [styles.isMobile]: isMobile && isMobile !== undefined }, 
 				{ [styles.isDesktop]: !isMobile && isMobile !== undefined },

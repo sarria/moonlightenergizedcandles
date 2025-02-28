@@ -10,7 +10,7 @@ const ImageCard = ({index, image, ratio, instagram, hasPadding, linkPage, images
 	const label = image.linkLabel || image.linkPage?.title
 	const LinkTo = image.linkPage?.slug || linkPage?.slug || null
 
-	console.log("instagram", instagram)
+	// console.log("instagram", instagram)
 
 	return (
 		<a href={LinkTo || 'javascript:void(0)'} target="_blank">

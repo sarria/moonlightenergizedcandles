@@ -4,14 +4,19 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
+    const [customizations, setCustomizations] = useState({});
     const [isCartVisible, setIsCartVisible] = useState(false);
 
-    // Load cart from localStorage on first render
+    // Load cart and customizations from localStorage on first render
     useEffect(() => {
         const savedCart = localStorage.getItem('cart');
         if (savedCart) {
             setCart(JSON.parse(savedCart));
         }
+        const savedCustomForms = localStorage.getItem('customForms');
+        if (savedCustomForms) {
+            setCustomizations(JSON.parse(savedCustomForms));
+        }        
     }, []);
 
     // Save cart to localStorage whenever it changes
@@ -22,6 +27,15 @@ export const CartProvider = ({ children }) => {
             localStorage.removeItem('cart');
         }
     }, [cart]);
+
+    // Save customizations to localStorage whenever it changes
+    useEffect(() => {
+        if (customizations.length > 0) {
+            localStorage.setItem('customForms', JSON.stringify(customizations));
+        } else {
+            localStorage.removeItem('customForms');
+        }
+    }, [customizations]);    
 
     const addToCart = (item) => {
         setCart((prevCart) => {
@@ -68,7 +82,17 @@ export const CartProvider = ({ children }) => {
         }
     };
     
-
+    const handleCustomizationChange = (formId, field, value) => {
+        setCustomizations(prev => {
+            const updated = {
+                ...prev,
+                [formId]: { ...prev[formId], [field]: value }
+            };
+            console.log("Updated customizations:", updated); // Log the updated state
+            return updated;
+        });
+    };
+    
     return (
         <CartContext.Provider value={{ 
             cart, 
@@ -79,7 +103,9 @@ export const CartProvider = ({ children }) => {
             getTotalCost, 
             getTotalQuantityById,
             toggleCart, 
-            isCartVisible 
+            isCartVisible,
+            customizations,
+            handleCustomizationChange
         }}>
             {children}
         </CartContext.Provider>
