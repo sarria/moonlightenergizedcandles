@@ -7,36 +7,36 @@ export const CartProvider = ({ children }) => {
     const [customizations, setCustomizations] = useState({});
     const [isCartVisible, setIsCartVisible] = useState(false);
 
-    // Load cart and customizations from localStorage on first render
+    // Load cart and customizations from sessionStorage on first render
     useEffect(() => {
-        const savedCart = localStorage.getItem('cart');
+        const savedCart = sessionStorage.getItem('cart');
         if (savedCart) {
             setCart(JSON.parse(savedCart));
         }
-        const savedCustomForms = localStorage.getItem('customForms');
+        const savedCustomForms = sessionStorage.getItem('customForms');
         if (savedCustomForms) {
             setCustomizations(JSON.parse(savedCustomForms));
         }        
     }, []);
 
-    // Save cart to localStorage whenever it changes
+    // Save cart to sessionStorage whenever it changes
     useEffect(() => {
         if (cart.length > 0) {
-            localStorage.setItem('cart', JSON.stringify(cart));
+            sessionStorage.setItem('cart', JSON.stringify(cart));
         } else {
-            localStorage.removeItem('cart');
+            sessionStorage.removeItem('cart');
         }
     }, [cart]);
 
-    // Save customizations to localStorage whenever it changes
+    // Save customizations to sessionStorage whenever it changes
     useEffect(() => {
         console.log("customizations.length", customizations ? 'si' : 'no')
         if (customizations) {
-            console.log('localStorage customForms', customizations)
-            localStorage.setItem('customForms', JSON.stringify(customizations));
+            console.log('sessionStorage customForms', customizations)
+            sessionStorage.setItem('customForms', JSON.stringify(customizations));
         } else {
             console.log("Remove customForms")
-            localStorage.removeItem('customForms');
+            sessionStorage.removeItem('customForms');
         }
     }, [customizations]);    
 
@@ -51,6 +51,10 @@ export const CartProvider = ({ children }) => {
                 return [...prevCart, { ...item, quantity: 1 }];
             }
         });
+
+        if (item.type.includes("candle") && item.type.includes("custom")) {
+            toggleCart(true)
+        }
     };
 
     const removeFromCart = (id) => {
@@ -140,6 +144,32 @@ export const CartProvider = ({ children }) => {
         return true;
     }
 
+    // Verify the prices in case of a hack to the sessionStorage
+    const verifyProducts = async () => {
+        try {
+            const response = await fetch('/api/verifyProducts', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cart }) // Send cart data for verification
+            });
+    
+            const updatedCart = await response.json();
+            console.log("updatedCart :: ", updatedCart);
+    
+            if (updatedCart) {
+                console.log("Cart successfully verified and updated!");
+                sessionStorage.setItem('cart', JSON.stringify(updatedCart));
+                setCart(updatedCart);
+            } else {
+                console.error("Verification failed: No updated cart returned.");
+            }
+        } catch (error) {
+            console.error("Error verifying cart:", error);
+            return null;
+        }
+    };
+     
+
     return (
         <CartContext.Provider value={{ 
             cart, 
@@ -154,7 +184,8 @@ export const CartProvider = ({ children }) => {
             customizations,
             handleCustomizationChange,
             handleRemoveCustomCandle,
-            isCheckoutValid
+            isCheckoutValid,
+            verifyProducts
         }}>
             {children}
         </CartContext.Provider>

@@ -12,17 +12,27 @@ import CustomCandleForm from './CustomCandleForm';
 
 const Cart = () => {
     const { 
-		cart, removeFromCart, updateQuantity, getTotalItems, getTotalCost, toggleCart,
+		cart, verifyProducts, getTotalItems, getTotalCost, toggleCart,
 		customizations, handleCustomizationChange, handleRemoveCustomCandle, isCheckoutValid
 	} = useCart();
     const [validationError, setValidationError] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
         if (!isCheckoutValid()) {
             setValidationError(true);
         } else {
             setValidationError(false);
-            // Replace with actual checkout logic
+            setIsLoading(true); // Show loader
+
+            const verifiedCart = verifyProducts();
+            if (typeof verifiedCart === Object) {
+                // Replace with actual checkout logic
+            }
+
+            setTimeout(() => {
+                setIsLoading(false); // Hide loader after checkout simulation
+            }, 2000);
         }
     };
 
@@ -47,8 +57,9 @@ const Cart = () => {
                     <button 
                         className={styles.checkoutBtn}
                         onClick={handleCheckout}
+                        disabled={isLoading}
                     >
-                        Proceed to Checkout
+                        {isLoading ? <div className={styles.loader}></div> : 'Proceed to Checkout'}
                     </button>
                 </div>
                 {cart.length === 0 ? (

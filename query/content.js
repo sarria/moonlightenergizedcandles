@@ -119,7 +119,6 @@ export default function query(slug) {
 			product: products(where: {name: "${slug}"}) {
 				edges {
 					node {
-						__typename
 						id
 						slug
 						title
