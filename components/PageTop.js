@@ -8,6 +8,7 @@ import styles from './pageTop.module.scss'
 function PageTop({isHomePage, global}) {
 	const [isOpen, setIsOpen] = useState(false);
 	const navigation = global.navigation
+	const shoppingPage = global.shoppingPage
 
 	const toggleMenu = (status) => {
 	  setIsOpen(!isOpen); // Toggle the state
@@ -21,7 +22,7 @@ function PageTop({isHomePage, global}) {
 					<div className={styles.navigation}>
 						<TopNav global={global} isOpen={isOpen} toggleMenu={toggleMenu} />
 						<div className={styles.shopButton}>
-							<ShopButton isMobilePageTop={true} />
+							<ShopButton shoppingPage={shoppingPage} isMobilePageTop={true} />
 						</div>
 						<Burger isOpen={isOpen} toggleMenu={toggleMenu} />
 					</div>
