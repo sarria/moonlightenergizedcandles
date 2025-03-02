@@ -17,6 +17,7 @@ const Cart = () => {
 	} = useCart();
     const [validationError, setValidationError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const totalItems = getTotalItems()
 
     const handleCheckout = async () => {
         if (!isCheckoutValid()) {
@@ -44,7 +45,7 @@ const Cart = () => {
                 </div>
                 <div className={styles.subtotal}>
                     <div className={styles.label}>
-                        Subtotal ({getTotalItems()} item{getTotalItems() === 1 ? '' : 's'})
+                        Subtotal ({totalItems} item{totalItems === 1 ? '' : 's'})
                     </div>
                     <div className={styles.money}>
                         ${getTotalCost()}
@@ -112,6 +113,16 @@ const Cart = () => {
                         })}
                     </ul>
                 )}
+                {totalItems >= 2 &&
+                <div className={styles.subtotal}>
+                    <button 
+                        className={styles.checkoutBtn}
+                        onClick={handleCheckout}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? <div className={styles.loader}></div> : 'Proceed to Checkout'}
+                    </button>
+                </div>}
             </div>
         </div>
     );
