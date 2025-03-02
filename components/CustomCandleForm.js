@@ -38,9 +38,9 @@ const CustomCandleForm = ({ id, candleNum, customizationData, onCustomizationCha
                         value={customizationData.date || ''}
                         onChange={(e) => onCustomizationChange(id, candleNum, 'date', e.target.value)}
                     />
-                    <button className={styles.clearIcon} onClick={(e) => onCustomizationChange(id, candleNum, 'date', '')}>
+                    {customizationData.date !== '' && <button className={styles.clearIcon} onClick={(e) => onCustomizationChange(id, candleNum, 'date', '')}>
                         <Image src={faXmark} layout="fill" title="Clear date" />
-                    </button>                    
+                    </button>}
                 </label>
             )}
 

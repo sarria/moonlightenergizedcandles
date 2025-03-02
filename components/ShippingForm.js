@@ -1,12 +1,11 @@
 import { useState } from "react";
 import styles from "./shippingForm.module.scss";
 
-const ShippingForm = () => {
+const ShippingForm = ({isAddressSelected, setIsAddressSelected}) => {
   const [formData, setFormData] = useState({ address: "", state: "", placeId: null });
   const [suggestions, setSuggestions] = useState([]);
   const [errors, setErrors] = useState({});
   const [isValidating, setIsValidating] = useState(false);
-  const [isAddressSelected, setIsAddressSelected] = useState(false);
   // const [isAddressValid, setIsAddressValid] = useState(false);
 
   // ✅ Handle input changes and fetch suggestions
@@ -145,11 +144,7 @@ const ShippingForm = () => {
             </form>
 
             {!isAddressValid() && <div>Please start typing your address and select one from the suggestions to continue</div>}
-
-            {isAddressValid() && 
-            <div>
-              PAYMENT
-            </div>}            
+     
         </div>
     </div>
   );
