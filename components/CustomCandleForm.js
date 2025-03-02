@@ -37,6 +37,7 @@ const CustomCandleForm = ({ id, candleNum, customizationData, onCustomizationCha
                         type="date"
                         value={customizationData.date || ''}
                         onChange={(e) => onCustomizationChange(id, candleNum, 'date', e.target.value)}
+                        className={styles.inputDate}
                     />
                     {customizationData.date !== '' && <button className={styles.clearIcon} onClick={(e) => onCustomizationChange(id, candleNum, 'date', '')}>
                         <Image src={faXmark} layout="fill" title="Clear date" />
