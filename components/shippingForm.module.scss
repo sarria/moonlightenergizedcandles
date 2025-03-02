@@ -2,6 +2,7 @@
 
 .root {
 	width: 100%;
+    font-size: 18px;
 
 	@include md {
 		width: 430px;
@@ -21,6 +22,7 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 16px;
         }
         
         .autocomplete-dropdown {
