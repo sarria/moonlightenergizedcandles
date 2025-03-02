@@ -13,14 +13,16 @@
 
 	.wrapper {
 		position: relative;
-		padding: 24px 24px 200px 24px;
+		padding: 0 24px 200px 24px;
 
 		.closeIco {
-			position: absolute;
-			right: 30px;
 			cursor: pointer;
 			width: 25px;
 			height: 25px;
+			position: fixed;
+			z-index: 11;
+			right: 25px;
+			margin-top: 23px;			
 		}
 
 		.subtotal {
@@ -28,6 +30,14 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
+
+			position: fixed;
+			background-color: white;
+			z-index: 10;
+			width: 430px;
+			padding-top: 24px;
+			padding-bottom: 24px;
+		  			
 
 			div {
 				text-align: center;
@@ -42,7 +52,7 @@
 
 		ul {
 			list-style: none;
-			padding: 30px 0 0 0;
+			padding: 160px 0 0 0;
 			margin: 0;
 
 			.cartItem {
@@ -124,6 +134,7 @@
 			min-width: 180px; /* Ensures button doesn't shrink when loading */
 			height: 40px;
 			transition: background 0.3s ease-in-out;
+			margin-bottom: 20px;
 		
 			&:hover {
 				background-color: darkgoldenrod;

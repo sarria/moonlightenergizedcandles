@@ -1,59 +1,201 @@
-curl https://connect.squareup.com/v2/online-checkout/payment-links \
-  -X POST \
-  -H 'Square-Version: 2025-02-20' \
-  -H 'Authorization: Bearer EAAAl9eUqQ69DcsP6zX2VN1UXJvpd96UIIz0cHRYbuhSSvJGhZrRoPvkH5eWX5S9' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "idempotency_key": "09095c21-d4ba-4e47-a770-cee2c3f148ee",
+{
+  "payment_link": {
+    "id": "6QT5RCNCMFMT23AY",
+    "version": 1,
+    "order_id": "Akq5Rbh1G3xgY7qadYJVkCYa80TZY",
     "checkout_options": {
       "redirect_url": "https://www.moonlightenergizedcandles.com/thank-you",
       "ask_for_shipping_address": false,
       "enable_coupon": false
     },
-    "order": {
-      "location_id": "LKCZJ71QE1RMY",
-      "taxes": [
-        {
-          "catalog_object_id": "RN3FBUQ3JGACAPKHNEWNKHHA"
-        }
-      ],
-      "line_items": [
-        {
-          "quantity": "1",
-          "name": "Aries Zodiac Candle",
-          "note": "9 oz, Wax Candle",
-          "base_price_money": {
-            "amount": 3600,
+    "url": "https://sandbox.square.link/u/lj0Z6iWM",
+    "long_url": "https://connect.squareupsandbox.com/v2/online-checkout/sandbox-testing-panel/ML67B4FPTDEYT/6QT5RCNCMFMT23AY",
+    "created_at": "2025-03-01T21:36:02Z"
+  },
+  "related_resources": {
+    "orders": [
+      {
+        "id": "Akq5Rbh1G3xgY7qadYJVkCYa80TZY",
+        "location_id": "LD4VTKK7FD8FW",
+        "source": {
+          "name": "Sandbox for sq0idp-QQuLyTO-RlFG9ATLYgbF6g"
+        },
+        "line_items": [
+          {
+            "uid": "FehPzwu6mQLyel4ndFBERC",
+            "name": "Aries Zodiac Candle",
+            "quantity": "1",
+            "note": "9 oz, Wax Candle",
+            "item_type": "ITEM",
+            "applied_taxes": [
+              {
+                "uid": "CCBxbNDGVJHAaJU4KXWHr",
+                "tax_uid": "BrqCyDDtySAWdp9w9KxEyC",
+                "applied_money": {
+                  "amount": 216,
+                  "currency": "USD"
+                }
+              }
+            ],
+            "base_price_money": {
+              "amount": 3600,
+              "currency": "USD"
+            },
+            "variation_total_price_money": {
+              "amount": 3600,
+              "currency": "USD"
+            },
+            "gross_sales_money": {
+              "amount": 3600,
+              "currency": "USD"
+            },
+            "total_tax_money": {
+              "amount": 216,
+              "currency": "USD"
+            },
+            "total_discount_money": {
+              "amount": 0,
+              "currency": "USD"
+            },
+            "total_money": {
+              "amount": 3816,
+              "currency": "USD"
+            },
+            "total_service_charge_money": {
+              "amount": 0,
+              "currency": "USD"
+            }
+          },
+          {
+            "uid": "YOODhYF9Orn1uHa5aawd7",
+            "name": "Love",
+            "quantity": "1",
+            "item_type": "ITEM",
+            "applied_taxes": [
+              {
+                "uid": "PN3dv6Ugmyv68Saoh83Dn",
+                "tax_uid": "BrqCyDDtySAWdp9w9KxEyC",
+                "applied_money": {
+                  "amount": 150,
+                  "currency": "USD"
+                }
+              }
+            ],
+            "base_price_money": {
+              "amount": 2500,
+              "currency": "USD"
+            },
+            "variation_total_price_money": {
+              "amount": 2500,
+              "currency": "USD"
+            },
+            "gross_sales_money": {
+              "amount": 2500,
+              "currency": "USD"
+            },
+            "total_tax_money": {
+              "amount": 150,
+              "currency": "USD"
+            },
+            "total_discount_money": {
+              "amount": 0,
+              "currency": "USD"
+            },
+            "total_money": {
+              "amount": 2650,
+              "currency": "USD"
+            },
+            "total_service_charge_money": {
+              "amount": 0,
+              "currency": "USD"
+            }
+          }
+        ],
+        "taxes": [
+          {
+            "uid": "BrqCyDDtySAWdp9w9KxEyC",
+            "catalog_object_id": "HVI6MVPHK23CPCEYD2WSFPRI",
+            "catalog_version": 1740864923514,
+            "name": "PA Sales Tax",
+            "type": "ADDITIVE",
+            "percentage": "6.0",
+            "applied_money": {
+              "amount": 366,
+              "currency": "USD"
+            },
+            "scope": "ORDER"
+          }
+        ],
+        "fulfillments": [
+          {
+            "uid": "EcEsUUavrPSSoeViNfcx2C",
+            "type": "SHIPMENT",
+            "state": "PROPOSED",
+            "shipment_details": {
+              "recipient": {
+                "display_name": "Juan Sarria",
+                "address": {
+                  "address_line_1": "255 Park Ridge Drive",
+                  "postal_code": "18040",
+                  "country": "US",
+                  "first_name": "Juan",
+                  "last_name": "Sarria"
+                }
+              }
+            }
+          }
+        ],
+        "net_amounts": {
+          "total_money": {
+            "amount": 6466,
+            "currency": "USD"
+          },
+          "tax_money": {
+            "amount": 366,
+            "currency": "USD"
+          },
+          "discount_money": {
+            "amount": 0,
+            "currency": "USD"
+          },
+          "tip_money": {
+            "amount": 0,
+            "currency": "USD"
+          },
+          "service_charge_money": {
+            "amount": 0,
             "currency": "USD"
           }
         },
-        {
-          "quantity": "1",
-          "base_price_money": {
-            "amount": 2500,
-            "currency": "USD"
-          },
-          "name": "Love"
+        "created_at": "2025-03-01T21:36:02.015Z",
+        "updated_at": "2025-03-01T21:36:02.015Z",
+        "state": "DRAFT",
+        "version": 1,
+        "total_money": {
+          "amount": 6466,
+          "currency": "USD"
+        },
+        "total_tax_money": {
+          "amount": 366,
+          "currency": "USD"
+        },
+        "total_discount_money": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "total_tip_money": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "total_service_charge_money": {
+          "amount": 0,
+          "currency": "USD"
+        },
+        "net_amount_due_money": {
+          "amount": 6466,
+          "currency": "USD"
         }
-      ],
-      "fulfillments": [
-        {
-          "type": "SHIPMENT",
-          "shipment_details": {
-            "recipient": {
-              "address": {
-                "address_line_1": "255 Park Ridge Drive",
-                "country": "US",
-                "first_name": "Juan",
-                "last_name": "Sarria",
-                "postal_code": "18040"
-              },
-              "display_name": "Juan Sarria",
-              "email_address": "jaunsarria@gmail.com",
-              "phone_number": "14845469605"
-            }
-          }
-        }
-      ]
-    }
-  }'
+      }
+    ]
+  }
+}
