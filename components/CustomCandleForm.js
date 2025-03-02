@@ -20,7 +20,6 @@ const CustomCandleForm = ({ id, candleNum, customizationData, onCustomizationCha
             onCustomizationChange(id, candleNum, 'words', value)
         }
     };
-    
 
     return (
         <div className={styles.custom}>
@@ -31,13 +30,14 @@ const CustomCandleForm = ({ id, candleNum, customizationData, onCustomizationCha
                 </div>
             </div>
             {!customizationData.words && (
-                <label>
-                    Date (if no words):
+                <label className={styles.date}>
+                    <div>Date (if no words):</div>
                     <input
                         type="date"
-                        value={customizationData.date ?? null} // Use null instead of empty string
+                        value={customizationData.date || ''}
                         onChange={(e) => onCustomizationChange(id, candleNum, 'date', e.target.value)}
                     />
+                    <button type="button" onClick={(e) => onCustomizationChange(id, candleNum, 'date', '')}>Clear</button>
                 </label>
             )}
 
