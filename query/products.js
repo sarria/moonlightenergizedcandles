@@ -5,7 +5,6 @@ export default function query(slug) {
             products(first: 200) { 
                 edges {
                     node {
-						__typename
 						id
 						slug
 						title
