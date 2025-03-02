@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 // import { useCart } from '../context/CartContext';
 import faTrash from '../public/icons/trash.svg';
 import Image from 'next/image';
+import faXmark from '../public/icons/xmark-black.svg';
 import styles from './customCandleForm.module.scss';
 
 const CustomCandleForm = ({ id, candleNum, customizationData, onCustomizationChange, onRemove }) => {
@@ -37,7 +38,9 @@ const CustomCandleForm = ({ id, candleNum, customizationData, onCustomizationCha
                         value={customizationData.date || ''}
                         onChange={(e) => onCustomizationChange(id, candleNum, 'date', e.target.value)}
                     />
-                    <button type="button" onClick={(e) => onCustomizationChange(id, candleNum, 'date', '')}>Clear</button>
+                    <div className={styles.clearIcon} onClick={(e) => onCustomizationChange(id, candleNum, 'date', '')}>
+                        <Image src={faXmark} layout="fill" title="Clear date" />
+                    </div>                    
                 </label>
             )}
 
