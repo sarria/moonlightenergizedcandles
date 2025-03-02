@@ -35,7 +35,7 @@ const CustomCandleForm = ({ id, candleNum, customizationData, onCustomizationCha
                     Date (if no words):
                     <input
                         type="date"
-                        value={customizationData.date || ''}
+                        value={customizationData.date ?? null} // Use null instead of empty string
                         onChange={(e) => onCustomizationChange(id, candleNum, 'date', e.target.value)}
                     />
                 </label>

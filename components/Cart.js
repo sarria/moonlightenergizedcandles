@@ -113,7 +113,7 @@ const Cart = () => {
                         })}
                     </ul>
                 )}
-                {totalItems >= 2 &&
+                {/* {cart.length >= 2 &&
                 <div className={styles.subtotal}>
                     <button 
                         className={styles.checkoutBtn}
@@ -122,7 +122,7 @@ const Cart = () => {
                     >
                         {isLoading ? <div className={styles.loader}></div> : 'Proceed to Checkout'}
                     </button>
-                </div>}
+                </div>} */}
             </div>
         </div>
     );
