@@ -28,7 +28,7 @@ import Checkout from './Checkout'
 import PageTop from './PageTop'
 import ShopNav from './ShopNav'
 import ProductPage from './ProductPage'
-import ShippingForm from './ShippingForm'
+// import ShippingForm from './ShippingForm'
 
 function PageContent({ page, global }) {
 	return page ? (
@@ -40,9 +40,11 @@ function PageContent({ page, global }) {
 
 function PageContentWithCart({page, global}) {
 	const router = useRouter()
-	const { getTotalItems, isCartVisible } = useCart()
+	const { getTotalItems, isCartVisible, setSlug } = useCart()
 	const totalItems = getTotalItems()
 	console.log("page ::", page)
+
+	setSlug(page.slug);
 
 	useEffect(() => {
 		// ALL THIS JUST TO BE ABLE TO JUMP TO A HASH IN A PAGE. WOW
@@ -83,7 +85,7 @@ function PageContentWithCart({page, global}) {
 			<PageTop className={styles.pageTop} global={global} />
 
 			<div className={cx(styles.root, {[styles.homePage]: isHomePage}, {[styles.innerPage]: !isHomePage})} id='pageContent'>
-				<div className={cx(styles.wrapper, {[styles.showCart] : showCart || isCheckout})}>
+				<div className={cx(styles.wrapper, {[styles.showCart] : showCart && !isCheckout })}>
 					<div className={styles.page}>
 						<div className={styles.content}>
 
@@ -170,10 +172,10 @@ function PageContentWithCart({page, global}) {
 					<div className={styles.cart}>
 						<Cart />
 					</div>}
-					{isCheckout && 
+					{/* {isCheckout && 
 					<div className={styles.cart}>
 						<ShippingForm />
-					</div>}
+					</div>} */}
 				</div>
 				
 			</div>	

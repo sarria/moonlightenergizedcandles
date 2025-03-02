@@ -7,11 +7,20 @@ const ShippingForm = () => {
   const [errors, setErrors] = useState({});
   const [isValidating, setIsValidating] = useState(false);
   const [isAddressSelected, setIsAddressSelected] = useState(false);
+  // const [isAddressValid, setIsAddressValid] = useState(false);
 
   // ✅ Handle input changes and fetch suggestions
   const handleChange = (e) => {
     const value = e.target.value;
-    setFormData({ ...formData, address: value }); // ✅ Update input field value
+    setFormData({ 
+      ...formData, 
+      address: value,
+      addressLine1: "",
+      addressLine2: "",
+      city: "",
+      state: "",
+      zipCode: ""    
+    }); // ✅ Update input field value and reset address parts
     setIsAddressSelected(false); // Reset selection state
     fetchPlaces(value);
   };
@@ -98,28 +107,20 @@ const ShippingForm = () => {
     }
    };
 
-
-  // ✅ Prevent submission if user did not select from suggestions
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsValidating(true);
-    setErrors({});
-
-    if (!isAddressSelected) {
-      setErrors({ address: "Please select an address from the suggestions." });
-      setIsValidating(false);
-      return;
+  const isAddressValid = () => {
+    if (formData.addressLine1 !== '' && formData.city !== '' && formData.state !== '' && formData.zipCode !== '') {
+      return true;
     }
-
-    setIsValidating(false);
-  };
+    return false;
+  }
 
   return (
-    <div key={id} id={id} className={styles.root}>
-		<div className={styles.wrapper}>    
-            <form onSubmit={handleSubmit} className={styles["shipping-form"]}>
-                <h2>Shipping Address</h2>
+    <div className={styles.root}>
+		    <div className={styles.wrapper}>    
+            <form className={styles["shipping-form"]}>
+                <div>Shipping Address</div>
 
+                {errors.address && <p className={styles.error}>{errors.address}</p>}
                 <input
                     type="text"
                     name="address"
@@ -128,7 +129,8 @@ const ShippingForm = () => {
                     placeholder="Start typing your address..."
                     className={styles.input}
                 />
-                {errors.address && <p className={styles.error}>{errors.address}</p>}
+
+                {isValidating && <div>Validating Address...</div>}
 
                 {suggestions.length > 0 && (
                     <ul className={styles["autocomplete-dropdown"]}>
@@ -140,10 +142,14 @@ const ShippingForm = () => {
                     </ul>
                 )}
 
-                <button type="submit" className={styles["submit-btn"]} disabled={isValidating}>
-                    {isValidating ? "Validating Address..." : "Proceed"}
-                </button>
             </form>
+
+            {!isAddressValid() && <div>Please start typing your address and select one from the suggestions to continue</div>}
+
+            {isAddressValid() && 
+            <div>
+              PAYMENT
+            </div>}            
         </div>
     </div>
   );

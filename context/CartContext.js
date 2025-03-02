@@ -6,6 +6,7 @@ export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
     const [customizations, setCustomizations] = useState({});
     const [isCartVisible, setIsCartVisible] = useState(false);
+    const [slug, setSlug] = useState('');
 
     // Load cart and customizations from sessionStorage on first render
     useEffect(() => {
@@ -160,12 +161,14 @@ export const CartProvider = ({ children }) => {
                 console.log("Cart successfully verified and updated!");
                 sessionStorage.setItem('cart', JSON.stringify(updatedCart));
                 setCart(updatedCart);
+                return true;
             } else {
                 console.error("Verification failed: No updated cart returned.");
+                return false;
             }
         } catch (error) {
             console.error("Error verifying cart:", error);
-            return null;
+            return false;
         }
     };
      
@@ -185,7 +188,8 @@ export const CartProvider = ({ children }) => {
             handleCustomizationChange,
             handleRemoveCustomCandle,
             isCheckoutValid,
-            verifyProducts
+            verifyProducts,
+            slug, setSlug
         }}>
             {children}
         </CartContext.Provider>

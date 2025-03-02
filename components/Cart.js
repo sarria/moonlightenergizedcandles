@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
+import { useRouter } from 'next/router'; // ✅ Import useRouter
 import { formatCurrency } from './utils/shared';
 import styles from './cart.module.scss';
 import Link from 'next/link';
@@ -18,6 +19,7 @@ const Cart = () => {
     const [validationError, setValidationError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const totalItems = getTotalItems()
+    const router = useRouter(); // ✅ Initialize useRouter
 
     const handleCheckout = async () => {
         if (!isCheckoutValid()) {
@@ -27,8 +29,10 @@ const Cart = () => {
             setIsLoading(true); // Show loader
 
             const verifiedCart = verifyProducts();
-            if (typeof verifiedCart === Object) {
+            if (verifiedCart) {
                 // Replace with actual checkout logic
+                console.log("Redirecting to checkout page")
+                router.push(`/checkout`); // ✅ Redirect to checkout URL
             }
 
             setTimeout(() => {
@@ -113,16 +117,6 @@ const Cart = () => {
                         })}
                     </ul>
                 )}
-                {/* {cart.length >= 2 &&
-                <div className={styles.subtotal}>
-                    <button 
-                        className={styles.checkoutBtn}
-                        onClick={handleCheckout}
-                        disabled={isLoading}
-                    >
-                        {isLoading ? <div className={styles.loader}></div> : 'Proceed to Checkout'}
-                    </button>
-                </div>} */}
             </div>
         </div>
     );
