@@ -1,4 +1,5 @@
 import { useState } from "react";
+import cx from 'classnames'
 import styles from "./shippingForm.module.scss";
 
 const ShippingForm = ({isAddressSelected, setIsAddressSelected}) => {
@@ -117,7 +118,7 @@ const ShippingForm = ({isAddressSelected, setIsAddressSelected}) => {
     <div className={styles.root}>
 		    <div className={styles.wrapper}>    
             <form className={styles["shipping-form"]}>
-                <div>Shipping Address</div>
+                <div className={styles.label}>Shipping Address</div>
 
                 {errors.address && <p className={styles.error}>{errors.address}</p>}
                 <input
@@ -143,7 +144,7 @@ const ShippingForm = ({isAddressSelected, setIsAddressSelected}) => {
 
             </form>
 
-            {!isAddressValid() && <div>Please start typing your address and select one from the suggestions to continue</div>}
+            <div className={cx(styles.note, {[styles.hide] : isAddressValid()})}>Please start typing your address and select one from the suggestions to continue</div>
      
         </div>
     </div>

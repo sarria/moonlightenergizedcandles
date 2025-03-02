@@ -2,23 +2,33 @@
 
 .root {
 	width: 100%;
-    font-size: 18px;
-
-	@include md {
-		width: 430px;
-	}	
+    font-size: 16px;
+    font-family: "Poppins", sans-serif;
 
 	.wrapper {
-		position: relative;
-		
+		position: relative;        
 
+        .label {
+            padding-bottom: 10px;
+        }
+
+        .note {
+            padding: 10px 0;
+            font-weight: 200;
+            transition: opacity 0.3s ease-in-out;
+
+            &.hide {
+                opacity: 0;
+            }
+        }        
+		
         .shipping-form {
             width: 100%;
             margin: auto;
         }
         
         .input {
-            width: 405px;
+            width: 355px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
@@ -27,14 +37,17 @@
         
         .autocomplete-dropdown {
             position: absolute;
-            // width: 100%;
-            background: white;
+            width: 376px;
+            background: #FAFAFA;
             border: 1px solid #ccc;
             border-radius: 4px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             max-height: 200px;
             overflow-y: auto;
             z-index: 100;
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
         
         .autocomplete-dropdown li {
