@@ -4,45 +4,56 @@ curl https://connect.squareup.com/v2/online-checkout/payment-links \
   -H 'Authorization: Bearer EAAAl9eUqQ69DcsP6zX2VN1UXJvpd96UIIz0cHRYbuhSSvJGhZrRoPvkH5eWX5S9' \
   -H 'Content-Type: application/json' \
   -d '{
-    "idempotency_key": "PROD-KEY-12",
+    "idempotency_key": "09095c21-d4ba-4e47-a770-cee2c3f148ee",
     "checkout_options": {
-      "allow_tipping": false,
+      "redirect_url": "https://www.moonlightenergizedcandles.com/thank-you",
       "ask_for_shipping_address": false,
-      "enable_coupon": false,
-      "redirect_url": "https://www.moonlightenergizedcandles.com/",
-      "merchant_support_email": "Moonlight.Energized.Candles@gmail.com"
+      "enable_coupon": false
     },
     "order": {
+      "location_id": "LKCZJ71QE1RMY",
+      "taxes": [
+        {
+          "catalog_object_id": "RN3FBUQ3JGACAPKHNEWNKHHA"
+        }
+      ],
       "line_items": [
         {
-          "quantity": "2",
-          "item_type": "ITEM",
-          "name": "Aries Candle",
+          "quantity": "1",
+          "name": "Aries Zodiac Candle",
+          "note": "9 oz, Wax Candle",
           "base_price_money": {
             "amount": 3600,
             "currency": "USD"
-          },
-          "note": "9 OZ. Energized Candle",
-          "modifiers": []
+          }
         },
         {
           "quantity": "1",
           "base_price_money": {
-            "amount": 1500,
+            "amount": 2500,
             "currency": "USD"
           },
-          "item_type": "ITEM",
-          "name": "Zodiac Bracelete",
-          "note": "A note about rhe Bracelete can go here"
+          "name": "Love"
         }
       ],
-      "location_id": "LKCZJ71QE1RMY",
-      "taxes": [
+      "fulfillments": [
         {
-          "scope": "ORDER",
-          "catalog_object_id": "RN3FBUQ3JGACAPKHNEWNKHHA"
+          "type": "SHIPMENT",
+          "shipment_details": {
+            "recipient": {
+              "address": {
+                "address_line_1": "255 Park Ridge Drive",
+                "country": "US",
+                "first_name": "Juan",
+                "last_name": "Sarria",
+                "postal_code": "18040"
+              },
+              "display_name": "Juan Sarria",
+              "email_address": "jaunsarria@gmail.com",
+              "phone_number": "14845469605"
+            }
+          }
         }
-      ],
-      "fulfillments": []
+      ]
     }
   }'

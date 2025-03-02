@@ -24,9 +24,11 @@ import Contact from './Contact'
 // import ContactUs from './ContactUs'
 import Shop from './Shop'
 import Cart from './Cart';
+import Checkout from './Checkout'
 import PageTop from './PageTop'
 import ShopNav from './ShopNav'
 import ProductPage from './ProductPage'
+import ShippingForm from './ShippingForm'
 
 function PageContent({ page, global }) {
 	return page ? (
@@ -40,7 +42,7 @@ function PageContentWithCart({page, global}) {
 	const router = useRouter()
 	const { getTotalItems, isCartVisible } = useCart()
 	const totalItems = getTotalItems()
-	// console.log("page ::", page)
+	console.log("page ::", page)
 
 	useEffect(() => {
 		// ALL THIS JUST TO BE ABLE TO JUMP TO A HASH IN A PAGE. WOW
@@ -68,6 +70,7 @@ function PageContentWithCart({page, global}) {
 	}, [])	
 
 	const isHomePage = page.slug === 'home-page';
+	const isCheckout = page.slug === 'checkout';
 	const showCart = totalItems !== 0 && isCartVisible;
 
 	return page ? (
@@ -80,7 +83,7 @@ function PageContentWithCart({page, global}) {
 			<PageTop className={styles.pageTop} global={global} />
 
 			<div className={cx(styles.root, {[styles.homePage]: isHomePage}, {[styles.innerPage]: !isHomePage})} id='pageContent'>
-				<div className={cx(styles.wrapper, {[styles.showCart] : showCart})}>
+				<div className={cx(styles.wrapper, {[styles.showCart] : showCart || isCheckout})}>
 					<div className={styles.page}>
 						<div className={styles.content}>
 
@@ -153,16 +156,24 @@ function PageContentWithCart({page, global}) {
 									<ProductPage global={global} product={page}/>
 								</>
 							}
+							{isCheckout && 
+								<>
+									<Checkout />
+								</>
+							}
 						</div>
 						<Footer 
 							global={global} buttons={page.buttons}
 						/>
 					</div>
-					{showCart && 
+					{showCart && !isCheckout && 
 					<div className={styles.cart}>
 						<Cart />
-					</div>
-					}									
+					</div>}
+					{isCheckout && 
+					<div className={styles.cart}>
+						<ShippingForm />
+					</div>}
 				</div>
 				
 			</div>	
