@@ -1,14 +1,13 @@
 import { useState } from "react";
-import cx from 'classnames'
+import cx from 'classnames';
 import styles from "./shippingForm.module.scss";
 
-const ShippingForm = ({isAddressSelected, setIsAddressSelected}) => {
+const ShippingForm = ({ onAddressValid, setPaymentLink }) => { 
   const [formData, setFormData] = useState({ address: "", state: "", placeId: null });
   const [suggestions, setSuggestions] = useState([]);
-  const [errors, setErrors] = useState({});
-  const [isValidating, setIsValidating] = useState(false);
-  // const [isAddressValid, setIsAddressValid] = useState(false);
-
+  const isAddressSelected = false;
+  const isAddressComplete = false
+  
   // ✅ Handle input changes and fetch suggestions
   const handleChange = (e) => {
     const value = e.target.value;
@@ -20,12 +19,15 @@ const ShippingForm = ({isAddressSelected, setIsAddressSelected}) => {
       city: "",
       state: "",
       zipCode: ""    
-    }); // ✅ Update input field value and reset address parts
-    setIsAddressSelected(false); // Reset selection state
-    fetchPlaces(value);
+    });
+
+    isAddressSelected = false
+    isAddressComplete = false
+    setPaymentLink('')
+    fetchPlaces(value)
   };
 
-  // ✅ Fetch Places API (New) Autocomplete Results
+  // ✅ Fetch Places API Autocomplete Results
   const fetchPlaces = async (inputText) => {
     if (!inputText) {
       setSuggestions([]);
@@ -42,12 +44,11 @@ const ShippingForm = ({isAddressSelected, setIsAddressSelected}) => {
       const data = await response.json();
       console.log("Autocomplete results:", data);
 
-      if (data.suggestions && data.suggestions.length > 0) {
+      if (data.suggestions?.length > 0) {
         const formattedSuggestions = data.suggestions.map((s) => ({
           description: s.placePrediction.text.text,
           placeId: s.placePrediction.placeId,
         }));
-
         setSuggestions(formattedSuggestions);
       } else {
         setSuggestions([]);
@@ -59,16 +60,14 @@ const ShippingForm = ({isAddressSelected, setIsAddressSelected}) => {
 
   // ✅ Handle Address Selection
   const handleSelectAddress = async (selectedAddress, placeId) => {
+    isAddressSelected = true
     setFormData({ ...formData, address: selectedAddress, placeId });
     setSuggestions([]);
-    setIsAddressSelected(true);
-
-    // ✅ Fetch state details for tax calculation
-    await fetchPlaceDetails(placeId);
+    await fetchPlaceDetails(selectedAddress, placeId);
   };
 
-  // ✅ Fetch State Details from Google Place API (New)
-  const fetchPlaceDetails = async (placeId) => {
+  // ✅ Fetch and validate address components
+  const fetchPlaceDetails = async (selectedAddress, placeId) => {
     try {
       const response = await fetch("/api/google-place-details", {
         method: "POST",
@@ -77,76 +76,66 @@ const ShippingForm = ({isAddressSelected, setIsAddressSelected}) => {
       });
 
       const data = await response.json();
-      console.log("Place details:", data);
-
       if (data.addressComponents) {
-        // ✅ Extract Address Parts
-        const streetNumber = data.addressComponents.find((c) => c.types.includes("street_number"))?.shortText || "";
-        const route = data.addressComponents.find((c) => c.types.includes("route"))?.shortText || "";
-        const city = data.addressComponents.find((c) => c.types.includes("locality"))?.shortText || "";
-        const state = data.addressComponents.find((c) => c.types.includes("administrative_area_level_1"))?.shortText || "";
-        const zipCode = data.addressComponents.find((c) => c.types.includes("postal_code"))?.shortText || "";
+        const addressParts = {
+          selectedAddress,
+          streetNumber: data.addressComponents.find((c) => c.types.includes("street_number"))?.shortText || "",
+          route: data.addressComponents.find((c) => c.types.includes("route"))?.shortText || "",
+          city: data.addressComponents.find((c) => c.types.includes("locality"))?.shortText || "",
+          state: data.addressComponents.find((c) => c.types.includes("administrative_area_level_1"))?.shortText || "",
+          zipCode: data.addressComponents.find((c) => c.types.includes("postal_code"))?.shortText || ""
+        };
 
-        // ✅ Address Line 1 = Street Number + Route
-        const addressLine1 = `${streetNumber} ${route}`.trim();
+        addressParts.addressLine1 = `${addressParts.streetNumber} ${addressParts.route}`.trim();
 
-        // ✅ Save in State
-        setFormData((prev) => ({
-          ...prev,
-          addressLine1,
-          addressLine2: "", // Leave empty for potential input
-          city,
-          state,
-          zipCode,
-        }));
+        setFormData((prev) => ({ ...prev, ...addressParts }));
 
-        console.log("Saved address parts:", { addressLine1, city, state, zipCode });
+        if (addressParts.addressLine1 && addressParts.city && addressParts.state && addressParts.zipCode) {
+          isAddressComplete = true
+          onAddressValid(addressParts);
+        }
       }
     } catch (error) {
       console.error("Error fetching place details:", error);
     }
-   };
-
-  const isAddressValid = () => {
-    if (formData.addressLine1 !== '' && formData.city !== '' && formData.state !== '' && formData.zipCode !== '') {
-      return true;
-    }
-    return false;
-  }
+  };
 
   return (
     <div className={styles.root}>
-		    <div className={styles.wrapper}>    
-            <form className={styles["shipping-form"]}>
-                <div className={styles.label}>Shipping Address</div>
+      <div className={styles.wrapper}>    
+        <div className={styles["shipping-form"]}>
+          <div className={styles.label}>Shipping Address</div>
 
-                {errors.address && <p className={styles.error}>{errors.address}</p>}
-                <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleChange}
-                    placeholder="Start typing your address..."
-                    className={styles.input}
-                />
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            placeholder="Start typing your address..."
+            className={styles.input}
+          />
 
-                {isValidating && <div>Validating Address...</div>}
-
-                {suggestions.length > 0 && (
-                    <ul className={styles["autocomplete-dropdown"]}>
-                    {suggestions.map((suggestion, index) => (
-                        <li key={index} onClick={() => handleSelectAddress(suggestion.description, suggestion.placeId)}>
-                        {suggestion.description}
-                        </li>
-                    ))}
-                    </ul>
-                )}
-
-            </form>
-
-            <div className={cx(styles.note, {[styles.hide] : isAddressValid()})}>Please start typing your address and select one from the suggestions to continue</div>
-     
+          {!isAddressSelected && suggestions.length > 0 && (
+            <ul className={styles["autocomplete-dropdown"]}>
+              {suggestions.map((suggestion, index) => (
+                <li key={index} onClick={() => handleSelectAddress(suggestion.description, suggestion.placeId)}>
+                  {suggestion.description}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
+
+        <div className={cx(styles.note, { [styles.hide]: isAddressComplete })}>
+          Please start typing your address and select one from the suggestions to continue
+        </div>
+
+        {isAddressSelected && !isAddressComplete && (
+            <div className={styles.errorMessage}>
+                <p>Please enter a complete shipping address before proceeding to payment.</p>
+            </div>
+        )}        
+      </div>
     </div>
   );
 };
