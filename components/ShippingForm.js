@@ -2,7 +2,7 @@ import { useState } from "react";
 import cx from 'classnames';
 import styles from "./shippingForm.module.scss";
 
-const ShippingForm = ({ onAddressValid, setPaymentLink }) => { 
+const ShippingForm = ({ onAddressValid, setShowCardEntry }) => { 
   const [formData, setFormData] = useState({ address: "", state: "", placeId: null });
   const [suggestions, setSuggestions] = useState([]);
   const isAddressSelected = false;
@@ -23,7 +23,7 @@ const ShippingForm = ({ onAddressValid, setPaymentLink }) => {
 
     isAddressSelected = false
     isAddressComplete = false
-    setPaymentLink('')
+    setShowCardEntry(false)
     fetchPlaces(value)
   };
 

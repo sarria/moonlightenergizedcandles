@@ -1,0 +1,10 @@
+4111 1111 1111 1111
+
+Card Type	Card Number	Expiration Date	CVV	Postal Code	Expected Result
+Visa	4111 1111 1111 1111	Any future date	Any	Any	✅ Approved
+Mastercard	5105 1051 0510 5100	Any future date	Any	Any	✅ Approved
+American Express	3714 496353 98431	Any future date	Any	Any	✅ Approved
+Discover	6011 1111 1111 1117	Any future date	Any	Any	✅ Approved
+Declined Transaction	4000 0000 0000 0002	Any future date	Any	Any	❌ Declined
+CVV Error	4000 0000 0000 0119	Any future date	Any	Any	❌ CVV Incorrect
+Postal Code Error	4000 0000 0000 0037	Any future date	Any	Any	❌ Postal Code Mismatch
