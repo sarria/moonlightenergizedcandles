@@ -23,3 +23,8 @@ export function formatCurrency(price, currency = 'USD', locale = 'en-US') {
 		maximumFractionDigits: 0  
 	}).format(price);
 }
+
+export function isValidEmail(email) {
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }

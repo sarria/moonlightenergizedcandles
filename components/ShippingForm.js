@@ -1,6 +1,7 @@
 import { useState } from "react";
 import cx from 'classnames';
 import styles from "./shippingForm.module.scss";
+import { isValidEmail } from './utils/shared';
 
 const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerifyingAddress, checkAddressFields }) => { 
   const [suggestions, setSuggestions] = useState([]);
@@ -119,7 +120,7 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
   };
 
   const missingField = (field) => {
-    return typeof shippingInformation["firstName"] === "string" && !shippingInformation[field]?.trim()
+    return typeof shippingInformation[field] === "string" && !shippingInformation[field]?.trim()
   }
 
   return (
@@ -157,7 +158,7 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
 
           <div className={styles.shippingInput}>
             <div className={cx(styles.inputs, styles.column)}>
-            <div className={cx(styles.field, {[styles.missingField]: missingField('email')})}>
+            <div className={cx(styles.field, {[styles.missingField]: missingField('email') || !isValidEmail(shippingInformation.email)})}>
                 <div className={styles.input}>
                   <input
                     type="text"

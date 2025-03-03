@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import cx from 'classnames';
+import { isValidEmail } from './utils/shared';
 import ShippingForm from './ShippingForm';
 import { useCart } from '../context/CartContext';
 import styles from './checkout.module.scss';
@@ -151,7 +152,7 @@ const Checkout = () => {
         return isValid
     }
 
-    const areShippingFieldsOk = checkRequiredFields()
+    const areShippingFieldsOk = checkRequiredFields() && isValidEmail(shippingInformation.email)
 
     return (
         <div className={styles.root}>
