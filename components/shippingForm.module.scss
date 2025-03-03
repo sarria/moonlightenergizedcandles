@@ -14,27 +14,11 @@
 
         .note {
             padding: 10px 0;
+            font-size: 14px;
             font-weight: 200;
             transition: opacity 0.3s ease-in-out;
-
-            &.hide {
-                opacity: 0;
-            }
         }        
 		
-        .shipping-form {
-            width: 100%;
-            margin: auto;
-        }
-        
-        .input {
-            width: 355px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        
         .autocomplete-dropdown {
             position: absolute;
             width: 376px;
@@ -59,31 +43,49 @@
             background: #f0f0f0;
         }
         
-        .submit-btn {
-            width: 100%;
-            background: #2563eb;
-            color: white;
-            padding: 10px;
-            margin-top: 15px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.2s ease-in-out;
-            font-size: 18px;
-        }
-        
-        .submit-btn:hover {
-            background: #1e40af;
-        }
-        
-        .submit-btn:disabled {
-            background: gray;
-            cursor: not-allowed;
-        }
-        
         .error {
             color: red;
             margin-top: 5px;
         }
+
+        .shippingInput {
+            width: 100%;
+            padding-bottom: 10px;
+
+            .inputs {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                gap: 10px;
+                box-sizing: border-box;
+
+                .field {
+                    flex-grow: 1;
+                    width: 100%;
+                    box-sizing: border-box;
+                    padding: 10px;
+                    border: solid 1px lightgray;
+                    border-radius: 4px;
+
+                    .input {
+                        cursor: pointer;
+                        box-sizing: border-box;
+
+                        input {
+                            border: none;
+                            font-size: 16px;
+                            width: 100%;
+
+                            &:focus {
+                                outline: none;
+                                box-shadow: none;
+                                border: none;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

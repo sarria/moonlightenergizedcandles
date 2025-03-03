@@ -11,40 +11,53 @@
         margin: 0 auto;
   		padding: 0 25px;
 
-	  	.errorMessage {
-			color: red;
-			font-weight: bold;
-			margin-top: 10px;
-		}
-		
-		.subtotal {
-			font-family: "Poppins", sans-serif;
+		.shippingScreen {
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
-			width: 380px;
-			background-color: white;
-			z-index: 10;
-			padding-top: 24px;
-			padding-bottom: 24px;
 
-			div {
-				text-align: center;
+			.subtotal {
+				font-family: "Poppins", sans-serif;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				width: 380px;
+				background-color: white;
+				z-index: 10;
+				padding-bottom: 24px;
+	
+				div {
+					text-align: center;
+				}
+	
+				.money {
+					color: #b12704;
+					font-weight: bold;
+					font-size: 25px;
+				}
 			}
 
-			.money {
-				color: #b12704;
-				font-weight: bold;
-				font-size: 25px;
+			.continueToPaymentBtn {
+				margin: 10px auto;
 			}
 		}
 
-		.paymentSection {
-			margin-top: 20px;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			gap: 15px;
+		.paymentScreen {
+			display: none;
+		}
+		
+		// .paymentSection {
+		// 	margin-top: 20px;
+		// 	display: flex;
+		// 	flex-direction: column;
+		// 	align-items: center;
+		// 	gap: 15px;
+		// }
+
+		.errorMessage {
+			color: red;
+			font-weight: bold;
+			margin-top: 10px;
 		}
 
 		button {
@@ -58,11 +71,17 @@
 			position: relative;
 			width: fit-content;
 			height: 40px;
+
+			&:disabled {
+				background-color: #ccc;
+				cursor: not-allowed;
+			}			
 		}
 
 		.loaderWrapper {
 			display: flex;
   			justify-content: center;
+			margin-top: 50px;
 		}
 
 		.loader {
@@ -80,7 +99,7 @@
 		}
 
 		.paymentSection {
-			// opacity: 0;
+			opacity: 0;
 
 			&.showCardEntry {
 				opacity: 1;

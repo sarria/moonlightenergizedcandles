@@ -2,32 +2,38 @@ import { useState } from "react";
 import cx from 'classnames';
 import styles from "./shippingForm.module.scss";
 
-const ShippingForm = ({ onAddressValid, setShowCardEntry }) => { 
-  const [formData, setFormData] = useState({ address: "", state: "", placeId: null });
+const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerifyingAddress }) => { 
   const [suggestions, setSuggestions] = useState([]);
   const isAddressSelected = false;
-  const isAddressComplete = false
   
-  // ✅ Handle input changes and fetch suggestions
-  const handleChange = (e) => {
+  const handleAddressChange = (e) => {
     const value = e.target.value;
-    setFormData({ 
-      ...formData, 
+
+    setShippingInformation((prev) => ({ 
+      ...prev, 
       address: value,
+      selectedAddress: "",
       addressLine1: "",
-      addressLine2: "",
       city: "",
       state: "",
-      zipCode: ""    
-    });
+      zipCode: ""         
+    }));    
 
     isAddressSelected = false
-    isAddressComplete = false
-    setShowCardEntry(false)
     fetchPlaces(value)
   };
 
-  // ✅ Fetch Places API Autocomplete Results
+  const handleFieldChange = (e) => {
+    const key = e.target.name;
+    const value = e.target.value;
+    // console.log(key, value)
+    setShippingInformation((prev) => ({ 
+      ...prev, 
+      [key]: value
+    }));
+  }
+
+  // Fetch Places API Autocomplete Results
   const fetchPlaces = async (inputText) => {
     if (!inputText) {
       setSuggestions([]);
@@ -42,7 +48,7 @@ const ShippingForm = ({ onAddressValid, setShowCardEntry }) => {
       });
 
       const data = await response.json();
-      console.log("Autocomplete results:", data);
+      // console.log("Autocomplete results:", data);
 
       if (data.suggestions?.length > 0) {
         const formattedSuggestions = data.suggestions.map((s) => ({
@@ -58,15 +64,24 @@ const ShippingForm = ({ onAddressValid, setShowCardEntry }) => {
     }
   };
 
-  // ✅ Handle Address Selection
+  const handleNameChange = () => {
+    
+  }
+
+  // Handle Address Selection
   const handleSelectAddress = async (selectedAddress, placeId) => {
+    setIsVerifyingAddress(true)
     isAddressSelected = true
-    setFormData({ ...formData, address: selectedAddress, placeId });
+    setShippingInformation((prev) => ({ 
+      ...prev, 
+      placeId,
+      address: selectedAddress
+    }));
     setSuggestions([]);
     await fetchPlaceDetails(selectedAddress, placeId);
   };
 
-  // ✅ Fetch and validate address components
+  // Fetch and validate address components
   const fetchPlaceDetails = async (selectedAddress, placeId) => {
     try {
       const response = await fetch("/api/google-place-details", {
@@ -85,18 +100,18 @@ const ShippingForm = ({ onAddressValid, setShowCardEntry }) => {
           state: data.addressComponents.find((c) => c.types.includes("administrative_area_level_1"))?.shortText || "",
           zipCode: data.addressComponents.find((c) => c.types.includes("postal_code"))?.shortText || ""
         };
-
         addressParts.addressLine1 = `${addressParts.streetNumber} ${addressParts.route}`.trim();
 
-        setFormData((prev) => ({ ...prev, ...addressParts }));
+        setShippingInformation((prev) => ({ 
+          ...prev, 
+          ...addressParts
+        }));        
 
-        if (addressParts.addressLine1 && addressParts.city && addressParts.state && addressParts.zipCode) {
-          isAddressComplete = true
-          onAddressValid(addressParts);
-        }
       }
+      setIsVerifyingAddress(false)
     } catch (error) {
       console.error("Error fetching place details:", error);
+      setIsVerifyingAddress(false)
     }
   };
 
@@ -106,14 +121,68 @@ const ShippingForm = ({ onAddressValid, setShowCardEntry }) => {
         <div className={styles["shipping-form"]}>
           <div className={styles.label}>Shipping Address</div>
 
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            placeholder="Start typing your address..."
-            className={styles.input}
-          />
+          <div className={styles.shippingInput}>
+            <div className={styles.inputs}>
+              <div className={styles.field}>
+                <div className={styles.input}>
+                    <input 
+                      type="text" 
+                      name="firstName" 
+                      value={shippingInformation.firstName || ''}
+                      placeholder="First name"
+                      onChange={handleFieldChange}
+                    />
+                </div>
+              </div>
+              <div className={styles.field}>
+                <div className={styles.input}>
+                    <input 
+                        type="text" 
+                        name="lastName" 
+                        value={shippingInformation.lastName || ''}
+                        placeholder="Last name"
+                        onChange={handleFieldChange}
+                    />
+                </div>
+              </div>              
+            </div>
+          </div>
+
+          <div className={styles.shippingInput}>
+            <div className={styles.inputs}>
+              <div className={styles.field}>
+                <div className={styles.input}>
+                  <input
+                    type="text"
+                    name="email"
+                    value={shippingInformation.email || ''}
+                    onChange={handleFieldChange}
+                    placeholder="Email address to receipt"
+                  />
+                </div>
+              </div>              
+            </div>
+          </div>           
+
+          <div className={styles.note}>
+            Please type your address and select one from the suggestions to validate and continue
+          </div>
+
+          <div className={styles.shippingInput}>
+            <div className={styles.inputs}>
+              <div className={styles.field}>
+                <div className={styles.input}>
+                  <input
+                    type="text"
+                    name="address"
+                    value={shippingInformation.address || ''}
+                    onChange={handleAddressChange}
+                    placeholder="Enter your address here"
+                  />
+                </div>
+              </div>              
+            </div>
+          </div>          
 
           {!isAddressSelected && suggestions.length > 0 && (
             <ul className={styles["autocomplete-dropdown"]}>
@@ -126,15 +195,11 @@ const ShippingForm = ({ onAddressValid, setShowCardEntry }) => {
           )}
         </div>
 
-        <div className={cx(styles.note, { [styles.hide]: isAddressComplete })}>
-          Please start typing your address and select one from the suggestions to continue
-        </div>
-
-        {isAddressSelected && !isAddressComplete && (
+        {/* {isAddressSelected && !isAddressComplete && (
             <div className={styles.errorMessage}>
                 <p>Please enter a complete shipping address before proceeding to payment.</p>
             </div>
-        )}        
+        )}         */}
       </div>
     </div>
   );

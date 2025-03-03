@@ -9,11 +9,10 @@ const Checkout = () => {
         cart, verifyProducts, getTotalItems, getTotalCost
     } = useCart();
     
-    const [isLoading, setIsLoading] = useState(false);
-    const [showCardEntry, setShowCardEntry] = useState(false);
+    const [isVerifyingAddress, setIsVerifyingAddress] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [paymentInstance, setPaymentInstance] = useState(null);
-    const [shippingAddress, setShippingAddress] = useState(null);
+    const [shippingInformation, setShippingInformation] = useState({});
     const totalItems = getTotalItems();
 
     useEffect(() => {
@@ -28,7 +27,7 @@ const Checkout = () => {
                 const response = await fetch("/api/getSquareConfig");
                 const { applicationId, environment } = await response.json();
 
-                console.log("applicationId, environment", applicationId, environment)
+                // console.log("applicationId, environment", applicationId, environment)
     
                 const payments = window.Square.payments(applicationId, environment);
     
@@ -50,33 +49,43 @@ const Checkout = () => {
         initializePayment();
     }, []);
 
-    const onAddressValid = async (addressParts) => {
-        console.log("onAddressValid :: ", addressParts);
-        if (addressParts.selectedAddress && addressParts.addressLine1 && addressParts.city && addressParts.state && addressParts.zipCode) {
-            setShippingAddress(addressParts);
-            // setIsLoading(true);
-            const verifiedCart = verifyProducts();
-            if (verifiedCart) {
-                setShowCardEntry(true)
-            }
-        } else {
-            // 
-        }
-    };
+    // const onAddressValid = async (addressParts) => {
+    //     // console.log("onAddressValid :: ", addressParts);
+    //     const requiredFields = ["selectedAddress","addressLine1","city","state","zipCode","firtName","lastName","email"]
+    //     const areShippingFieldsOk = requiredFields.every(field => addressParts[field]?.trim());
+    //     //const isValid = requiredFields.every(field => !!addressParts[field]?.trim());
+
+    //     // console.log("addressParts", addressParts)
+    //     // console.log(areShippingFieldsOk)
+
+    //     if (areShippingFieldsOk) {
+            // const verifiedCart = verifyProducts(); // Verify with the server the prodcut details in the cart
+            
+            // if (verifiedCart) {
+            //     // Continue the payment process
+            //     setShippingInformation(addressParts);
+
+            //     // Calculate Taxes and Shpping costs
+
+            // } else {
+            //     setShippingInformation(null);
+            // }
+    //     } else {
+    //         // alert("Address could not be verified")
+    //     }
+    // };
 
     const handlePayment = async () => {
         if (!paymentInstance) return;
 
         console.log("paymentInstance", paymentInstance)
 
-        // setIsLoading(true);
         setErrorMessage("");
 
         try {
             const { token } = await paymentInstance.tokenize();
             if (!token) {
                 setErrorMessage("Payment failed. Please try again.");
-                // setIsLoading(false);
                 return;
             }
 
@@ -85,7 +94,7 @@ const Checkout = () => {
             const response = await fetch("/api/submitPayment", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ cart, shippingAddress, token }),
+                body: JSON.stringify({ cart, shippingInformation, token }),
             });
 
             const data = await response.json();
@@ -99,39 +108,80 @@ const Checkout = () => {
             console.error("Payment error:", error);
             setErrorMessage("An error occurred. Please try again.");
         } finally {
-            // setIsLoading(false);
+            // Error
         }
-    };
+    }
+
+    const handleContinueToPayment = () => {
+        console.log("shippingInformation", shippingInformation)
+
+        if (verifyProducts()) {
+            // Verify with the server the prodcut details in the cart
+            // Continue the payment process
+            // Calculate Taxes and Shpping costs
+
+
+        } else {
+            // Send an erro message
+            setShippingInformation(null);
+        }        
+    }
+
+    const checkShippingFields = () => {
+        const requiredFields = [
+            "addressLine1",
+            "city",
+            "state",
+            "zipCode",
+            "firstName",
+            "lastName",
+            "email"
+        ];
+        const isValid = requiredFields.every(field => shippingInformation[field]?.trim());
+        return isValid
+    }
+
+    const areShippingFieldsOk = checkShippingFields()
 
     return (
         <div className={styles.root}>
             <div className={styles.wrapper}>
-                <div className={styles.subtotal}>
-                    <div className={styles.label}>
-                        Subtotal ({totalItems} item{totalItems === 1 ? '' : 's'})
-                    </div>
-                    <div className={styles.money}>
-                        ${getTotalCost()}
-                    </div>
+
+                <div className={styles.shippingScreen}>
+                
+                    <div className={styles.subtotal}>
+                        <div className={styles.label}>
+                            Subtotal ({totalItems} item{totalItems === 1 ? '' : 's'})
+                        </div>
+                        <div className={styles.money}>
+                            ${getTotalCost()}
+                        </div>
+                    </div>   
+
+                    <ShippingForm 
+                        shippingInformation={shippingInformation}
+                        setShippingInformation={setShippingInformation}
+                        setIsVerifyingAddress={setIsVerifyingAddress}
+                    />
+
+                    <button className={styles.continueToPaymentBtn} onClick={handleContinueToPayment} disabled={!areShippingFieldsOk || isVerifyingAddress}>
+                        {isVerifyingAddress ? <div className={styles.loader}></div> : "Continue"}
+                    </button>
+
+                    {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}              
                 </div>
 
-                <ShippingForm 
-                    onAddressValid={onAddressValid}
-                    setShowCardEntry={setShowCardEntry} 
-                />
-
-                {/* {isLoading && <div className={styles.loaderWrapper}><div className={styles.loader}></div></div>} */}
-
-                <div className={cx(styles.paymentSection, {[styles.showCardEntry] : showCardEntry} )}>
-                    <div id="card-container"></div>  {/* 🔹 This is where the card input should appear */}
+                <div className={styles.paymentScreen}>
+                    <div id="card-container"></div>
                     {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
 
-                    <button className={styles.checkoutBtn} onClick={handlePayment} XXX_disabled={isLoading}>
-                        {/* {isLoading ? <div className={styles.loader}></div> : "Submit Payment"} */}
+                    <button className={styles.checkoutBtn} onClick={handlePayment} disabled={!shippingInformation}>
+                        {/* {isMakingPayment ? <div className={styles.loader}></div> : "Submit Payment"} */}
+                        {/* <div className={styles.loader}></div> */}
                         Submit Payment
                     </button>
                 </div>
-
+                
             </div>
         </div>
     );

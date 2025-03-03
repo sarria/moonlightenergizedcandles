@@ -31,12 +31,11 @@ export const CartProvider = ({ children }) => {
 
     // Save customizations to sessionStorage whenever it changes
     useEffect(() => {
-        console.log("customizations.length", customizations ? 'si' : 'no')
         if (customizations) {
-            console.log('sessionStorage customForms', customizations)
+            // console.log('sessionStorage customForms', customizations)
             sessionStorage.setItem('customForms', JSON.stringify(customizations));
         } else {
-            console.log("Remove customForms")
+            // console.log("Remove customForms")
             sessionStorage.removeItem('customForms');
         }
     }, [customizations]);    

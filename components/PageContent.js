@@ -42,7 +42,7 @@ function PageContentWithCart({page, global}) {
 	const router = useRouter()
 	const { getTotalItems, isCartVisible, setSlug } = useCart()
 	const totalItems = getTotalItems()
-	console.log("page ::", page)
+	// console.log("page ::", page)
 
 	setSlug(page.slug);
 

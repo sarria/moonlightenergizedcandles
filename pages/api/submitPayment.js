@@ -8,16 +8,17 @@ export default async function handler(req, res) {
     try {
         const { cart, addressParts, token } = req.body;
 
-        // if (!cart || cart.length === 0 || !addressParts) {
-        //     return res.status(400).json({ error: 'Missing required data' });
-        // }
+        if (!cart || cart.length === 0 || !addressParts) {
+            return res.status(400).json({ error: 'Missing required data' });
+        }
 
         const ENV = process.env.ENV.toUpperCase()
         const locationId = process.env['SQUARE_LOCATION_ID_' + ENV]
         const squareAccessToken = process.env['SQUARE_ACCESS_TOKEN_' + ENV]
         const idempotencyKey = crypto.randomUUID()
 
-        console.log("locationId", 'SQUARE_LOCATION_ID_' + ENV, ENV, locationId)
+        // console.log("locationId", 'SQUARE_LOCATION_ID_' + ENV, ENV, locationId)
+        console.log("submitPayment cart, addressParts ::", cart, addressParts)
 
         const requestBody = {
             "sourceId": token,
@@ -28,7 +29,6 @@ export default async function handler(req, res) {
               "currency": "USD"
             },
             "buyer_email_address": "jaunsarria@gmail.com",
-            "buyer_phone_number": "+14845469605",
             "location_id": locationId,
             "shipping_address": {
               "address_line_1": "255 Park Ridge Dr",
