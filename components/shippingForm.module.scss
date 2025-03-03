@@ -59,33 +59,69 @@
                 gap: 10px;
                 box-sizing: border-box;
 
+                &.column {
+                    flex-direction: column;
+                }
+
                 .field {
                     flex-grow: 1;
                     width: 100%;
                     box-sizing: border-box;
                     padding: 10px;
-                    border: solid 1px lightgray;
+                    border: solid 1px #A9A9A9;
                     border-radius: 4px;
 
+                    &.missingField {
+                        border-color: #a82826;
+                    }
+
                     .input {
-                        cursor: pointer;
                         box-sizing: border-box;
 
+                        textarea,
                         input {
-                            border: none;
+                            font-family: "Poppins", sans-serif;
                             font-size: 16px;
+                            border: none;                            
                             width: 100%;
 
                             &:focus {
                                 outline: none;
                                 box-shadow: none;
                                 border: none;
-                            }
+                            }                        
                         }
+
                     }
                 }
             }
         }
 
+        .checkboxField {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            font-weight: 200;
+        
+            input[type="checkbox"] {
+                width: 16px;
+                height: 16px;
+                cursor: pointer;
+            }
+        
+            label {
+                font-size: 14px;
+                cursor: pointer;
+            }
+        }
+       
+        input::placeholder, 
+        textarea::placeholder {
+            font-family: "Poppins", sans-serif;
+            font-size: 16px; 
+            color: #A9A9A9; 
+            opacity: 1; 
+        }
     }
 }

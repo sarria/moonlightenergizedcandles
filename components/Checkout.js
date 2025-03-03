@@ -127,21 +127,31 @@ const Checkout = () => {
         }        
     }
 
-    const checkShippingFields = () => {
-        const requiredFields = [
-            "addressLine1",
-            "city",
-            "state",
-            "zipCode",
-            "firstName",
-            "lastName",
-            "email"
-        ];
+    const addressFields = [
+        "addressLine1",
+        "city",
+        "state",
+        "zipCode"
+    ]
+
+    const contactFields = [
+        "firstName",
+        "lastName",
+        "email"
+    ]
+
+    const checkAddressFields = () => {
+        const isValid = addressFields.every(field => shippingInformation[field]?.trim());
+        return isValid
+    }    
+
+    const checkRequiredFields = () => {
+        const requiredFields = [...addressFields, ...contactFields]
         const isValid = requiredFields.every(field => shippingInformation[field]?.trim());
         return isValid
     }
 
-    const areShippingFieldsOk = checkShippingFields()
+    const areShippingFieldsOk = checkRequiredFields()
 
     return (
         <div className={styles.root}>
@@ -162,6 +172,7 @@ const Checkout = () => {
                         shippingInformation={shippingInformation}
                         setShippingInformation={setShippingInformation}
                         setIsVerifyingAddress={setIsVerifyingAddress}
+                        checkAddressFields={checkAddressFields}
                     />
 
                     <button className={styles.continueToPaymentBtn} onClick={handleContinueToPayment} disabled={!areShippingFieldsOk || isVerifyingAddress}>

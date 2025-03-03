@@ -2,7 +2,7 @@ import { useState } from "react";
 import cx from 'classnames';
 import styles from "./shippingForm.module.scss";
 
-const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerifyingAddress }) => { 
+const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerifyingAddress, checkAddressFields }) => { 
   const [suggestions, setSuggestions] = useState([]);
   const isAddressSelected = false;
   
@@ -64,10 +64,6 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
     }
   };
 
-  const handleNameChange = () => {
-    
-  }
-
   // Handle Address Selection
   const handleSelectAddress = async (selectedAddress, placeId) => {
     setIsVerifyingAddress(true)
@@ -80,6 +76,13 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
     setSuggestions([]);
     await fetchPlaceDetails(selectedAddress, placeId);
   };
+
+  const handleCheckboxChange = (e) => {
+    setShippingInformation((prev) => ({ 
+      ...prev, 
+      joinMailingList: e.target.checked
+    }));
+  };  
 
   // Fetch and validate address components
   const fetchPlaceDetails = async (selectedAddress, placeId) => {
@@ -115,6 +118,10 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
     }
   };
 
+  const missingField = (field) => {
+    return typeof shippingInformation["firstName"] === "string" && !shippingInformation[field]?.trim()
+  }
+
   return (
     <div className={styles.root}>
       <div className={styles.wrapper}>    
@@ -123,7 +130,7 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
 
           <div className={styles.shippingInput}>
             <div className={styles.inputs}>
-              <div className={styles.field}>
+              <div className={cx(styles.field, {[styles.missingField]: missingField('firstName')})}>
                 <div className={styles.input}>
                     <input 
                       type="text" 
@@ -134,7 +141,7 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
                     />
                 </div>
               </div>
-              <div className={styles.field}>
+              <div className={cx(styles.field, {[styles.missingField]: missingField('lastName')})}>
                 <div className={styles.input}>
                     <input 
                         type="text" 
@@ -149,8 +156,8 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
           </div>
 
           <div className={styles.shippingInput}>
-            <div className={styles.inputs}>
-              <div className={styles.field}>
+            <div className={cx(styles.inputs, styles.column)}>
+            <div className={cx(styles.field, {[styles.missingField]: missingField('email')})}>
                 <div className={styles.input}>
                   <input
                     type="text"
@@ -160,9 +167,30 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
                     placeholder="Email address to receipt"
                   />
                 </div>
+              </div>
+              <div className={styles.checkboxField}>
+                <input 
+                  type="checkbox" 
+                  id="mailingList" 
+                  name="joinMailingList"
+                  checked={shippingInformation.joinMailingList || false}
+                  onChange={handleCheckboxChange}
+                />
+                <label htmlFor="mailingList">Join our mailing list for updates and promotions</label>
+              </div>                            
+              <div className={styles.field}>
+                <div className={styles.input}>
+                  <textarea
+                    type="text"
+                    name="notes"
+                    value={shippingInformation.notes || ''}
+                    onChange={handleFieldChange}
+                    placeholder="Any special delivery instructions?"
+                  />
+                </div>
               </div>              
             </div>
-          </div>           
+          </div>        
 
           <div className={styles.note}>
             Please type your address and select one from the suggestions to validate and continue
@@ -170,14 +198,14 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
 
           <div className={styles.shippingInput}>
             <div className={styles.inputs}>
-              <div className={styles.field}>
+              <div className={cx(styles.field, {[styles.missingField]: missingField('address') || !checkAddressFields()})}>
                 <div className={styles.input}>
                   <input
                     type="text"
                     name="address"
                     value={shippingInformation.address || ''}
                     onChange={handleAddressChange}
-                    placeholder="Enter your address here"
+                    placeholder="Enter your shipping address here"
                   />
                 </div>
               </div>              
