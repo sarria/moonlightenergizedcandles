@@ -123,11 +123,16 @@ const Checkout = () => {
             // Continue the payment process
             // Calculate Taxes and Shpping costs
 
-            setShowSummary(true)
+            handleShowSummary(true)
         } else {
             // Send an erro message
             setShippingInformation(null);
         }        
+    }
+
+    const handleShowSummary = (value) => {
+        setShowSummary(value);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     const addressFields = [
@@ -191,7 +196,10 @@ const Checkout = () => {
 
                 {totalItems > 0 && <div className={cx(styles.paymentScreen, {[styles.show]: showSummary}, {[styles.hide]: !showSummary})}>
                     <div className={styles.orderSummary}>
-                        <Summary shippingInformation={shippingInformation} />
+                        <Summary 
+                            shippingInformation={shippingInformation} 
+                            handleShowSummary={handleShowSummary}                            
+                        />
                     </div>
 
                     <div className={styles.paymentInfo}>

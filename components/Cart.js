@@ -6,7 +6,7 @@ import styles from './cart.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
 import ImageRatio from './elements/ImageRatio';
-import faXmark from '../public/icons/xmark-black.svg';
+import faXmark from '../images/icons/xmark-black.svg';
 import parse from 'html-react-parser';
 import AddToCartButton from './AddToCartButton';
 import CustomCandleForm from './CustomCandleForm';

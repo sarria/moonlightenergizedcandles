@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
-import faCartShoppingBlack from '../public/icons/cart-shopping-black.svg';
-import faCartShoppingWhite from '../public/icons/cart-shopping-white.svg';
+import faCartShoppingBlack from '../images/icons/cart-shopping-black.svg';
+import faCartShoppingWhite from '../images/icons/cart-shopping-white.svg';
 import styles from './shopButton.module.scss';
 import cx from 'classnames';
 

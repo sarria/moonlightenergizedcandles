@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 // import { useCart } from '../context/CartContext';
-import faTrash from '../public/icons/trash.svg';
+import faTrash from '../images/icons/trash.svg';
 import Image from 'next/image';
-import faXmark from '../public/icons/xmark-black.svg';
+import faXmark from '../images/icons/xmark-black.svg';
 import styles from './customCandleForm.module.scss';
 
 const CustomCandleForm = ({ id, candleNum, customizationData, onCustomizationChange, onRemove }) => {

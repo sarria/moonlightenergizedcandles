@@ -5,7 +5,7 @@ import Link from 'next/link'
 import ShopButton from './ShopButton'
 import { useRouter } from "next/router";
 import Image from "next/image";
-import faInstagramBlack from '../public/icons/instagram-black.svg'
+import faInstagramBlack from '../images/icons/instagram-black.svg'
 
 const Item = ({item, toggleMenu}) => {
 	const router = useRouter();

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import parse from 'html-react-parser';
 import cx from 'classnames'
 import styles from './events.module.scss'
-import faLocationDot from '../public/icons/location-dot-red.svg';
+import faLocationDot from '../images/icons/location-dot-red.svg';
 import ImageRatio from './elements/ImageRatio'
 
 

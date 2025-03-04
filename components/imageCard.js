@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from "next/image";
 import ImageRatio from './elements/ImageRatio'
 import styles from './imageCard.module.scss'
-import faInstagram from '../public/icons/instagram-white.svg'
+import faInstagram from '../images/icons/instagram-white.svg'
 
 const ImageCard = ({index, image, ratio, instagram, hasPadding, linkPage, imagesLayout}) => {
 	const hasLink = image.linkPage?.slug ? 'hasLink' : ''

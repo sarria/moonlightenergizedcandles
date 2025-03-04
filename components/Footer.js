@@ -7,7 +7,7 @@ import Images from './Images'
 import Image from "next/image";
 import Logo from './Logo'
 import LogoImage from '../images/Moonlight Logo-02.svg'
-import faInstagramBlack from '../public/icons/instagram-black.svg'
+import faInstagramBlack from '../images/icons/instagram-black.svg'
 
 const Footer = ({global, buttons}) => {
 	const textData =                 {

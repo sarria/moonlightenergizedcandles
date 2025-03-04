@@ -19,7 +19,7 @@
             }
 
             .money {
-                color: #b12704;
+                // color: #b12704;
                 font-weight: bold;
                 font-size: 25px;
             }
@@ -99,27 +99,51 @@
                         }
 
                     }
-                }
 
-                .summaryFooter {
-                
-                    .summaryRow {
-                        display: flex;
-                        justify-content: space-between;
-                        font-size: 16px;
-                        padding: 5px 0;
+                    .customizations {
+                        margin-top: 10px;
+                        padding: 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                    
+                        h4 {
+                            margin-top: 0px;
+                            margin-bottom: 5px;
+                            font-size: 16px;
+                            font-weight: bold;
+                            text-transform: uppercase;
+                        }
+                    
+                        .customItem {
+                            margin-bottom: 10px;
+                            font-size: 14px;
+                    
+                            p {
+                                margin: 3px 0;
+                            }
+                        }
                     }
-                
-                    .summaryRowTotal {
-                        display: flex;
-                        justify-content: space-between;
-                        font-size: 18px;
-                        font-weight: bold;
-                        padding-top: 10px;
-                    }
+                    
                 }
-                
             }
+
+            .summaryFooter {
+                
+                .summaryRow {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 16px;
+                    padding: 5px 0;
+                }
+            
+                .summaryRowTotal {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 18px;
+                    font-weight: bold;
+                    padding-top: 10px;
+                }
+            }            
         }
 
         .shippingInfo {
@@ -129,10 +153,19 @@
             border-radius: 5px;
             background-color: #f9f9f9;
         
-            h3 {
+            .headline {
+                display: flex;
+                justify-content: space-between;
                 margin-bottom: 10px;
                 font-size: 18px;
                 font-weight: bold;
+
+                .editIcon {
+                    cursor: pointer;
+                    position: relative;
+                    width: 25px;
+                    height: 25px;
+                }                
             }
         
             p {
