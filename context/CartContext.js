@@ -154,7 +154,7 @@ export const CartProvider = ({ children }) => {
             });
     
             const updatedCart = await response.json();
-            console.log("updatedCart :: ", updatedCart);
+            // console.log("updatedCart :: ", updatedCart);
     
             if (updatedCart) {
                 console.log("Cart successfully verified and updated!");

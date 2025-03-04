@@ -8,7 +8,7 @@ import Summary from './Summary'
 
 const Checkout = () => {
     const { 
-        cart, verifyProducts, getTotalItems, getSubtotal
+        cart, verifyProducts, getTotalItems, getSubtotal, calculateTaxes, getTotalOrderCost, customizations
     } = useCart();
     
     const [isVerifyingAddress, setIsVerifyingAddress] = useState(false);
@@ -52,33 +52,18 @@ const Checkout = () => {
         initializePayment();
     }, []);
 
-    // const onAddressValid = async (addressParts) => {
-    //     // console.log("onAddressValid :: ", addressParts);
-    //     const requiredFields = ["selectedAddress","addressLine1","city","state","zipCode","firtName","lastName","email"]
-    //     const areShippingFieldsOk = requiredFields.every(field => addressParts[field]?.trim());
-    //     //const isValid = requiredFields.every(field => !!addressParts[field]?.trim());
-
-    //     // console.log("addressParts", addressParts)
-    //     // console.log(areShippingFieldsOk)
-
-    //     if (areShippingFieldsOk) {
-            // const verifiedCart = verifyProducts(); // Verify with the server the prodcut details in the cart
-            
-            // if (verifiedCart) {
-            //     // Continue the payment process
-            //     setShippingInformation(addressParts);
-
-            //     // Calculate Taxes and Shpping costs
-
-            // } else {
-            //     setShippingInformation(null);
-            // }
-    //     } else {
-    //         // alert("Address could not be verified")
-    //     }
-    // };
-
     const handlePayment = async () => {
+        const orderData = await createOrder();
+        console.log("order ::", orderData)
+
+        if (orderData && orderData.order?.id) {
+            console.log("Ready to create payment linked to order id: ", orderData.order.id)
+        } else {
+            setErrorMessage("Order could not be crated.");    
+        }
+    }
+
+    const createOrder = async () => {
         if (!paymentInstance) return;
 
         console.log("paymentInstance", paymentInstance)
@@ -92,18 +77,28 @@ const Checkout = () => {
                 return;
             }
 
-            console.log("token", token)
+            const totals = {
+                subtotal : getSubtotal(),
+                taxes : calculateTaxes(shippingInformation.state),
+                totalOrderCost : getTotalOrderCost(shippingInformation.state)
+            }
 
-            const response = await fetch("/api/submitPayment", {
+            const response = await fetch("/api/createOrder", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ cart, shippingInformation, token }),
+                body: JSON.stringify({
+                    token,
+                    cart,
+                    totals,
+                    customizations,
+                    shippingInformation }),
             });
 
             const data = await response.json();
 
             if (response.ok) {
                 console.log("Payment result ::", data)
+                return data
             } else {
                 setErrorMessage(data.error);
             }
@@ -115,14 +110,48 @@ const Checkout = () => {
         }
     }
 
+    // const createPayment = async () => {
+    //     if (!paymentInstance) return;
+
+    //     console.log("paymentInstance", paymentInstance)
+
+    //     setErrorMessage("");
+
+    //     try {
+    //         const { token } = await paymentInstance.tokenize();
+    //         if (!token) {
+    //             setErrorMessage("Payment failed. Please try again.");
+    //             return;
+    //         }
+
+    //         console.log("token", token)
+
+    //         const response = await fetch("/api/submitPayment", {
+    //             method: "POST",
+    //             headers: { "Content-Type": "application/json" },
+    //             body: JSON.stringify({ cart, shippingInformation, token }),
+    //         });
+
+    //         const data = await response.json();
+
+    //         if (response.ok) {
+    //             console.log("Payment result ::", data)
+    //         } else {
+    //             setErrorMessage(data.error);
+    //         }
+    //     } catch (error) {
+    //         console.error("Payment error:", error);
+    //         setErrorMessage("An error occurred. Please try again.");
+    //     } finally {
+    //         // Error
+    //     }
+    // }
+
     const handleContinueToPayment = () => {
-        console.log("shippingInformation", shippingInformation)
+        // console.log("shippingInformation", shippingInformation)
 
         if (verifyProducts()) {
-            // Verify with the server the prodcut details in the cart
-            // Continue the payment process
-            // Calculate Taxes and Shpping costs
-
+            // Go to next step Summary
             handleShowSummary(true)
         } else {
             // Send an erro message
