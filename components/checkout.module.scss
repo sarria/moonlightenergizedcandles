@@ -43,16 +43,48 @@
 		}
 
 		.paymentScreen {
-			display: none;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			padding-bottom: 30px;
+
+			.paymentInfo {
+				margin-top: 20px;
+				padding: 15px;
+				border: 1px solid #ddd;
+				border-radius: 5px;
+				background-color: #f9f9f9;
+			
+				h3 {
+					margin-bottom: 5px;
+					font-size: 18px;
+					font-weight: bold;
+				}
+			
+				p {
+					margin: 0;
+					font-size: 16px;
+					color: #4CAF50; /* Green color to indicate security */
+				}
+			}			
+
+			.payment {
+				padding-top: 30px;
+			}
+
+			.checkoutBtn {
+				margin: 20px auto;
+			}
 		}
 		
-		// .paymentSection {
-		// 	margin-top: 20px;
-		// 	display: flex;
-		// 	flex-direction: column;
-		// 	align-items: center;
-		// 	gap: 15px;
-		// }
+		.hide {
+			display: none;
+		}
+
+		.show {
+			display: flex;
+		}
+
 
 		.errorMessage {
 			color: red;
@@ -98,12 +130,6 @@
 			100% { transform: rotate(360deg); }
 		}
 
-		.paymentSection {
-			opacity: 0;
-
-			&.showCardEntry {
-				opacity: 1;
-			}
-		}		
+		
 	}	
 }

@@ -15,16 +15,16 @@ export function handleScrollToSection(id) {
 	}
 }
 
-export function formatCurrency(price, currency = 'USD', locale = 'en-US') {
+export function formatCurrency(price, minimumFractionDigits = 0, maximumFractionDigits = 0, currency = 'USD', locale = 'en-US') {
 	return new Intl.NumberFormat(locale, {
 		style: 'currency',
 		currency: currency,
-		minimumFractionDigits: 0,
-		maximumFractionDigits: 0  
+		minimumFractionDigits,
+		maximumFractionDigits  
 	}).format(price);
 }
 
 export function isValidEmail(email) {
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return email && email !== "" ? emailRegex.test(email) : true;
   }

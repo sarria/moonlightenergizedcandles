@@ -73,7 +73,7 @@ export const CartProvider = ({ children }) => {
     const getTotalItems = () => cart.reduce((total, item) => total + item.quantity, 0);
 
     // Get total cost of items in the cart
-    const getTotalCost = () => cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    const getSubtotal = () => cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
     const getTotalQuantityById = (id) => {
         const item = cart.find((cartItem) => cartItem.id === id);
@@ -170,7 +170,17 @@ export const CartProvider = ({ children }) => {
             return false;
         }
     };
-     
+    
+    const calculateTaxes = (state) => {
+        const taxRate = state === "PA" ? 0.06 : 0;
+        return getSubtotal() * taxRate;
+    };
+
+    const getTotalOrderCost = (state) => {
+        const subtotal = getSubtotal();
+        const taxes = calculateTaxes(state);
+        return subtotal + taxes;
+    };
 
     return (
         <CartContext.Provider value={{ 
@@ -179,7 +189,7 @@ export const CartProvider = ({ children }) => {
             removeFromCart, 
             updateQuantity, 
             getTotalItems, 
-            getTotalCost, 
+            getSubtotal, 
             getTotalQuantityById,
             toggleCart, 
             isCartVisible,
@@ -188,7 +198,9 @@ export const CartProvider = ({ children }) => {
             handleRemoveCustomCandle,
             isCheckoutValid,
             verifyProducts,
-            slug, setSlug
+            slug, setSlug,
+            calculateTaxes,
+            getTotalOrderCost
         }}>
             {children}
         </CartContext.Provider>

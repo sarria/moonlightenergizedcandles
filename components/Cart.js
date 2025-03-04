@@ -13,7 +13,7 @@ import CustomCandleForm from './CustomCandleForm';
 
 const Cart = () => {
     const { 
-		cart, verifyProducts, getTotalItems, getTotalCost, toggleCart,
+		cart, verifyProducts, getTotalItems, getSubtotal, toggleCart,
 		customizations, handleCustomizationChange, handleRemoveCustomCandle, isCheckoutValid
 	} = useCart();
     const [validationError, setValidationError] = useState(false);
@@ -52,7 +52,7 @@ const Cart = () => {
                         Subtotal ({totalItems} item{totalItems === 1 ? '' : 's'})
                     </div>
                     <div className={styles.money}>
-                        ${getTotalCost()}
+                        ${getSubtotal()}
                     </div>
                     {validationError && (
                         <div className={styles.errorMessage}>

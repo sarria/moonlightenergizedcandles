@@ -1,16 +1,18 @@
-import { useEffect, useState } from 'react';
-import cx from 'classnames';
-import { isValidEmail } from './utils/shared';
-import ShippingForm from './ShippingForm';
-import { useCart } from '../context/CartContext';
-import styles from './checkout.module.scss';
+import { useEffect, useState } from 'react'
+import cx from 'classnames'
+import { isValidEmail } from './utils/shared'
+import ShippingForm from './ShippingForm'
+import { useCart } from '../context/CartContext'
+import styles from './checkout.module.scss'
+import Summary from './Summary'
 
 const Checkout = () => {
     const { 
-        cart, verifyProducts, getTotalItems, getTotalCost
+        cart, verifyProducts, getTotalItems, getSubtotal
     } = useCart();
     
     const [isVerifyingAddress, setIsVerifyingAddress] = useState(false);
+    const [showSummary, setShowSummary] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [paymentInstance, setPaymentInstance] = useState(null);
     const [shippingInformation, setShippingInformation] = useState({});
@@ -24,7 +26,7 @@ const Checkout = () => {
             }
     
             try {
-                // 🔹 Fetch Square credentials from the server
+                // Fetch Square credentials from the server
                 const response = await fetch("/api/getSquareConfig");
                 const { applicationId, environment } = await response.json();
 
@@ -121,7 +123,7 @@ const Checkout = () => {
             // Continue the payment process
             // Calculate Taxes and Shpping costs
 
-
+            setShowSummary(true)
         } else {
             // Send an erro message
             setShippingInformation(null);
@@ -158,14 +160,14 @@ const Checkout = () => {
         <div className={styles.root}>
             <div className={styles.wrapper}>
 
-                <div className={styles.shippingScreen}>
+                <div className={cx(styles.shippingScreen, {[styles.show]: !showSummary}, {[styles.hide]: showSummary})}>
                 
                     <div className={styles.subtotal}>
                         <div className={styles.label}>
                             Subtotal ({totalItems} item{totalItems === 1 ? '' : 's'})
                         </div>
                         <div className={styles.money}>
-                            ${getTotalCost()}
+                            ${getSubtotal()}
                         </div>
                     </div>   
 
@@ -183,13 +185,22 @@ const Checkout = () => {
                     {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}              
                 </div>
 
-                <div className={styles.paymentScreen}>
-                    <div id="card-container"></div>
-                    {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+                <div className={cx(styles.paymentScreen, {[styles.show]: showSummary}, {[styles.hide]: !showSummary})}>
+                    <div className={styles.orderSummary}>
+                        <Summary shippingInformation={shippingInformation} />
+                    </div>
+
+                    <div className={styles.paymentInfo}>
+                        <h3>Payment</h3>
+                        <p>All transactions are secure and encrypted.</p>
+
+                        <div className={styles.payment}>
+                            <div id="card-container"></div>
+                            {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+                        </div>
+                    </div>
 
                     <button className={styles.checkoutBtn} onClick={handlePayment} disabled={!shippingInformation}>
-                        {/* {isMakingPayment ? <div className={styles.loader}></div> : "Submit Payment"} */}
-                        {/* <div className={styles.loader}></div> */}
                         Submit Payment
                     </button>
                 </div>
