@@ -166,26 +166,30 @@ const Checkout = () => {
                         <div className={styles.label}>
                             Subtotal ({totalItems} item{totalItems === 1 ? '' : 's'})
                         </div>
-                        <div className={styles.money}>
+                        {totalItems > 0 && <div className={styles.money}>
                             ${getSubtotal()}
-                        </div>
+                        </div>}
                     </div>   
 
-                    <ShippingForm 
-                        shippingInformation={shippingInformation}
-                        setShippingInformation={setShippingInformation}
-                        setIsVerifyingAddress={setIsVerifyingAddress}
-                        checkAddressFields={checkAddressFields}
-                    />
+                    {totalItems > 0 && 
+                        <>
+                            <ShippingForm 
+                                shippingInformation={shippingInformation}
+                                setShippingInformation={setShippingInformation}
+                                setIsVerifyingAddress={setIsVerifyingAddress}
+                                checkAddressFields={checkAddressFields}
+                            />
 
-                    <button className={styles.continueToPaymentBtn} onClick={handleContinueToPayment} disabled={!areShippingFieldsOk || isVerifyingAddress}>
-                        {isVerifyingAddress ? <div className={styles.loader}></div> : "Continue"}
-                    </button>
+                            <button className={styles.continueToPaymentBtn} onClick={handleContinueToPayment} disabled={!areShippingFieldsOk || isVerifyingAddress}>
+                                {isVerifyingAddress ? <div className={styles.loader}></div> : "Continue"}
+                            </button>
 
-                    {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}              
+                            {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+                        </>
+                    }
                 </div>
 
-                <div className={cx(styles.paymentScreen, {[styles.show]: showSummary}, {[styles.hide]: !showSummary})}>
+                {totalItems > 0 && <div className={cx(styles.paymentScreen, {[styles.show]: showSummary}, {[styles.hide]: !showSummary})}>
                     <div className={styles.orderSummary}>
                         <Summary shippingInformation={shippingInformation} />
                     </div>
@@ -203,7 +207,7 @@ const Checkout = () => {
                     <button className={styles.checkoutBtn} onClick={handlePayment} disabled={!shippingInformation}>
                         Submit Payment
                     </button>
-                </div>
+                </div>}
                 
             </div>
         </div>
