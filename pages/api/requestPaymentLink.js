@@ -4,9 +4,15 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { cart, addressParts } = req.body;
+        const { 
+            token,
+            cart,
+            totals,
+            customizations,
+            shippingInformation            
+        } = req.body;
 
-        if (!cart || cart.length === 0 || !addressParts) {
+        if (!cart || cart.length === 0 || !shippingInformation) {
             return res.status(400).json({ error: 'Missing required data' });
         }
 
@@ -41,9 +47,9 @@ export default async function handler(req, res) {
                         shipment_details: {
                             recipient: {
                                 address: {
-                                    address_line_1: addressParts.addressLine1,
-                                    locality: addressParts.city,
-                                    postal_code: addressParts.zipCode,
+                                    address_line_1: shippingInformation.addressLine1,
+                                    locality: shippingInformation.city,
+                                    postal_code: shippingInformation.zipCode,
                                     country: "US"                                    
                                 }
                             }
@@ -53,7 +59,7 @@ export default async function handler(req, res) {
             }
         }
 
-        if (addressParts.state === 'PA') {
+        if (shippingInformation.state === 'PA') {
             requestBody.order.taxes = [
                 {
                   "catalog_object_id": squarePATaxId

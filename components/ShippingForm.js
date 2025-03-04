@@ -3,7 +3,7 @@ import cx from 'classnames';
 import styles from "./shippingForm.module.scss";
 import { isValidEmail } from './utils/shared';
 
-const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerifyingAddress, checkAddressFields }) => { 
+const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerifyingAddress, setFetchingSuggestions, checkAddressFields }) => { 
   const [suggestions, setSuggestions] = useState([]);
   const isAddressSelected = false;
   
@@ -26,13 +26,19 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
 
   const handleFieldChange = (e) => {
     const key = e.target.name;
-    const value = e.target.value;
-    // console.log(key, value)
+    let value = e.target.value;
+
+    // Limit "notes" field to 500 characters
+    if (key === "notes" && value.length > 500) {
+        value = value.slice(0, 500); // Trim the value if it exceeds 500 characters
+    }
+
     setShippingInformation((prev) => ({ 
       ...prev, 
       [key]: value
     }));
-  }
+};
+
 
   // Fetch Places API Autocomplete Results
   const fetchPlaces = async (inputText) => {
@@ -40,17 +46,19 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
       setSuggestions([]);
       return;
     }
-
+  
+    setFetchingSuggestions(true);
+  
     try {
       const response = await fetch("/api/google-autocomplete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ inputText }),
       });
-
+  
       const data = await response.json();
       // console.log("Autocomplete results:", data);
-
+  
       if (data.suggestions?.length > 0) {
         const formattedSuggestions = data.suggestions.map((s) => ({
           description: s.placePrediction.text.text,
@@ -62,8 +70,11 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
       }
     } catch (error) {
       console.error("Error fetching places:", error);
+    } finally {
+      setFetchingSuggestions(false); // ✅ Runs no matter what (success or error)
     }
   };
+  
 
   // Handle Address Selection
   const handleSelectAddress = async (selectedAddress, placeId) => {

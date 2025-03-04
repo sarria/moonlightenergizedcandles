@@ -4,6 +4,7 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
+    const [totalOrderCosts, setTotalOrderCost] = useState({});
     const [customizations, setCustomizations] = useState({});
     const [isCartVisible, setIsCartVisible] = useState(false);
     const [slug, setSlug] = useState('');
@@ -171,20 +172,64 @@ export const CartProvider = ({ children }) => {
         }
     };
     
-    const calculateTaxes = (state) => {
+    const calculateTaxes = (shippingInformation) => {
+        const state = shippingInformation?.state || ""
         const taxRate = state === "PA" ? 0.06 : 0;
         return getSubtotal() * taxRate;
     };
 
-    const getTotalOrderCost = (state) => {
-        const subtotal = getSubtotal();
-        const taxes = calculateTaxes(state);
-        return subtotal + taxes;
+    const calculateHandling = (shippingInformation) => {
+        const state = shippingInformation?.state || ""
+        return 2.00
+    }
+
+    const calculateShipping = (shippingInformation) => {
+        const state = shippingInformation?.state || ""
+        return 7.50
+    }
+
+    const calculateFees = (total) => {
+        const percentageFee = 0.029; // 2.9%
+        const fixedFee = 0.30;       // Flat $0.30 fee
+    
+        // Calculate the correct amount to charge so the fee is covered
+        const totalWithFees = (total + fixedFee) / (1 - percentageFee);
+    
+        // Extract only the fee
+        const processingFee = totalWithFees - total;
+    
+        // Round to match Square's behavior
+        return Math.round(processingFee * 100) / 100;
     };
+    
+
+    const calculateTotals = (shippingInformation) => {
+        const subtotal = getSubtotal()
+        const taxes = calculateTaxes(shippingInformation)
+        const shipping = calculateShipping(shippingInformation)
+        const handling = calculateHandling(shippingInformation)
+        const total = subtotal + taxes + shipping + handling
+        const fees = calculateFees(total)
+        const charge = total + fees
+
+        const totals = {
+            subtotal,
+            taxes,
+            shipping,
+            handling,
+            total,
+            fees,
+            charge
+        }
+
+        setTotalOrderCost(totals)
+
+        return totals
+    }
 
     return (
         <CartContext.Provider value={{ 
-            cart, 
+            cart,
             addToCart, 
             removeFromCart, 
             updateQuantity, 
@@ -199,8 +244,16 @@ export const CartProvider = ({ children }) => {
             isCheckoutValid,
             verifyProducts,
             slug, setSlug,
+
             calculateTaxes,
-            getTotalOrderCost
+            calculateShipping,            
+            calculateHandling,
+            calculateFees,
+            // getTotalOrderCost,
+
+            totalOrderCosts, 
+            calculateTotals,
+            
         }}>
             {children}
         </CartContext.Provider>

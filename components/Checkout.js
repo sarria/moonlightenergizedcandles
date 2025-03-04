@@ -8,10 +8,13 @@ import Summary from './Summary'
 
 const Checkout = () => {
     const { 
-        cart, verifyProducts, getTotalItems, getSubtotal, calculateTaxes, getTotalOrderCost, customizations
+        cart, verifyProducts, customizations, getTotalItems, getSubtotal, calculateTotals, totalOrderCosts
     } = useCart();
     
+    const [isPaymentCompleted, setIsPaymentCompleted] = useState(false);
     const [isVerifyingAddress, setIsVerifyingAddress] = useState(false);
+    const [isSubmittingPayment, setIsSubmittingPayment] = useState(false);
+    const [fetchingSuggestions, setFetchingSuggestions] = useState(false);
     const [showSummary, setShowSummary] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [paymentInstance, setPaymentInstance] = useState(null);
@@ -52,21 +55,54 @@ const Checkout = () => {
         initializePayment();
     }, []);
 
-    const handlePayment = async () => {
-        const orderData = await createOrder();
-        console.log("order ::", orderData)
 
-        if (orderData && orderData.order?.id) {
-            console.log("Ready to create payment linked to order id: ", orderData.order.id)
+    const handleContinueToPayment = () => {
+        // console.log("shippingInformation", shippingInformation)
+
+        if (verifyProducts()) {
+            // Go to next step Summary
+            calculateTotals(shippingInformation)
+            handleShowSummary(true)
         } else {
-            setErrorMessage("Order could not be crated.");    
-        }
+            // Send an erro message
+            setShippingInformation(null);
+        }        
+    }    
+
+    const handlePayment = async () => {
+        setIsSubmittingPayment(true)
+
+        try {
+            const order = await createOrder();
+            console.log("order ::", order)
+
+            if (order?.order?.id) {
+                console.log("==> order id: ", order.order.id)
+                const payment = await createPayment({
+                    orderId: order.order.id
+                });
+                console.log("payment ::", payment)
+
+                if (payment?.payment?.id) {
+                    // Send email with receipt to client and copy to us
+                    setIsPaymentCompleted(true)
+                }
+
+            } else {
+                setErrorMessage("Order could not be crated.");    
+            }
+            
+        } catch (error) {
+            console.error("handlePayment error");
+        } finally {
+            setIsSubmittingPayment(false)
+        }            
     }
 
     const createOrder = async () => {
         if (!paymentInstance) return;
 
-        console.log("paymentInstance", paymentInstance)
+        // console.log("paymentInstance", paymentInstance)
 
         setErrorMessage("");
 
@@ -77,19 +113,13 @@ const Checkout = () => {
                 return;
             }
 
-            const totals = {
-                subtotal : getSubtotal(),
-                taxes : calculateTaxes(shippingInformation.state),
-                totalOrderCost : getTotalOrderCost(shippingInformation.state)
-            }
-
             const response = await fetch("/api/createOrder", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     token,
                     cart,
-                    totals,
+                    totalOrderCosts,
                     customizations,
                     shippingInformation }),
             });
@@ -103,60 +133,51 @@ const Checkout = () => {
                 setErrorMessage(data.error);
             }
         } catch (error) {
-            console.error("Payment error:", error);
+            console.error("createOrder error:", error);
             setErrorMessage("An error occurred. Please try again.");
         } finally {
             // Error
         }
     }
 
-    // const createPayment = async () => {
-    //     if (!paymentInstance) return;
+    const createPayment = async ({orderId}) => {
+        console.log("createPayment orderId", orderId)
 
-    //     console.log("paymentInstance", paymentInstance)
+        if (!paymentInstance) return;
 
-    //     setErrorMessage("");
+        setErrorMessage("");
 
-    //     try {
-    //         const { token } = await paymentInstance.tokenize();
-    //         if (!token) {
-    //             setErrorMessage("Payment failed. Please try again.");
-    //             return;
-    //         }
+        try {
+            const { token } = await paymentInstance.tokenize();
+            if (!token) {
+                setErrorMessage("Payment failed. Please try again.");
+                return;
+            }
 
-    //         console.log("token", token)
+            const response = await fetch("/api/createPayment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    token,
+                    orderId,
+                    totalOrderCosts,
+                    shippingInformation }),
+            });
 
-    //         const response = await fetch("/api/submitPayment", {
-    //             method: "POST",
-    //             headers: { "Content-Type": "application/json" },
-    //             body: JSON.stringify({ cart, shippingInformation, token }),
-    //         });
+            const data = await response.json();
 
-    //         const data = await response.json();
-
-    //         if (response.ok) {
-    //             console.log("Payment result ::", data)
-    //         } else {
-    //             setErrorMessage(data.error);
-    //         }
-    //     } catch (error) {
-    //         console.error("Payment error:", error);
-    //         setErrorMessage("An error occurred. Please try again.");
-    //     } finally {
-    //         // Error
-    //     }
-    // }
-
-    const handleContinueToPayment = () => {
-        // console.log("shippingInformation", shippingInformation)
-
-        if (verifyProducts()) {
-            // Go to next step Summary
-            handleShowSummary(true)
-        } else {
-            // Send an erro message
-            setShippingInformation(null);
-        }        
+            if (response.ok) {
+                console.log("Payment result ::", data)
+                return data
+            } else {
+                setErrorMessage(data.error);
+            }
+        } catch (error) {
+            console.error("createPayment error:", error);
+            setErrorMessage("An error occurred. Please try again.");
+        } finally {
+            // Error
+        }
     }
 
     const handleShowSummary = (value) => {
@@ -211,11 +232,12 @@ const Checkout = () => {
                                 shippingInformation={shippingInformation}
                                 setShippingInformation={setShippingInformation}
                                 setIsVerifyingAddress={setIsVerifyingAddress}
+                                setFetchingSuggestions={setFetchingSuggestions}
                                 checkAddressFields={checkAddressFields}
                             />
 
-                            <button className={styles.continueToPaymentBtn} onClick={handleContinueToPayment} disabled={!areShippingFieldsOk || isVerifyingAddress}>
-                                {isVerifyingAddress ? <div className={styles.loader}></div> : "Continue"}
+                            <button className={styles.continueToPaymentBtn} onClick={handleContinueToPayment} disabled={!areShippingFieldsOk || isVerifyingAddress || fetchingSuggestions}>
+                                {isVerifyingAddress || fetchingSuggestions ? <div className={styles.loader}></div> : "Continue"}
                             </button>
 
                             {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
@@ -241,9 +263,11 @@ const Checkout = () => {
                         </div>
                     </div>
 
-                    <button className={styles.checkoutBtn} onClick={handlePayment} disabled={!shippingInformation}>
-                        Submit Payment
-                    </button>
+                    {!isPaymentCompleted && <button className={styles.checkoutBtn} onClick={handlePayment} disabled={!shippingInformation || isSubmittingPayment}>
+                        {isSubmittingPayment ? <div className={styles.loader}></div> : "Submit Payment"}
+                    </button>}
+
+                    {isPaymentCompleted && <div>Payment completed</div>}
                 </div>}
                 
             </div>

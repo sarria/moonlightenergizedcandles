@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
-import { useRouter } from 'next/router'; 
 import { formatCurrency } from './utils/shared';
 import styles from './summary.module.scss';
 import Image from 'next/image';
@@ -9,20 +8,18 @@ import faPencil from '../images/icons/pencil-solid.svg';
 import parse from 'html-react-parser';
 
 const Summary = ({ shippingInformation, handleShowSummary }) => {
-    const { cart, getTotalItems, getSubtotal, getTotalOrderCost, calculateTaxes, customizations } = useCart();
+    const { 
+        cart, getTotalItems, customizations, totalOrderCosts
+    } = useCart();
 
-    const totalItems = getTotalItems();
-    const router = useRouter();
-    
     const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+    const totalItems = getTotalItems();
+
+    console.log(totalOrderCosts)
 
     const toggleSummary = () => {
         setIsSummaryOpen(prevState => !prevState);
     };
-
-    const subtotal = getSubtotal();
-    const taxes = calculateTaxes(shippingInformation.state);
-    const totalOrderCost = getTotalOrderCost(shippingInformation.state);
 
     return (
         <div className={styles.root}>
@@ -30,7 +27,7 @@ const Summary = ({ shippingInformation, handleShowSummary }) => {
                 
                 <div className={styles.totalCost}>
                     <div className={styles.money}>
-                        {formatCurrency(totalOrderCost, 2, 2)}
+                        {formatCurrency(totalOrderCosts.charge, 2, 2)}
                     </div>
                 </div>
                 {cart.length === 0 ? (
@@ -90,17 +87,29 @@ const Summary = ({ shippingInformation, handleShowSummary }) => {
                         <div className={styles.summaryFooter}>
                             <div className={styles.summaryRow}>
                                 <span>Subtotal</span>
-                                <span>{formatCurrency(subtotal, 2, 2)}</span>
+                                <span>{formatCurrency(totalOrderCosts.subtotal, 2, 2)}</span>
                             </div>
                             <div className={styles.summaryRow}>
                                 <span>Taxes ({shippingInformation.state === "PA" ? "PA Sales Tax" : "No Tax"})</span>
-                                <span>{formatCurrency(taxes, 2, 2)}</span>
+                                <span>{formatCurrency(totalOrderCosts.taxes, 2, 2)}</span>
+                            </div>                            
+                            <div className={styles.summaryRow}>
+                                <span>Shipping & Handling</span>
+                                <span>{formatCurrency(totalOrderCosts.shipping + totalOrderCosts.handling, 2, 2)}</span>
+                            </div>
+                            <div className={styles.summaryRow}>
+                                <span>Total</span>
+                                <span>{formatCurrency(totalOrderCosts.total, 2, 2)}</span>
+                            </div>
+                            <div className={styles.summaryRow}>
+                                <span>Processing Fees</span>
+                                <span>{formatCurrency(totalOrderCosts.fees, 2, 2)}</span>
                             </div>
                             <div className={styles.summaryRowTotal}>
                                 <span>Order Total</span>
-                                <span>{formatCurrency(totalOrderCost, 2, 2)}</span>
+                                <span>{formatCurrency(totalOrderCosts.charge, 2, 2)}</span>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 )}
 

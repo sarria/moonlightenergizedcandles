@@ -9,12 +9,12 @@ export default async function handler(req, res) {
         const { 
             token,
             cart,
-            totals,
+            totalOrderCosts,
             customizations,
             shippingInformation            
         } = req.body;
 
-        if (!cart || cart.length === 0 || !shippingInformation) {
+        if (!token || !cart || cart.length === 0 || !shippingInformation) {
             return res.status(400).json({ error: 'Missing required data' });
         }
 
@@ -23,7 +23,7 @@ export default async function handler(req, res) {
         const squareAccessToken = process.env['SQUARE_ACCESS_TOKEN_' + ENV];
         const idempotencyKey = crypto.randomUUID();
 
-        console.log("Processing order:", { cart, shippingInformation, totals, customizations });
+        // console.log("Processing order:", { cart, shippingInformation, totals, customizations });
 
         // ✅ Generate line items dynamically
         const lineItems = cart.map((item, index) => {
@@ -58,19 +58,57 @@ export default async function handler(req, res) {
             "source_id": token,
             "idempotency_key": idempotencyKey,
             "order": {
-                "location_id": locationId,
-                "line_items": lineItems,
-                "taxes": [
+              "location_id": locationId,
+              "line_items": lineItems,
+              "taxes": [
                     {
                         "name": "Sales Tax",
                         "percentage": (shippingInformation.state === "PA" ? "6.00" : "0.00"),
                         "scope": "ORDER"
                     }
-                ]
+                ],
+              "fulfillments": [
+                {
+                  "type": "SHIPMENT",
+                  "shipment_details": {
+                    "shipping_note": (shippingInformation?.notes || "").substring(0, 500),
+                    "recipient": {
+                      "display_name": shippingInformation.firstName + ' ' + shippingInformation.lastName,
+                      "email_address": shippingInformation.email,
+                      "address": {
+                            address_line_1: shippingInformation.addressLine1,
+                            administrative_district_level_1: shippingInformation.state,
+                            first_name: shippingInformation.firstName,
+                            last_name: shippingInformation.lastName,
+                            locality: shippingInformation.city,
+                            postal_code: shippingInformation.zipCode,
+                      }
+                    }
+                  }
+                }
+              ],
+              "service_charges": [
+                {
+                    "name": "Shipping & Handling",
+                    "calculation_phase": "TOTAL_PHASE",
+                    "amount_money": {
+                        "amount": Math.round((totalOrderCosts.shipping + totalOrderCosts.handling) * 100),
+                        "currency": "USD"
+                    },
+                },
+                {
+                    "name": "Processing Fees",
+                    "calculation_phase": "TOTAL_PHASE",
+                    "amount_money": {
+                        "amount": Math.round(totalOrderCosts.fees * 100),
+                        "currency": "USD"
+                    },
+                }
+              ]
             }
-        };    
-
-        console.log("Final Order Request:", JSON.stringify(requestBody, null, 2));
+        }        
+        
+        console.log("\nFinal Order Request:\n", JSON.stringify(requestBody, null, 2));
 
         // ✅ Submit request to Square API
         const response = await fetch('https://connect.squareupsandbox.com/v2/orders', {
@@ -85,15 +123,15 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
-        console.log("Payment Response:", data);
+        console.log("\nOrder Response:\n", data);
 
         if (response.ok && !data.errors) {
             return res.status(200).json(data);
         } else {
-            return res.status(400).json({ error: data.errors?.[0]?.detail || "Payment failed", details: data });
+            return res.status(400).json({ error: data.errors?.[0]?.detail || "Payment Order failed", details: data });
         }
     } catch (error) {
-        console.error('Error processing payment:', error);
+        console.error('Error processing order:', error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 }

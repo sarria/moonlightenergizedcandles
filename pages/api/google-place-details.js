@@ -23,7 +23,7 @@ export default async function handler(req, res) {
       });
   
       const data = await response.json();
-      console.log("Place details response:", data);
+      // console.log("Place details response:", data);
   
       if (!data.addressComponents) {
         return res.status(400).json({ error: "No address details found for this place." });
