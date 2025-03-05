@@ -4,7 +4,8 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
-    const [totalOrderCosts, setTotalOrderCost] = useState({});
+    const [shippingInformation, setShippingInformation] = useState({});
+    const [totalOrderCosts, setTotalOrderCosts] = useState({});
     const [customizations, setCustomizations] = useState({});
     const [isCartVisible, setIsCartVisible] = useState(false);
     const [slug, setSlug] = useState('');
@@ -71,10 +72,10 @@ export const CartProvider = ({ children }) => {
     };
 
     // Get total number of items in the cart
-    const getTotalItems = () => cart.reduce((total, item) => total + item.quantity, 0);
+    const getTotalItems = () => cart?.reduce((total, item) => total + item.quantity, 0);
 
     // Get total cost of items in the cart
-    const getSubtotal = () => cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    const getSubtotal = () => cart?.reduce((total, item) => total + item.price * item.quantity, 0);
 
     const getTotalQuantityById = (id) => {
         const item = cart.find((cartItem) => cartItem.id === id);
@@ -172,18 +173,18 @@ export const CartProvider = ({ children }) => {
         }
     };
     
-    const calculateTaxes = (shippingInformation) => {
+    const calculateTaxes = () => {
         const state = shippingInformation?.state || ""
         const taxRate = state === "PA" ? 0.06 : 0;
         return getSubtotal() * taxRate;
     };
 
-    const calculateHandling = (shippingInformation) => {
+    const calculateHandling = () => {
         const state = shippingInformation?.state || ""
         return 2.00
     }
 
-    const calculateShipping = (shippingInformation) => {
+    const calculateShipping = () => {
         const state = shippingInformation?.state || ""
         return 7.50
     }
@@ -203,11 +204,11 @@ export const CartProvider = ({ children }) => {
     };
     
 
-    const calculateTotals = (shippingInformation) => {
+    const calculateTotals = () => {
         const subtotal = getSubtotal()
-        const taxes = calculateTaxes(shippingInformation)
-        const shipping = calculateShipping(shippingInformation)
-        const handling = calculateHandling(shippingInformation)
+        const taxes = calculateTaxes()
+        const shipping = calculateShipping()
+        const handling = calculateHandling()
         const total = subtotal + taxes + shipping + handling
         const fees = calculateFees(total)
         const charge = total + fees
@@ -222,7 +223,7 @@ export const CartProvider = ({ children }) => {
             charge
         }
 
-        setTotalOrderCost(totals)
+        setTotalOrderCosts(totals)
 
         return totals
     }
@@ -230,6 +231,7 @@ export const CartProvider = ({ children }) => {
     return (
         <CartContext.Provider value={{ 
             cart,
+            setCart,
             addToCart, 
             removeFromCart, 
             updateQuantity, 
@@ -239,6 +241,7 @@ export const CartProvider = ({ children }) => {
             toggleCart, 
             isCartVisible,
             customizations,
+            setCustomizations,
             handleCustomizationChange,
             handleRemoveCustomCandle,
             isCheckoutValid,
@@ -252,7 +255,11 @@ export const CartProvider = ({ children }) => {
             // getTotalOrderCost,
 
             totalOrderCosts, 
+            setTotalOrderCosts,
             calculateTotals,
+
+            shippingInformation, 
+            setShippingInformation
             
         }}>
             {children}

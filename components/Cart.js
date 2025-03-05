@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
-import { useRouter } from 'next/router'; // ✅ Import useRouter
+import { useRouter } from 'next/router';
 import { formatCurrency } from './utils/shared';
 import styles from './cart.module.scss';
 import Link from 'next/link';
@@ -19,7 +19,7 @@ const Cart = () => {
     const [validationError, setValidationError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const totalItems = getTotalItems()
-    const router = useRouter(); // ✅ Initialize useRouter
+    const router = useRouter();
 
     const handleCheckout = async () => {
         if (!isCheckoutValid()) {

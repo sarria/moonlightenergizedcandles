@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useCart } from '../context/CartContext'
 import cx from 'classnames';
 import styles from "./shippingForm.module.scss";
 import { isValidEmail } from './utils/shared';
 
-const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerifyingAddress, setFetchingSuggestions, checkAddressFields }) => { 
+const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddressFields }) => { 
+  const { shippingInformation, setShippingInformation } = useCart();
+
   const [suggestions, setSuggestions] = useState([]);
   const isAddressSelected = false;
   
@@ -131,6 +134,7 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
   };
 
   const missingField = (field) => {
+    if (!shippingInformation) return false;
     return typeof shippingInformation[field] === "string" && !shippingInformation[field]?.trim()
   }
 
@@ -147,7 +151,7 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
                     <input 
                       type="text" 
                       name="firstName" 
-                      value={shippingInformation.firstName || ''}
+                      value={shippingInformation?.firstName || ''}
                       placeholder="First name"
                       onChange={handleFieldChange}
                     />
@@ -158,7 +162,7 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
                     <input 
                         type="text" 
                         name="lastName" 
-                        value={shippingInformation.lastName || ''}
+                        value={shippingInformation?.lastName || ''}
                         placeholder="Last name"
                         onChange={handleFieldChange}
                     />
@@ -169,12 +173,12 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
 
           <div className={styles.shippingInput}>
             <div className={cx(styles.inputs, styles.column)}>
-            <div className={cx(styles.field, {[styles.missingField]: missingField('email') || !isValidEmail(shippingInformation.email)})}>
+            <div className={cx(styles.field, {[styles.missingField]: missingField('email') || !isValidEmail(shippingInformation?.email)})}>
                 <div className={styles.input}>
                   <input
                     type="text"
                     name="email"
-                    value={shippingInformation.email || ''}
+                    value={shippingInformation?.email || ''}
                     onChange={handleFieldChange}
                     placeholder="Email address to receipt"
                   />
@@ -185,7 +189,7 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
                   type="checkbox" 
                   id="mailingList" 
                   name="joinMailingList"
-                  checked={shippingInformation.joinMailingList || false}
+                  checked={shippingInformation?.joinMailingList || false}
                   onChange={handleCheckboxChange}
                 />
                 <label htmlFor="mailingList">Join our mailing list for updates and promotions</label>
@@ -195,7 +199,7 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
                   <textarea
                     type="text"
                     name="notes"
-                    value={shippingInformation.notes || ''}
+                    value={shippingInformation?.notes || ''}
                     onChange={handleFieldChange}
                     placeholder="Any special delivery instructions?"
                   />
@@ -215,7 +219,7 @@ const ShippingForm = ({ shippingInformation, setShippingInformation, setIsVerify
                   <input
                     type="text"
                     name="address"
-                    value={shippingInformation.address || ''}
+                    value={shippingInformation?.address || ''}
                     onChange={handleAddressChange}
                     placeholder="Enter your shipping address here"
                   />

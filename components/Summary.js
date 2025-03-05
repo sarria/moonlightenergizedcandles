@@ -7,9 +7,10 @@ import faDown from '../images/icons/chevron-down-solid.svg';
 import faPencil from '../images/icons/pencil-solid.svg';
 import parse from 'html-react-parser';
 
-const Summary = ({ shippingInformation, handleShowSummary }) => {
+const Summary = ({ handleShowSummary }) => {
     const { 
-        cart, getTotalItems, customizations, totalOrderCosts
+        cart, getTotalItems, customizations, totalOrderCosts,
+        shippingInformation, setShippingInformation
     } = useCart();
 
     const [isSummaryOpen, setIsSummaryOpen] = useState(false);
@@ -90,7 +91,7 @@ const Summary = ({ shippingInformation, handleShowSummary }) => {
                                 <span>{formatCurrency(totalOrderCosts.subtotal, 2, 2)}</span>
                             </div>
                             <div className={styles.summaryRow}>
-                                <span>Taxes ({shippingInformation.state === "PA" ? "PA Sales Tax" : "No Tax"})</span>
+                                <span>Taxes ({shippingInformation?.state === "PA" ? "PA Sales Tax" : "No Tax"})</span>
                                 <span>{formatCurrency(totalOrderCosts.taxes, 2, 2)}</span>
                             </div>                            
                             <div className={styles.summaryRow}>
@@ -120,11 +121,11 @@ const Summary = ({ shippingInformation, handleShowSummary }) => {
                             <Image src={faPencil} layout="fill" title="Edit Shipping Info" />
                         </div>                        
                     </div>
-                    <p><strong>Name:</strong> <span>{shippingInformation.firstName} {shippingInformation.lastName}</span></p>
-                    <p><strong>Email:</strong> <span>{shippingInformation.email}</span></p>
-                    <p><strong>Address:</strong> <span>{shippingInformation.addressLine1}, {shippingInformation.city}, {shippingInformation.state} {shippingInformation.zipCode}</span></p>
-                    {shippingInformation.notes && (
-                        <p><strong>Notes:</strong> <span>{shippingInformation.notes}</span></p>
+                    <p><strong>Name:</strong> <span>{shippingInformation?.firstName} {shippingInformation?.lastName}</span></p>
+                    <p><strong>Email:</strong> <span>{shippingInformation?.email}</span></p>
+                    <p><strong>Address:</strong> <span>{shippingInformation?.addressLine1}, {shippingInformation?.city}, {shippingInformation?.state} {shippingInformation?.zipCode}</span></p>
+                    {shippingInformation?.notes && (
+                        <p><strong>Notes:</strong> <span>{shippingInformation?.notes}</span></p>
                     )}
                 </div>
            

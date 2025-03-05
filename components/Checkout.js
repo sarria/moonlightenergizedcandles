@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router';
 import cx from 'classnames'
 import { isValidEmail } from './utils/shared'
 import ShippingForm from './ShippingForm'
@@ -8,8 +9,11 @@ import Summary from './Summary'
 
 const Checkout = () => {
     const { 
-        cart, verifyProducts, customizations, getTotalItems, getSubtotal, calculateTotals, totalOrderCosts
+        cart, setCart, verifyProducts, customizations, getTotalItems, getSubtotal, calculateTotals, totalOrderCosts, setTotalOrderCosts, setCustomizations,
+        shippingInformation, setShippingInformation
     } = useCart();
+
+    const router = useRouter();
     
     const [isPaymentCompleted, setIsPaymentCompleted] = useState(false);
     const [isVerifyingAddress, setIsVerifyingAddress] = useState(false);
@@ -18,7 +22,7 @@ const Checkout = () => {
     const [showSummary, setShowSummary] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [paymentInstance, setPaymentInstance] = useState(null);
-    const [shippingInformation, setShippingInformation] = useState({});
+    // const [shippingInformation, setShippingInformation] = useState({});
     const totalItems = getTotalItems();
 
     useEffect(() => {
@@ -61,43 +65,63 @@ const Checkout = () => {
 
         if (verifyProducts()) {
             // Go to next step Summary
-            calculateTotals(shippingInformation)
+            calculateTotals()
             handleShowSummary(true)
         } else {
             // Send an erro message
             setShippingInformation(null);
         }        
-    }    
+    }
+
+    const closeSession = () => {
+        setCart([])
+        setShippingInformation({})
+        setTotalOrderCosts({})
+        setCustomizations({})
+        router.push(`/thank-you`); // ✅ Redirect to than you page
+    }
 
     const handlePayment = async () => {
-        setIsSubmittingPayment(true)
-
+        setIsSubmittingPayment(true);
+    
         try {
             const order = await createOrder();
-            console.log("order ::", order)
-
+            console.log("order ::", order);
+    
             if (order?.order?.id) {
-                console.log("==> order id: ", order.order.id)
-                const payment = await createPayment({
-                    orderId: order.order.id
-                });
-                console.log("payment ::", payment)
-
+                console.log("==> order id: ", order.order.id);
+                const payment = await createPayment({ orderId: order.order.id });
+                console.log("payment ::", payment);
+    
                 if (payment?.payment?.id) {
-                    // Send email with receipt to client and copy to us
-                    setIsPaymentCompleted(true)
+                    // ✅ Send Email Confirmation
+                    const data = { 
+                        orderId: order.order.id,
+                        paymentId: payment.payment.id,
+                        shippingInformation, 
+                        cart, 
+                        totalOrderCosts, 
+                        customizations 
+                    }
+                    await fetch("/api/sendReceipt", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data),
+                    });
+    
+                    setIsPaymentCompleted(true);
+                    closeSession(); // Reset Cart & Data
                 }
-
             } else {
-                setErrorMessage("Order could not be crated.");    
+                setErrorMessage("Order could not be created.");
             }
-            
         } catch (error) {
-            console.error("handlePayment error");
+            console.error("handlePayment error", error);
         } finally {
-            setIsSubmittingPayment(false)
-        }            
-    }
+            setIsSubmittingPayment(false);
+        }
+    };
+    
 
     const createOrder = async () => {
         if (!paymentInstance) return;
@@ -199,11 +223,13 @@ const Checkout = () => {
     ]
 
     const checkAddressFields = () => {
+        if (!shippingInformation) return false;
         const isValid = addressFields.every(field => shippingInformation[field]?.trim());
         return isValid
     }    
 
     const checkRequiredFields = () => {
+        if (!shippingInformation) return false;
         const requiredFields = [...addressFields, ...contactFields]
         const isValid = requiredFields.every(field => shippingInformation[field]?.trim());
         return isValid
@@ -229,8 +255,8 @@ const Checkout = () => {
                     {totalItems > 0 && 
                         <>
                             <ShippingForm 
-                                shippingInformation={shippingInformation}
-                                setShippingInformation={setShippingInformation}
+                                // shippingInformation={shippingInformation}
+                                // setShippingInformation={setShippingInformation}
                                 setIsVerifyingAddress={setIsVerifyingAddress}
                                 setFetchingSuggestions={setFetchingSuggestions}
                                 checkAddressFields={checkAddressFields}
@@ -248,7 +274,7 @@ const Checkout = () => {
                 {totalItems > 0 && <div className={cx(styles.paymentScreen, {[styles.show]: showSummary}, {[styles.hide]: !showSummary})}>
                     <div className={styles.orderSummary}>
                         <Summary 
-                            shippingInformation={shippingInformation} 
+                            // shippingInformation={shippingInformation} 
                             handleShowSummary={handleShowSummary}                            
                         />
                     </div>
@@ -267,7 +293,7 @@ const Checkout = () => {
                         {isSubmittingPayment ? <div className={styles.loader}></div> : "Submit Payment"}
                     </button>}
 
-                    {isPaymentCompleted && <div>Payment completed</div>}
+                    {isPaymentCompleted && <div className={styles.paymentCompletedLabel}>Payment completed!</div>}
                 </div>}
                 
             </div>
