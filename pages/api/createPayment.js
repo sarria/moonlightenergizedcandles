@@ -23,6 +23,7 @@ export default async function handler(req, res) {
         const locationId = process.env['SQUARE_LOCATION_ID_' + ENV];
         const squareAccessToken = process.env['SQUARE_ACCESS_TOKEN_' + ENV];
         const idempotencyKey = crypto.randomUUID();
+        const squareAPI = process.env['SQUARE_API_' + ENV];
 
         console.log("\nProcessing payment:\n", { orderId, totalOrderCosts, shippingInformation });
 
