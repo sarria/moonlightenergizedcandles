@@ -23,12 +23,23 @@ const Checkout = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [paymentInstance, setPaymentInstance] = useState(null);
     const totalItems = getTotalItems();
-    const freeCandles = calculateFreeCandles();
+
 
     useEffect(() => {
         async function initializePayment() {
-            if (!window.Square) {
-                console.error("Square SDK failed to load.");
+            let attempts = 0;
+            const maxAttempts = 10; // Retry up to 10 times
+            const delay = 500; // 500ms delay between retries
+    
+            while (!window.Square && attempts < maxAttempts) {
+                await new Promise(resolve => setTimeout(resolve, delay));
+                attempts++;
+            }
+    
+            if (window.Square) {
+                console.log("✅ Square SDK exists on Checkout");
+            } else {
+                console.error("❌ Square SDK failed to load after retries.");
                 return;
             }
     
@@ -36,13 +47,10 @@ const Checkout = () => {
                 // Fetch Square credentials from the server
                 const response = await fetch("/api/getSquareConfig");
                 const { applicationId, environment } = await response.json();
-
-                // console.log("applicationId, environment", applicationId, environment)
     
                 const payments = window.Square.payments(applicationId, environment);
     
                 const cardContainer = document.getElementById("card-container");
-                // Remove any previously attached card instance
                 if (cardContainer?.children.length > 0) {
                     cardContainer.innerHTML = "";
                 }
@@ -52,7 +60,7 @@ const Checkout = () => {
     
                 setPaymentInstance(card);
             } catch (error) {
-                console.error("Square Payments SDK Error:", error);
+                console.error("❌ Square Payments SDK Error:", error);
             }
         }
     
@@ -113,6 +121,8 @@ const Checkout = () => {
     
                     setIsPaymentCompleted(true);
                     closeSession(); // Reset Cart & Data
+                } else {
+                    setErrorMessage("Payment could not be made.");    
                 }
             } else {
                 setErrorMessage("Order could not be created.");
