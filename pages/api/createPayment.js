@@ -55,7 +55,7 @@ export default async function handler(req, res) {
         console.log("\nFinal payment Request:\n", JSON.stringify(requestBody, null, 2));
 
         // ✅ Submit request to Square API
-        const response = await fetch('https://connect.squareupsandbox.com/v2/payments', {
+        const response = await fetch(squareAPI + 'payments', {
             method: 'POST',
             headers: {
                 'Square-Version': '2025-02-20',

@@ -9,14 +9,15 @@ import parse from 'html-react-parser';
 
 const Summary = ({ handleShowSummary }) => {
     const { 
-        cart, getTotalItems, customizations, totalOrderCosts,
+        cart, getTotalItems, customizations, totalOrderCosts, calculateFreeCandles,
         shippingInformation, setShippingInformation
     } = useCart();
 
     const [isSummaryOpen, setIsSummaryOpen] = useState(false);
     const totalItems = getTotalItems();
+    const freeCandles = calculateFreeCandles();
 
-    console.log(totalOrderCosts)
+    // console.log(totalOrderCosts)
 
     const toggleSummary = () => {
         setIsSummaryOpen(prevState => !prevState);
@@ -86,6 +87,10 @@ const Summary = ({ handleShowSummary }) => {
                         </div>
 
                         <div className={styles.summaryFooter}>
+                            {freeCandles !== 0 && 
+                            <div className={styles.summaryRow}>
+                                <span>🎁 You've earned <strong>{freeCandles} FREE 3.5 oz Protection Candle{freeCandles == 1 ? '' : 's'}</strong> with your order!</span>
+                            </div>}
                             <div className={styles.summaryRow}>
                                 <span>Subtotal</span>
                                 <span>{formatCurrency(totalOrderCosts.subtotal, 2, 2)}</span>

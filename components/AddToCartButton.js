@@ -102,6 +102,8 @@ const AddToCartButton = ({ item, small }) => {
 	};
 
 	const handleUpdate = (unit) => {
+		if (!unit) return;
+		
 		const updatedQuantity = quantity + unit
 
 		if (updatedQuantity >= 0) {

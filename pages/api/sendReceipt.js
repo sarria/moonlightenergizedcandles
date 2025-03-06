@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { orderId, paymentId, shippingInformation, cart, totalOrderCosts, customizations } = req.body;
+        const { orderId, paymentId, shippingInformation, cart, totalOrderCosts, customizations, freeCandles } = req.body;
 
         if (!shippingInformation || !cart || cart.length === 0) {
             return res.status(400).json({ error: "Missing required data" });
@@ -17,7 +17,8 @@ export default async function handler(req, res) {
             shippingInformation,
             cart,
             totalOrderCosts,
-            customizations
+            customizations,
+            freeCandles
         };
 
         console.log("orderData", orderData)

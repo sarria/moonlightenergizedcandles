@@ -62,6 +62,7 @@ export default function query(slug) {
 							price
 							headline
 							type
+							weight
 							buttonLink
 						}
 					}
@@ -74,6 +75,7 @@ export default function query(slug) {
 							price
 							headline
 							type
+							weight
 							buttonLink
 						}
 					}
@@ -86,6 +88,7 @@ export default function query(slug) {
 							price
 							headline
 							type
+							weight
 							buttonLink
 						}
 					}
@@ -98,6 +101,7 @@ export default function query(slug) {
 							price
 							headline
 							type
+							weight
 							buttonLink
 						}
 					}
@@ -110,6 +114,8 @@ export default function query(slug) {
 							price
 							headline
 							type
+							
+							
 							buttonLink
 						}
 					}
@@ -125,6 +131,7 @@ export default function query(slug) {
 						title
 						image
 						type
+						weight
 						price
 						headline
 						description

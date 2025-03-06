@@ -22,6 +22,7 @@ export default async function handler(req, res) {
         const locationId = process.env['SQUARE_LOCATION_ID_' + ENV];
         const squareAccessToken = process.env['SQUARE_ACCESS_TOKEN_' + ENV];
         const idempotencyKey = crypto.randomUUID();
+        const squareAPI = process.env['SQUARE_API_' + ENV];
 
         // console.log("Processing order:", { cart, shippingInformation, totals, customizations });
 
@@ -111,7 +112,7 @@ export default async function handler(req, res) {
         console.log("\nFinal Order Request:\n", JSON.stringify(requestBody, null, 2));
 
         // ✅ Submit request to Square API
-        const response = await fetch('https://connect.squareupsandbox.com/v2/orders', {
+        const response = await fetch(squareAPI + 'orders', {
             method: 'POST',
             headers: {
                 'Square-Version': '2025-02-20',

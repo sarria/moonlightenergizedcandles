@@ -10,7 +10,7 @@ import Summary from './Summary'
 const Checkout = () => {
     const { 
         cart, setCart, verifyProducts, customizations, getTotalItems, getSubtotal, calculateTotals, totalOrderCosts, setTotalOrderCosts, setCustomizations,
-        shippingInformation, setShippingInformation
+        shippingInformation, setShippingInformation, calculateFreeCandles
     } = useCart();
 
     const router = useRouter();
@@ -22,8 +22,8 @@ const Checkout = () => {
     const [showSummary, setShowSummary] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [paymentInstance, setPaymentInstance] = useState(null);
-    // const [shippingInformation, setShippingInformation] = useState({});
     const totalItems = getTotalItems();
+    const freeCandles = calculateFreeCandles();
 
     useEffect(() => {
         async function initializePayment() {
@@ -95,13 +95,15 @@ const Checkout = () => {
     
                 if (payment?.payment?.id) {
                     // ✅ Send Email Confirmation
+                    const freeCandles = calculateFreeCandles();
                     const data = { 
                         orderId: order.order.id,
                         paymentId: payment.payment.id,
                         shippingInformation, 
                         cart, 
                         totalOrderCosts, 
-                        customizations 
+                        customizations,
+                        freeCandles
                     }
                     await fetch("/api/sendReceipt", {
                         method: "POST",

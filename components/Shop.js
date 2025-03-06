@@ -30,7 +30,8 @@ const Items = ({ items }) => {
 									<a>
 										<div className={styles.line1}>
 											<div className={styles.name}>{item.title}</div>
-											<div className={styles.date}>{formatCurrency(item.price)}</div>
+											{item.price && parseFloat(item.price) > 0 &&
+											<div className={styles.date}>{formatCurrency(item.price)}</div>}
 										</div>
 										<div className={styles.line2}>
 											<div className={styles.headline}>{item.headline}</div>
@@ -38,9 +39,10 @@ const Items = ({ items }) => {
 									</a>
 								</Link>
 							</div>
+							{item.price && parseFloat(item.price) > 0 ?
 							<div className={styles.addToCart}>
 								<AddToCartButton item={item} />
-							</div>
+							</div> : <div><p>Comming soon!</p></div>}
 						</div>
 					</div>
 				)

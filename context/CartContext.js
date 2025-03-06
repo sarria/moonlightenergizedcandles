@@ -186,7 +186,7 @@ export const CartProvider = ({ children }) => {
 
     const calculateShipping = () => {
         const state = shippingInformation?.state || ""
-        return 7.50
+        return 5.50
     }
 
     const calculateFees = (total) => {
@@ -228,6 +228,13 @@ export const CartProvider = ({ children }) => {
         return totals
     }
 
+    const calculateFreeCandles = () => {
+        // console.log("calculateFreeCandles", cart)
+        const eligibleItems = cart.filter(item => item.type.includes("candle") && item.weight === "9");
+        const eligibleQuantity = eligibleItems.reduce((total, item) => total + item.quantity, 0);
+        return Math.floor(eligibleQuantity / 3);
+    };    
+
     return (
         <CartContext.Provider value={{ 
             cart,
@@ -259,7 +266,9 @@ export const CartProvider = ({ children }) => {
             calculateTotals,
 
             shippingInformation, 
-            setShippingInformation
+            setShippingInformation,
+
+            calculateFreeCandles
             
         }}>
             {children}

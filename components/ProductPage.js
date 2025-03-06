@@ -24,10 +24,11 @@ const ProductPage = ({ product, global }) => {
                     <div className={styles.headline}>
                         {parse(product.headline)}
                     </div>
+                    {product.price && parseFloat(product.price) > 0 &&
                     <div className={styles.price}>
                         <span>{formatCurrency(product.price)}</span>
                         <span><AddToCartButton item={product} small={true} /></span>
-                    </div>
+                    </div>}
                     <div className={styles.description}>
                         {parse(product.description)}
                     </div>

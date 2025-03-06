@@ -28,7 +28,7 @@ import Checkout from './Checkout'
 import PageTop from './PageTop'
 import ShopNav from './ShopNav'
 import ProductPage from './ProductPage'
-// import ShippingForm from './ShippingForm'
+import SquareFeeCalculator from './SquareFeeCalculator'
 
 function PageContent({ page, global }) {
 	return page ? (
@@ -73,6 +73,7 @@ function PageContentWithCart({page, global}) {
 
 	const isHomePage = page.slug === 'home-page';
 	const isCheckout = page.slug === 'checkout';
+	const isCalculator = page.slug === 'calc';
 	const showCart = totalItems !== 0 && isCartVisible;
 
 	return page ? (
@@ -163,6 +164,11 @@ function PageContentWithCart({page, global}) {
 									<Checkout />
 								</>
 							}
+							{isCalculator && 
+								<>
+									<SquareFeeCalculator />
+								</>
+							}							
 						</div>
 						<Footer 
 							global={global} buttons={page.buttons}
@@ -172,10 +178,6 @@ function PageContentWithCart({page, global}) {
 					<div className={styles.cart}>
 						<Cart />
 					</div>}
-					{/* {isCheckout && 
-					<div className={styles.cart}>
-						<ShippingForm />
-					</div>} */}
 				</div>
 				
 			</div>	
