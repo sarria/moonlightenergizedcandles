@@ -184,6 +184,24 @@ export const CartProvider = ({ children }) => {
         return 2.00
     }
 
+    /*
+        Caja individual 9oz => 5x5x5 = 1ox 3/4oz = 0.109
+
+        9oz = 1lb 4oz 5/8oz = 1.289 lbs = 5x5x5
+        6oz = 0lb 14oz 1/2oz = 0.906 lbs = 4x4x4
+        Trio = 2lb 10oz 3/8oz = 2.648 lbs = 9x4x4
+        3.5 = 0lb 11ox 1/2ox = 0.719 lbs = 4x4x4
+        1 Bracelete: 1/4oz
+        3 Braceletes: 5/8oz 
+
+        Only braceletes or matches = No weight = $1
+
+        5x5x5 = 0.109
+        10x10x10 → 0.772 lbs
+        10x10x5 → 0.386 lbs
+        10x5x5 → 0.193 lbs ​
+    */    
+
     const calculateShipping = () => {
         const state = shippingInformation?.state || ""
         return 5.50
@@ -230,9 +248,9 @@ export const CartProvider = ({ children }) => {
 
     const calculateFreeCandles = () => {
         // console.log("calculateFreeCandles", cart)
-        const eligibleItems = cart.filter(item => item.type.includes("candle") && item.weight === "9");
-        const eligibleQuantity = eligibleItems.reduce((total, item) => total + item.quantity, 0);
-        return Math.floor(eligibleQuantity / 3);
+        const eligibleItems = cart.filter(item => item.type.includes("candle") && (item.weight === "9" || item.weight === "1.289"))
+        const eligibleQuantity = eligibleItems.reduce((total, item) => total + item.quantity, 0)
+        return Math.floor(eligibleQuantity / 3)
     };    
 
     return (

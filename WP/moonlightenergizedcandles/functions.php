@@ -140,6 +140,15 @@ function register_acf_graphql_fields() {
             }
         ]);
 
+        // Register size
+        register_graphql_field('Product', 'size', [
+            'type' => 'String',
+            'description' => 'The size of the product',
+            'resolve' => function($post) {
+                return get_field('size', $post->ID);
+            }
+        ]);
+
         // Register Weight
         register_graphql_field('Product', 'weight', [
             'type' => 'String',

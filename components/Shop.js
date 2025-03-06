@@ -42,7 +42,7 @@ const Items = ({ items }) => {
 							{item.price && parseFloat(item.price) > 0 ?
 							<div className={styles.addToCart}>
 								<AddToCartButton item={item} />
-							</div> : <div><p>Comming soon!</p></div>}
+							</div> : <div><p>Coming soon!</p></div>}
 						</div>
 					</div>
 				)

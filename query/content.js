@@ -114,8 +114,7 @@ export default function query(slug) {
 							price
 							headline
 							type
-							
-							
+							weight
 							buttonLink
 						}
 					}
@@ -243,8 +242,10 @@ export default function query(slug) {
 								dark							
 							}
 						}
-
-
+						seo {
+							seoTitle
+							seoDescription
+						}							
 					}
 				}
 			}

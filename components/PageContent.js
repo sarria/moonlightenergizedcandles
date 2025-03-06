@@ -79,8 +79,8 @@ function PageContentWithCart({page, global}) {
 	return page ? (
 		<>
 			<Header seo={{
-				title : (page.title || global.title) +  ' | ' + (page.seoTitle ?page.seoTitle : global.title),
-				description : page.seoDescription || global.description,
+				title : (page.title || global.title) +  ' | ' + (page.seoTitle || page.seo?.seoTitle || global.title),
+				description : page.seoDescription || page.seo?.seoDescription || global.description,
 				image : page.image || global.logo
 			}} />
 			<PageTop className={styles.pageTop} global={global} />
