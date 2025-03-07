@@ -44,8 +44,8 @@ const Contact = ({ data }) => {
           <div className={styles.success}>
             <h2>Thank You for Reaching Out!</h2>
             <p>Your message has been received, and we truly appreciate you connecting with us. Our team will get back to you as soon as possible.</p>
-            <p>In the meantime, keep the light glowing—follow our journey on Instagram for inspiration, new releases, and behind-the-scenes magic.</p>
-            <h3>Moonlight Energized Candles - Crafted with love, charged with intention</h3>
+            <p>In the meantime, keep the light glowing, follow our journey on Instagram for inspiration, new releases, and behind the scenes magic.</p>
+            <h3>Moonlight Energized Candles. Crafted with love, charged with intention</h3>
           </div> 
           :
           <form onSubmit={handleSubmit} className={styles.form}>
