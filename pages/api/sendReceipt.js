@@ -21,7 +21,7 @@ export default async function handler(req, res) {
             freeCandles
         };
 
-        console.log("orderData", orderData)
+        // console.log("orderData", orderData)
 
         // Send order data to WordPress PHP script
         const wordpressEndpoint = "http://cms.moonlightenergizedcandles.com/scripts/sendReceipt.php";

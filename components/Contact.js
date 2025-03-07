@@ -1,10 +1,11 @@
 import { useState } from "react";
 import styles from "./contact.module.scss";
+import { isValidEmail } from './utils/shared';
 
 const Contact = ({ data }) => {
-  const [email_address, setEmail] = useState("");
-  const [FNAME, setFullName] = useState("");
-  const [MESSAGE, setMessage] = useState("");
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [message, setMessage] = useState("");
   const [appState, setAppState] = useState("IDLE");
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -13,74 +14,78 @@ const Contact = ({ data }) => {
     setAppState("LOADING");
 
     try {
-      const response = await fetch("http://cms.moonlightenergizedcandles.com/contactus.php", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          email: email_address,
-          name: FNAME,
-          message: MESSAGE,
-          sendTo: "jaunsarria@gmail.com",
-        }),
-      });
+        const response = await fetch("/api/contact", { // Use the Next.js API route
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, name, message }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (data.success) {
-        setAppState("SUCCESS");
-      } else {
-        setAppState("ERROR");
-        setErrorMessage(data.message || "Something went wrong.");
-      }
+        if (response.ok) {
+            setAppState("SUCCESS");
+        } else {
+            setAppState("ERROR");
+            setErrorMessage(data.error || "Something went wrong.");
+        }
     } catch (error) {
-      setAppState("ERROR");
-      setErrorMessage("Failed to submit. Please try again.");
+        setAppState("ERROR");
+        setErrorMessage("Failed to submit. Please try again.");
     }
-  };
+};
+
 
   return (
     <div className={styles.root}>
       <div className={styles.wrapper}>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.field}>
-            <div>Full Name *</div>
-            <input
-              type="text"
-              value={FNAME}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-            />
-          </div>
-          <div className={styles.field}>
-            <div>Email *</div>
-            <input
-              type="email"
-              value={email_address}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className={styles.field}>
-            <div>Message *</div>
-            <textarea
-              value={MESSAGE}
-              onChange={(e) => setMessage(e.target.value)}
-              rows="4"
-              required
-            />
-          </div>
-          <div className={styles.messages}>
-            {appState === "ERROR" && <div className={styles.error}>{errorMessage}</div>}
-            {appState === "SUCCESS" && <div className={styles.success}>Thank you!</div>}
-          </div>
-          <div className={styles.buttons}>
-            <button className={styles.button} type="submit" disabled={appState === "LOADING"}>
-              Submit
-            </button>
-          </div>
-        </form>
+        {appState === "SUCCESS" ? 
+          <div className={styles.success}>
+            <h2>Thank You for Reaching Out!</h2>
+            <p>Your message has been received, and we truly appreciate you connecting with us. Our team will get back to you as soon as possible.</p>
+            <p>In the meantime, keep the light glowing—follow our journey on Instagram for inspiration, new releases, and behind-the-scenes magic.</p>
+            <h3>Moonlight Energized Candles - Crafted with love, charged with intention</h3>
+          </div> 
+          :
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <div className={styles.field}>
+              <div>Full Name *</div>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+            <div className={styles.field}>
+              <div>Email *</div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className={styles.field}>
+              <div>Message *</div>
+              <textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                rows="4"
+                required
+              />
+            </div>
+            <div className={styles.messages}>
+              {appState === "ERROR" && <div className={styles.error}>{errorMessage}</div>}
+            </div>
+            <div className={styles.buttons}>
+              <button className={styles.button} type="submit" disabled={appState === "LOADING"}>
+                {appState === "LOADING" ? "Sending..." : "Submit"}
+              </button>
+            </div>
+          </form>
+        }
       </div>
     </div>
   );
