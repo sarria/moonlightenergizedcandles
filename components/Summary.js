@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
-import { formatCurrency } from './utils/shared';
+import { formatCurrency, FreeCandleProgressMsg, FreeShippingMsg } from './utils/shared';
 import styles from './summary.module.scss';
+import cx from 'classnames';
 import Image from 'next/image';
 import faDown from '../images/icons/chevron-down-solid.svg';
 import faPencil from '../images/icons/pencil-solid.svg';
@@ -10,14 +11,16 @@ import parse from 'html-react-parser';
 const Summary = ({ handleShowSummary }) => {
     const { 
         cart, getTotalItems, customizations, totalOrderCosts, calculateFreeCandles,
-        shippingInformation, setShippingInformation
+        shippingInformation, freeShippingThreshold
     } = useCart();
 
     const [isSummaryOpen, setIsSummaryOpen] = useState(false);
     const totalItems = getTotalItems();
-    const freeCandles = calculateFreeCandles();
+    const { freeCandles, candlesNeededForNext } = calculateFreeCandles()
+    const freeShipping = freeShippingThreshold()
 
     // console.log(totalOrderCosts)
+    console.log("cart", cart)
 
     const toggleSummary = () => {
         setIsSummaryOpen(prevState => !prevState);
@@ -87,10 +90,12 @@ const Summary = ({ handleShowSummary }) => {
                         </div>
 
                         <div className={styles.summaryFooter}>
-                            {freeCandles !== 0 && 
-                            <div className={styles.summaryRow}>
-                                <span>🎁 You've earned <strong>{freeCandles} FREE 3.5 oz Protection Candle{freeCandles == 1 ? '' : 's'}</strong> with your order!</span>
-                            </div>}
+                        <div className={cx(styles.summaryRow, styles.promo)}>
+                                <FreeShippingMsg freeShipping={freeShipping} />
+                            </div>                            
+                            <div className={cx(styles.summaryRow, styles.promo)}>
+                                <FreeCandleProgressMsg freeCandles={freeCandles} candlesNeededForNext={candlesNeededForNext} />
+                            </div>
                             <div className={styles.summaryRow}>
                                 <span>Subtotal</span>
                                 <span>{formatCurrency(totalOrderCosts.subtotal, 2, 2)}</span>

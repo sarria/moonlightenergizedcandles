@@ -23,8 +23,7 @@ const Checkout = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [paymentInstance, setPaymentInstance] = useState(null);
     const totalItems = getTotalItems();
-
-
+    
     useEffect(() => {
         async function initializePayment() {
             let attempts = 0;
@@ -103,7 +102,7 @@ const Checkout = () => {
     
                 if (payment?.payment?.id) {
                     // ✅ Send Email Confirmation
-                    const freeCandles = calculateFreeCandles();
+                    const { freeCandles } = calculateFreeCandles()
                     const data = { 
                         orderId: order.order.id,
                         paymentId: payment.payment.id,

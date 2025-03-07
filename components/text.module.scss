@@ -13,6 +13,18 @@
 	line-height: 25px;
 	font-weight: 300;
 
+	H2 {
+		font-family: "Poppins", sans-serif;
+		font-size: 20px;
+		line-height: 27px;
+		font-weight: 400;
+
+		@include md {
+			font-size: 25px;
+			line-height: 30px;
+		}
+	}
+
 	@include md {
 		width: 80%;
 		padding: 0 $GLOBAL-MARGIN;

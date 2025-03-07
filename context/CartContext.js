@@ -181,13 +181,13 @@ export const CartProvider = ({ children }) => {
 
     const calculateHandling = () => {
         const state = shippingInformation?.state || ""
-        return 2.00
+        return 0 // 2.00
     }
 
     /*
         Caja individual 9oz => 5x5x5 = 1ox 3/4oz = 0.109
 
-        9oz = 1lb 4oz 5/8oz = 1.289 lbs = 5x5x5
+        9oz = 1lb 4oz 5/8oz = 1.289 lbs = 5x5x5 = $7
         6oz = 0lb 14oz 1/2oz = 0.906 lbs = 4x4x4
         Trio = 2lb 10oz 3/8oz = 2.648 lbs = 9x4x4
         3.5 = 0lb 11ox 1/2ox = 0.719 lbs = 4x4x4
@@ -202,9 +202,10 @@ export const CartProvider = ({ children }) => {
         10x5x5 → 0.193 lbs ​
     */    
 
+    const FREE_SHIPPING_THRESHOLD = 99; // Free shipping at $99
+
     const calculateShipping = () => {
-        const state = shippingInformation?.state || ""
-        return 5.50
+        return getSubtotal() >= FREE_SHIPPING_THRESHOLD ? 0 : 7.49;
     }
 
     const calculateFees = (total) => {
@@ -222,6 +223,10 @@ export const CartProvider = ({ children }) => {
     };
     
 
+    const freeShippingThreshold = () => {
+        return FREE_SHIPPING_THRESHOLD - getSubtotal()
+    }
+
     const calculateTotals = () => {
         const subtotal = getSubtotal()
         const taxes = calculateTaxes()
@@ -238,7 +243,8 @@ export const CartProvider = ({ children }) => {
             handling,
             total,
             fees,
-            charge
+            charge,
+            freeShippingThreshold
         }
 
         setTotalOrderCosts(totals)
@@ -247,11 +253,15 @@ export const CartProvider = ({ children }) => {
     }
 
     const calculateFreeCandles = () => {
-        // console.log("calculateFreeCandles", cart)
-        const eligibleItems = cart.filter(item => item.type.includes("candle") && (item.weight === "9" || item.weight === "1.289"))
-        const eligibleQuantity = eligibleItems.reduce((total, item) => total + item.quantity, 0)
-        return Math.floor(eligibleQuantity / 3)
-    };    
+        const eligibleItems = cart.filter(item => item.type.includes("candle") && item.weight === "9");
+        const eligibleQuantity = eligibleItems.reduce((total, item) => total + item.quantity, 0);
+        
+        const freeCandles = Math.floor(eligibleQuantity / 3);
+        const candlesNeededForNext = 3 - (eligibleQuantity % 3); // How many more 9oz candles are needed
+    
+        return { freeCandles, candlesNeededForNext };
+    };
+    
 
     return (
         <CartContext.Provider value={{ 
@@ -286,7 +296,8 @@ export const CartProvider = ({ children }) => {
             shippingInformation, 
             setShippingInformation,
 
-            calculateFreeCandles
+            calculateFreeCandles,
+            freeShippingThreshold
             
         }}>
             {children}

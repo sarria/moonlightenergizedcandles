@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useRouter } from 'next/router';
-import { formatCurrency } from './utils/shared';
+import { formatCurrency, FreeCandleProgressMsg, FreeShippingMsg } from './utils/shared';
+import cx from 'classnames';
 import styles from './cart.module.scss';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -13,13 +14,14 @@ import CustomCandleForm from './CustomCandleForm';
 
 const Cart = () => {
     const { 
-		cart, verifyProducts, getTotalItems, getSubtotal, toggleCart, calculateFreeCandles,
-		customizations, handleCustomizationChange, handleRemoveCustomCandle, isCheckoutValid
+		cart, verifyProducts, getTotalItems, getSubtotal, toggleCart, calculateFreeCandles, totalOrderCosts,
+		customizations, handleCustomizationChange, handleRemoveCustomCandle, isCheckoutValid, freeShippingThreshold
 	} = useCart();
     const [validationError, setValidationError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const totalItems = getTotalItems()
-    const freeCandles = calculateFreeCandles();
+    const { freeCandles, candlesNeededForNext } = calculateFreeCandles()
+    const freeShipping = freeShippingThreshold()
     const router = useRouter();
 
     const handleCheckout = async () => {
@@ -73,11 +75,13 @@ const Cart = () => {
                 ) : (
 
                 <div className={styles.cart}>
-                    {freeCandles > 0 && (
-                        <div className={styles.promotion}>
-                            🎁 You've earned <strong>{freeCandles} FREE 3.5 oz Protection Candle(s)</strong> with your order!
-                        </div>
-                    )}                        
+                    <div className={styles.promotion}>
+                        <FreeShippingMsg freeShipping={freeShipping} />
+                    </div>
+                    <div className={styles.promotion}>
+                        <FreeCandleProgressMsg freeCandles={freeCandles} candlesNeededForNext={candlesNeededForNext} />
+                    </div>
+                    
                     {cart.map((item) => {
                         const image = { altText: item.title, sourceUrl: item.image };
                         const isCustomCandle = item.type.includes("candle") && item.type.includes("custom");

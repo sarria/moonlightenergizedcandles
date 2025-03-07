@@ -134,6 +134,19 @@
                     justify-content: space-between;
                     font-size: 16px;
                     padding: 5px 0;
+
+                    &.promo {
+                        color: #026F06;
+                        border: solid 1px #026F06;
+                        border-radius: 6px;
+                        margin-bottom: 10px;
+                        padding: 10px;
+
+                        > div {
+                            width: 100%;
+                            text-align: center;
+                        }
+                    }                    
                 }
             
                 .summaryRowTotal {

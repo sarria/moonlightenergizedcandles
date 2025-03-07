@@ -49,6 +49,8 @@ function moonlight_products_custom_columns($columns) {
     $new_columns['type'] = __('Type');
     $new_columns['price'] = __('Price');
     $new_columns['headline'] = __('headline');
+    $new_columns['size'] = __('size');
+    $new_columns['weight'] = __('weight');
 
     // Add the rest of the default columns
     $new_columns['date'] = $columns['date'];
@@ -74,8 +76,16 @@ function moonlight_products_custom_column_content($column, $post_id) {
             break;
         case 'headline':
             $headline = get_field('headline', $post_id); // Get ACF field
-            echo $headline; // Display formatted price
-            break;            
+            echo $headline; // Display headline
+            break;
+        case 'size':
+            $size = get_field('size', $post_id); // Get ACF field
+            echo $size; // Display size
+            break;
+        case 'weight':
+            $weight = get_field('weight', $post_id); // Get ACF field
+            echo $weight; // Display weight
+            break;
     }
 }
 add_action('manage_products_posts_custom_column', 'moonlight_products_custom_column_content', 10, 2);

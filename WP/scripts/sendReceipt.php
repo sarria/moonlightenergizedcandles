@@ -39,6 +39,7 @@ $orderDate = date("F j, Y, g:i a"); // Order date
 
 $freeCandles = isset($data['freeCandles']) ? (int)$data['freeCandles'] : 0;
 $freeCandlesHtml = $freeCandles > 0 ? "<p>🎁 Congratulations! You've received <strong>{$freeCandles} FREE 3.5 oz Protection Candle".($freeCandles === 1 ? "" : "s")."</strong> as part of our promotion.</p>" : "";
+$freeShippingHtml = ($totalOrderCosts['shipping'] == 0) ? "<p>🎉 Congratulations! You've qualified for <strong>Free Shipping!</strong></p>" : "";
 
 // Extract order totals
 $subtotal = number_format($totalOrderCosts['subtotal'], 2);
@@ -140,6 +141,7 @@ try {
             </table>
             <br/>
 
+            $freeShippingHtml
             $freeCandlesHtml
 
             <h3>Order Breakdown</h3>

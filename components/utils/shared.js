@@ -27,4 +27,30 @@ export function formatCurrency(price, minimumFractionDigits = 0, maximumFraction
 export function isValidEmail(email) {
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return email && email !== "" ? emailRegex.test(email) : true;
-  }
+}
+
+
+export const FreeCandleProgressMsg = ({ freeCandles, candlesNeededForNext }) => {
+    return (
+        <>
+            {freeCandles === 0 ? (
+                <div>You're <strong>{candlesNeededForNext} Zodiac Candle{candlesNeededForNext > 1 ? 's' : ''}</strong> away from earning a FREE 3.5 oz Protection Candle!</div>
+            ) : (
+                <div>🎁 Congratulations! You've earned <strong>{freeCandles} FREE 3.5 oz Protection Candle{freeCandles === 1 ? '' : 's'}</strong> with your order! 🎉</div>
+            )}
+        </>
+    );
+};
+
+
+export const FreeShippingMsg = ({freeShipping}) => {
+	return (
+		<>
+			{freeShipping > 0 ? (
+				<div>You're <strong>{formatCurrency(freeShipping)}</strong> away from Free Shipping!</div>
+			) : (
+				<div>🎉 Congratulations! You qualify for <strong>Free Shipping!</strong></div>
+			)}
+		</>
+	)
+}
