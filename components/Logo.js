@@ -2,7 +2,8 @@ import { ReactElement } from 'react';
 import Link from 'next/link';
 import cx from 'classnames';
 import Image from 'next/image';
-import LogoImage from '../images/Moonlight Logo-01.svg';
+// import LogoImage from '../images/Moonlight Logo-01.svg';
+import LogoImage from '../images/moonlight-energized-candles.png';
 import styles from './logo.module.scss';
 
 function Logo({ className, image }) {
