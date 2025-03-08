@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /wp-admin/
+Disallow: /wp-login.php
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /thank-you/
+Disallow: /my-account/
+Disallow: /wp-content/plugins/
+Allow: /wp-admin/admin-ajax.php
+
+Sitemap: https://moonlightenergizedcandles.com/sitemap_index.xml
