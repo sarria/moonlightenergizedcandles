@@ -16,7 +16,6 @@ function Logo({ className, image }) {
             <Image
               alt="Moonlight Logo"
               src={img}
-              layout="responsive"
             />
           </a>
         </Link>
