@@ -14,7 +14,7 @@
 		padding: 12px $GLOBAL-MARGIN/2;
 		justify-content: center;
 
-		@include md {
+		@include xl {
 			padding: 12px 0px
 		}
 
@@ -24,7 +24,7 @@
 			width: 100%;
 			align-items: center;
 
-			@include md {
+			@include xl {
 				width: 80%;
 			}
 
