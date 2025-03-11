@@ -15,27 +15,16 @@ export default async function handler(req, res) {
         // Define slugs to exclude
         const excludedSlugs = ["calc", "checkout", "thank-you"];
 
-        // Extract and filter pages
-        const pages = response.data.pages.edges
+        const ALL = [...response.data.pages.edges, ...response.data.products.edges]
+
+        const urls = ALL
             .map((page) => ({
                 slug: page.node.slug,
                 url: `${siteUrl}/${page.node.slug}`,
-                lastmod: page.node.modified,
+                lastmod: page.node.modified.substring(0, 10), //new Date(page.node.modified).toISOString().split("Z")[0] + "+00:00", // Formats correctly
                 priority: page.node.slug === "home-page" ? "1.0" : "0.8"
             }))
-            .filter(page => !excludedSlugs.includes(page.slug));
-
-        // Extract and filter products
-        const products = response.data.products.edges
-            .map((product) => ({
-                url: `${siteUrl}/${product.node.slug}`,
-                priority: "0.8"
-            }));
-
-        // Combine all URLs
-        const urls = [...pages, ...products];
-
-        console.log("===>", urls);
+            .filter(page => !excludedSlugs.includes(page.slug));        
 
         // Generate XML Sitemap
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
