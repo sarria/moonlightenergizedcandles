@@ -4,6 +4,14 @@ const nextConfig = {
   images: {
     domains: ['cms.moonlightenergizedcandles.com'],
   },
-}
+  async rewrites() {
+    return [
+      {
+        source: "/sitemap.xml",
+        destination: "/api/sitemap",
+      },
+    ];
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

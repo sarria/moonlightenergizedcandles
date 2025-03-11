@@ -1,6 +1,7 @@
 User-agent: *
 Disallow: /wp-admin/
 Disallow: /wp-login.php
+Disallow: /calc/
 Disallow: /cart/
 Disallow: /checkout/
 Disallow: /thank-you/

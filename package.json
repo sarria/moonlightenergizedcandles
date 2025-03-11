@@ -9,12 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@apollo/client": "^3.5.10",
+    "@apollo/client": "^3.13.4",
     "@react-google-maps/api": "^2.20.6",
     "@square/web-sdk": "^2.1.0",
     "@svgr/webpack": "^8.1.0",
     "axios": "^0.26.1",
-    "graphql": "^16.3.0",
+    "graphql": "^16.10.0",
     "html-react-parser": "^1.4.8",
     "json-bigint": "^1.0.0",
     "next": "12.1.1",

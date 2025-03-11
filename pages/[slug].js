@@ -14,24 +14,38 @@ function Page({ global, page}) {
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
 export async function getStaticProps(context) {
-  const res = await fetch(process.env.GRAPHQL + queryContent(context.params.slug))
-  const data = await res.json()
-  const global = data.data?.acfOptionsGlobalOptions?.global || null
-  // const page = data.data?.content?.edges[0]?.node || {data.data?.product?.edges[0]?.node || null}
-  // console.log("data ==>", data)  
-  const page = data.data?.content?.edges[0] ? data.data?.content?.edges[0]?.node : data.data?.product?.edges[0]?.node
+  try {
+    const res = await fetch(process.env.GRAPHQL + queryContent(context.params.slug))
+    const data = await res.json()
 
-  return {
-    props: {
-      global,
-      page
-    },
-    // Next.js will attempt to re-generate the page:
-    // - When a request comes in
-    // - At most once every 10 seconds
-    revalidate: 30, // In seconds
+    // Ensure global options are safely retrieved
+    const global = data.data?.acfOptionsGlobalOptions?.global || null;
+
+    // Handle page data safely, setting it to null if no valid response
+    const page = data.data?.content?.edges?.[0]?.node || data.data?.product?.edges?.[0]?.node || null;
+
+    // If the page is still null, return a 404 (not found)
+    if (!page) {
+      return {
+        notFound: true, // This will trigger a 404 page
+      };
+    }
+
+    return {
+      props: {
+        global,
+        page,
+      },
+      revalidate: 30, // Regenerate every 30 seconds
+    };
+  } catch (error) {
+    console.error("Error fetching page data:", error);
+    return {
+      notFound: true, // Fail-safe, show 404 if there's an error
+    };
   }
 }
+
 
 // This function gets called at build time on server-side.
 // It may be called again, on a serverless function, if
