@@ -9,4 +9,4 @@ Disallow: /my-account/
 Disallow: /wp-content/plugins/
 Allow: /wp-admin/admin-ajax.php
 
-Sitemap: https://moonlightenergizedcandles.com/sitemap_index.xml
+Sitemap: https://moonlightenergizedcandles.com/sitemap.xml
