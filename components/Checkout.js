@@ -28,35 +28,32 @@ const Checkout = () => {
     useEffect(() => {
         async function initializePayment() {
             let attempts = 0;
-            const maxAttempts = 10; // Retry up to 10 times
-            const delay = 500; // 500ms delay between retries
+            const maxAttempts = 10;
+            const delay = 500;
     
             while (!window.Square && attempts < maxAttempts) {
                 await new Promise(resolve => setTimeout(resolve, delay));
                 attempts++;
             }
     
-            if (window.Square) {
-                // console.log("✅ Square SDK exists on Checkout");
-            } else {
+            if (!window.Square) {
                 console.error("❌ Square SDK failed to load after retries.");
                 return;
             }
     
             try {
-                // Fetch Square credentials from the server
                 const response = await fetch("/api/getSquareConfig");
                 const { applicationId, environment } = await response.json();
-    
                 const payments = window.Square.payments(applicationId, environment);
     
-                const cardContainer = document.getElementById("card-container");
-                if (cardContainer?.children.length > 0) {
-                    cardContainer.innerHTML = ""; // Clean Up
+                // Properly clean up any existing payment instance
+                if (paymentInstance) {
+                    await paymentInstance.destroy();
+                    setPaymentInstance(null);
                 }
     
                 const card = await payments.card();
-                await card.attach("#card-container"); // Ensure this div exists in the JSX
+                await card.attach("#card-container");
     
                 setPaymentInstance(card);
             } catch (error) {
@@ -66,7 +63,6 @@ const Checkout = () => {
     
         initializePayment();
     }, []);
-
 
     const handleContinueToPayment = () => {
         // console.log("shippingInformation", shippingInformation)
