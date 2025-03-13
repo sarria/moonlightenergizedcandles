@@ -90,9 +90,10 @@ const Summary = ({ handleShowSummary }) => {
                         </div>
 
                         <div className={styles.summaryFooter}>
-                        <div className={cx(styles.summaryRow, styles.promo)}>
+                            {totalOrderCosts.subtotal - totalOrderCosts.discount !== 0 && 
+                            <div className={cx(styles.summaryRow, styles.promo)}>
                                 <FreeShippingMsg freeShipping={freeShipping} />
-                            </div>                            
+                            </div>}
                             <div className={cx(styles.summaryRow, styles.promo)}>
                                 <FreeCandleProgressMsg freeCandles={freeCandles} candlesNeededForNext={candlesNeededForNext} />
                             </div>

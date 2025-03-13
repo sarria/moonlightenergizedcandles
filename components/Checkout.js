@@ -81,11 +81,6 @@ const Checkout = () => {
         }        
     }
 
-    const closeSession = () => {
-        clearSession()
-        router.push(`/thank-you`); // ✅ Redirect to than you page
-    }
-
     const handlePayment = async () => {
         setIsSubmittingPayment(true);
     
@@ -140,15 +135,6 @@ const Checkout = () => {
         }
     };
 
-    function generateRandomId(length) {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < length; i++) {
-          result += characters.charAt(Math.floor(Math.random() * characters.length));
-        }
-        return result;
-    }
-      
     const handleSubmitFreeOrder = async () => {
         const { freeCandles } = calculateFreeCandles(cart, coupon)
         const data = { 
@@ -283,12 +269,18 @@ const Checkout = () => {
         return isValid
     }
 
+    const closeSession = () => {
+        clearSession()
+        router.push(`/thank-you`);
+    }    
+
     const areShippingFieldsOk = checkRequiredFields() && isValidEmail(shippingInformation.email)
 
     return (
         <div className={styles.root}>
+            {!isPaymentCompleted && 
             <div className={styles.wrapper}>
-
+                
                 <div className={cx(styles.shippingScreen, {[styles.show]: !showSummary}, {[styles.hide]: showSummary})}>
                 
                     <div className={styles.subtotal}>
@@ -338,13 +330,12 @@ const Checkout = () => {
                             </div>
                         </div>
 
-                        {!isPaymentCompleted && <div className={styles.center}>
+                        <div className={styles.center}>
                             <button className={styles.checkoutBtn} onClick={handlePayment} disabled={!shippingInformation || isSubmittingPayment}>
                                 {isSubmittingPayment ? <div className={styles.loader}></div> : "Submit Payment"}
                             </button>
-                        </div>}
+                        </div>
 
-                        {isPaymentCompleted && <div className={styles.paymentCompletedLabel}>Payment completed!</div>}
                     </div>
                     <div className={cx(styles.hide, {[styles.show] : subTotal === 0})}>
                         <button className={styles.checkoutBtn} onClick={handleSubmitFreeOrder}>
@@ -353,7 +344,7 @@ const Checkout = () => {
                     </div>
                 </div>
                 
-            </div>
+            </div>}
         </div>
     );
 };

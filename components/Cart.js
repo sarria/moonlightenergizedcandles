@@ -14,7 +14,7 @@ import CustomCandleForm from './CustomCandleForm';
 
 const Cart = () => {
     const { 
-		cart, verifyProducts, getTotalItems, calculateSubTotal, toggleCart, calculateFreeCandles, coupon,
+		cart, verifyProducts, getTotalItems, calculateSubTotal, toggleCart, calculateFreeCandles, coupon, totalOrderCosts,
 		customizations, handleCustomizationChange, handleRemoveCustomCandle, isCheckoutValid, freeShippingThreshold
 	} = useCart();
     const [validationError, setValidationError] = useState(false);
@@ -75,9 +75,9 @@ const Cart = () => {
                 ) : (
 
                 <div className={styles.cart}>
-                    <div className={styles.promotion}>
+                    {totalOrderCosts.subtotal - totalOrderCosts.discount !== 0 && <div className={styles.promotion}>
                         <FreeShippingMsg freeShipping={freeShipping} />
-                    </div>
+                    </div>}
                     <div className={styles.promotion}>
                         <FreeCandleProgressMsg freeCandles={freeCandles} candlesNeededForNext={candlesNeededForNext} />
                     </div>

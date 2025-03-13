@@ -297,13 +297,8 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
               ))}
             </ul>
           )}
+          
         </div>
-
-        {/* {isAddressSelected && !isAddressComplete && (
-            <div className={styles.errorMessage}>
-                <p>Please enter a complete shipping address before proceeding to payment.</p>
-            </div>
-        )}         */}
       </div>
     </div>
   );
