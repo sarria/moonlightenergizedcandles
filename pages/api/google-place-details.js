@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
     const url = `https://places.googleapis.com/v1/places/${placeId}?key=${GOOGLE_API_KEY}`;
 
-    console.log('details url', url)
+    // console.log('details url', url)
   
     try {
       const response = await fetch(url, {

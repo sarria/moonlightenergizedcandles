@@ -252,7 +252,7 @@ export default function query(slug) {
 		}
 	`.replace(/\s\s+/g, ' ');
 
-	console.log('Query', Query)
+	// console.log('Query', Query)
 
 	return Query;
 }

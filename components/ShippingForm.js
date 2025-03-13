@@ -3,11 +3,16 @@ import { useCart } from '../context/CartContext'
 import cx from 'classnames';
 import styles from "./shippingForm.module.scss";
 import { isValidEmail } from './utils/shared';
+import { finished } from "stream";
 
 const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddressFields }) => { 
-  const { shippingInformation, setShippingInformation } = useCart();
+  const { shippingInformation, setShippingInformation, applyCoupon, coupon } = useCart();
 
   const [suggestions, setSuggestions] = useState([]);
+  const [couponCode, setCouponCode] = useState(coupon?.code || '');
+  const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+  const [couponError, setCouponError] = useState('');
+
   const isAddressSelected = false;
   
   const handleAddressChange = (e) => {
@@ -138,10 +143,65 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
     return typeof shippingInformation[field] === "string" && !shippingInformation[field]?.trim()
   }
 
+  const handleCheckCoupon = async () => {
+    setIsApplyingCoupon(true);
+    applyCoupon(null)
+    setCouponError('')
+
+    try {
+        const response = await fetch("/api/validateCoupon", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ couponCode }),
+        });
+
+        const data = await response.json();        
+        // console.log("coupon data", data?.data?.data?.coupons); 
+
+        const coupon = data?.data?.data?.coupons
+
+        if (response.ok && coupon?.length) {
+            applyCoupon(coupon[0]); // Apply coupon with type
+        } else {
+            // Invalid or expired coupon
+            applyCoupon(null)
+            setCouponError('Invalid or expired coupon.')
+        }
+    } catch (error) {
+        console.error("Error validating coupon:", error);
+    } finally {
+        setIsApplyingCoupon(false);
+    }
+  };
+
   return (
     <div className={styles.root}>
       <div className={styles.wrapper}>    
         <div className={styles["shipping-form"]}>
+
+          <div className={styles.shippingInput}>
+            <div className={styles.inputs}>
+              <div className={cx(styles.field, {[styles.missingField]: missingField('firstName')})}>
+                <div className={styles.input}>
+                  <input 
+                      type="text" 
+                      placeholder="Enter coupon code" 
+                      value={couponCode} 
+                      onChange={(e) => setCouponCode(e.target.value)} 
+                  />
+                </div>
+              </div>
+              <div className={cx(styles.field, styles.button)}>
+                <button className={styles.applyCouponBtn} onClick={handleCheckCoupon} >
+                    {isApplyingCoupon ? <div className={styles.loader}></div> : "Apply Coupon"}
+                </button>
+              </div>
+            </div>
+            {coupon && <div className={styles.couponApplied}>{coupon.message}</div>}
+            {!coupon && couponError !== '' && <div className={styles.couponError}>{couponError}</div>}
+          </div>
+          <br></br>
+          
           <div className={styles.label}>Shipping Address</div>
 
           <div className={styles.shippingInput}>

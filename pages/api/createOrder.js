@@ -88,6 +88,16 @@ export default async function handler(req, res) {
                   }
                 }
               ],
+              "discounts": [
+                {
+                    "type": "FIXED_AMOUNT",
+                    "name": "Free Candle",
+                    "amount_money": {
+                        "amount": Math.round(totalOrderCosts.discount) * 100,
+                        "currency": "USD"
+                    }
+                }
+              ],
               "service_charges": [
                 {
                     "name": "Shipping & Handling",
@@ -109,7 +119,7 @@ export default async function handler(req, res) {
             }
         }        
         
-        console.log("\nFinal Order Request:\n", JSON.stringify(requestBody, null, 2));
+        // console.log("\nFinal Order Request:\n", JSON.stringify(requestBody, null, 2));
 
         // ✅ Submit request to Square API
         const response = await fetch(squareAPI + 'orders', {
@@ -124,7 +134,7 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
-        console.log("\nOrder Response:\n", data);
+        // console.log("\nOrder Response:\n", data);
 
         if (response.ok && !data.errors) {
             return res.status(200).json(data);

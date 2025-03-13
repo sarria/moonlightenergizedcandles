@@ -51,7 +51,7 @@ const SquareFeeCalculator = () => {
         );
         setCalculatedFee(squareFee);
         setTotalToCharge(totalCharge);
-        console.log("fee:", fee)
+        // console.log("fee:", fee)
     };
 
     return (

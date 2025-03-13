@@ -14,13 +14,13 @@ import CustomCandleForm from './CustomCandleForm';
 
 const Cart = () => {
     const { 
-		cart, verifyProducts, getTotalItems, getSubtotal, toggleCart, calculateFreeCandles, totalOrderCosts,
+		cart, verifyProducts, getTotalItems, calculateSubTotal, toggleCart, calculateFreeCandles, coupon,
 		customizations, handleCustomizationChange, handleRemoveCustomCandle, isCheckoutValid, freeShippingThreshold
 	} = useCart();
     const [validationError, setValidationError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const totalItems = getTotalItems()
-    const { freeCandles, candlesNeededForNext } = calculateFreeCandles()
+    const { freeCandles, candlesNeededForNext } = calculateFreeCandles(cart, coupon)
     const freeShipping = freeShippingThreshold()
     const router = useRouter();
 
@@ -34,7 +34,7 @@ const Cart = () => {
             const verifiedCart = verifyProducts();
             if (verifiedCart) {
                 // Replace with actual checkout logic
-                console.log("Redirecting to checkout page")
+                // console.log("Redirecting to checkout page")
                 router.push(`/checkout`); // ✅ Redirect to checkout URL
             }
 
@@ -55,7 +55,7 @@ const Cart = () => {
                         Subtotal ({totalItems} item{totalItems === 1 ? '' : 's'})
                     </div>
                     <div className={styles.money}>
-                        ${getSubtotal()}
+                        ${calculateSubTotal()}
                     </div>
                     {validationError && (
                         <div className={styles.errorMessage}>

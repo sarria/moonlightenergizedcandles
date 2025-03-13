@@ -21,11 +21,11 @@ export default async function handler(req, res) {
             freeCandles
         };
 
-        // console.log("orderData", orderData)
+        // console.log("sendReceipt", orderData)
 
         // Send order data to WordPress PHP script
         const wordpressEndpoint = "http://cms.moonlightenergizedcandles.com/scripts/sendReceipt.php";
-        console.log("wordpressEndpoint",wordpressEndpoint)
+        // console.log("wordpressEndpoint",wordpressEndpoint)
         const response = await fetch(wordpressEndpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -37,7 +37,7 @@ export default async function handler(req, res) {
         if (response.ok) {
             return res.status(200).json({ message: "Email sent successfully", data });
         } else {
-            return res.status(400).json({ error: "Failed to send email", details: data });
+            return res.status(400).json({ error: "Failed to send email: " + (response?.error), details: data });
         }
     } catch (error) {
         console.error("Error sending email:", error);

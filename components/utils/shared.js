@@ -44,6 +44,7 @@ export const FreeCandleProgressMsg = ({ freeCandles, candlesNeededForNext }) => 
 
 
 export const FreeShippingMsg = ({freeShipping}) => {
+	console.log("freeShipping", freeShipping)
 	return (
 		<>
 			{freeShipping > 0 ? (

@@ -11,16 +11,16 @@ import parse from 'html-react-parser';
 const Summary = ({ handleShowSummary }) => {
     const { 
         cart, getTotalItems, customizations, totalOrderCosts, calculateFreeCandles,
-        shippingInformation, freeShippingThreshold
+        shippingInformation, freeShippingThreshold, coupon
     } = useCart();
 
     const [isSummaryOpen, setIsSummaryOpen] = useState(false);
     const totalItems = getTotalItems();
-    const { freeCandles, candlesNeededForNext } = calculateFreeCandles()
+    const { freeCandles, candlesNeededForNext } = calculateFreeCandles(cart, coupon)
     const freeShipping = freeShippingThreshold()
 
     // console.log(totalOrderCosts)
-    console.log("cart", cart)
+    // console.log("cart", cart)
 
     const toggleSummary = () => {
         setIsSummaryOpen(prevState => !prevState);
@@ -100,6 +100,18 @@ const Summary = ({ handleShowSummary }) => {
                                 <span>Subtotal</span>
                                 <span>{formatCurrency(totalOrderCosts.subtotal, 2, 2)}</span>
                             </div>
+                            {totalOrderCosts.discount !== 0 && (
+                                <>
+                                    <div className={styles.summaryRow}>
+                                        <span>Discount:</span>
+                                        <span>-{formatCurrency(totalOrderCosts.discount, 2, 2)}</span>
+                                    </div>
+                                    <div className={styles.summaryRow}>
+                                        <span><strong>Subtotal after Discount:</strong></span>
+                                        <span>{formatCurrency(totalOrderCosts.subtotal - totalOrderCosts.discount, 2, 2)}</span>
+                                    </div>
+                                </>
+                            )}                            
                             <div className={styles.summaryRow}>
                                 <span>Taxes ({shippingInformation?.state === "PA" ? "PA Sales Tax" : "No Tax"})</span>
                                 <span>{formatCurrency(totalOrderCosts.taxes, 2, 2)}</span>
@@ -117,7 +129,7 @@ const Summary = ({ handleShowSummary }) => {
                                 <span>{formatCurrency(totalOrderCosts.fees, 2, 2)}</span>
                             </div>
                             <div className={styles.summaryRowTotal}>
-                                <span>Order Total</span>
+                                <span>Total to pay</span>
                                 <span>{formatCurrency(totalOrderCosts.charge, 2, 2)}</span>
                             </div>
                         </div>

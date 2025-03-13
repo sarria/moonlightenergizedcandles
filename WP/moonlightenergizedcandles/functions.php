@@ -206,23 +206,123 @@ function register_acf_graphql_fields() {
 }
 add_action('graphql_register_types', 'register_acf_graphql_fields');
 
-// function add_default_weight_to_products() {
-//     $args = array(
-//         'post_type'      => 'products',
-//         'posts_per_page' => -1,
-//         'fields'         => 'ids',
-//     );
+add_action( 'graphql_register_types', function() {
+    register_graphql_object_type( 'Coupon', [
+        'description' => 'Represents a discount coupon',
+        'fields' => [
+            'code' => [
+                'type' => 'String',
+                'description' => 'Coupon Code',
+            ],
+            'quantity' => [
+                'type' => 'Integer',
+                'description' => 'Available quantity',
+            ],
+            'kind' => [
+                'type' => 'String',
+                'description' => 'Type of coupon',
+            ],
+            'message' => [
+                'type' => 'String',
+                'description' => 'Message of coupon',
+            ],            
+        ],
+    ]);
 
-//     $products = get_posts($args);
+    register_graphql_field( 'RootQuery', 'coupons', [
+        'type' => ['list_of' => 'Coupon'],
+        'description' => 'Retrieve coupons from custom table',
+        'args' => [
+            'code' => [
+                'type' => 'String',
+                'description' => 'Filter by coupon code'
+            ]
+        ],
+        'resolve' => function($root, $args, $context, $info) {
+            global $wpdb;
 
-//     foreach ($products as $product_id) {
-//         echo $product_id . ",";
-//         if (!get_post_meta($product_id, 'weight', true)) {
-//             update_post_meta($product_id, 'weight', '6');
-//         }
-//     }
+            // Secure query that ensures quantity > 0
+            $sql = "SELECT code, quantity, kind, message FROM {$wpdb->prefix}coupons WHERE quantity > 0";
 
-//     echo "Updated all products missing the weight field.";
-// }
+            if (!empty($args['code'])) {
+                $sql .= $wpdb->prepare(" AND code = %s", $args['code']);
+            }
 
-// add_default_weight_to_products();
+            $results = $wpdb->get_results($sql, ARRAY_A);
+
+            return $results ?: [];
+        }
+    ]);
+});
+
+add_action('graphql_register_types', function() {
+    register_graphql_mutation('useCoupon', [
+        'inputFields' => [
+            'code' => [
+                'type' => 'String',
+                'description' => 'The coupon code to use'
+            ]
+        ],
+        'outputFields' => [
+            'success' => [
+                'type' => 'Boolean',
+                'description' => 'True if the coupon was successfully used'
+            ],
+            'message' => [
+                'type' => 'String',
+                'description' => 'Status message'
+            ],
+            'remainingQuantity' => [
+                'type' => 'Integer',
+                'description' => 'Remaining quantity of the coupon'
+            ]
+        ],
+        'mutateAndGetPayload' => function($input, $context, $info) {
+            global $wpdb;
+
+            $code = $input['code'];
+
+            // Fetch coupon data
+            $coupon = $wpdb->get_row(
+                $wpdb->prepare("SELECT quantity FROM {$wpdb->prefix}coupons WHERE code = %s", $code)
+            );
+
+            if (!$coupon) {
+                return [
+                    'success' => false,
+                    'message' => 'Coupon not found',
+                    'remainingQuantity' => null
+                ];
+            }
+
+            if ($coupon->quantity <= 0) {
+                return [
+                    'success' => false,
+                    'message' => 'Coupon is already used up',
+                    'remainingQuantity' => 0
+                ];
+            }
+
+            // Reduce coupon quantity by 1
+            $updated = $wpdb->update(
+                "{$wpdb->prefix}coupons",
+                ['quantity' => max(0, $coupon->quantity - 1)], // Ensure it doesn't go below zero
+                ['code' => $code]
+            );
+
+            if ($updated === false) {
+                return [
+                    'success' => false,
+                    'message' => 'Failed to update coupon quantity',
+                    'remainingQuantity' => $coupon->quantity
+                ];
+            }
+
+            return [
+                'success' => true,
+                'message' => 'Coupon applied successfully',
+                'remainingQuantity' => max(0, $coupon->quantity - 1)
+            ];
+        }
+    ]);
+});

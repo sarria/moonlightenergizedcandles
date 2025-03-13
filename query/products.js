@@ -18,7 +18,7 @@ export default function query(slug) {
         }
 	`.replace(/\s\s+/g, ' ');
 
-	console.log('Products Query', Query)
+	// console.log('Products Query', Query)
 
 	return Query;
 }

@@ -8,7 +8,7 @@ import ImageRatio from './elements/ImageRatio'
 
 
 const Events = ({data}) => {
-	console.log('Events data ::', data.events)
+	// console.log('Events data ::', data.events)
 	
 	return (
 		<div className={styles.root}>

@@ -22,7 +22,7 @@ const Header = ({ seo }) => {
 				script.src = scriptUrl;
 				script.async = true;
 				script.onload = () => {
-					console.log("✅ Square SDK Loaded on Header");
+					// console.log("✅ Square SDK Loaded on Header");
 					setSquareLoaded(true);
 				};
 				script.onerror = () => {

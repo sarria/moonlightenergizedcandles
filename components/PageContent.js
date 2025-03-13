@@ -42,39 +42,16 @@ function PageContentWithCart({page, global}) {
 	const router = useRouter()
 	const { getTotalItems, isCartVisible, setSlug } = useCart()
 	const totalItems = getTotalItems()
-	// console.log("page ::", page)
-
-	setSlug(page.slug);
 
 	useEffect(() => {
-		// ALL THIS JUST TO BE ABLE TO JUMP TO A HASH IN A PAGE. WOW
-		const handleRouteChange = (url, { shallow }) => {
-			// console.log(
-			// 	`Page changed to ${url} ${
-			// 		shallow ? 'with' : 'without'
-			// 	} shallow routing`
-			// )
-		  	if (location.hash) {
-				// location = location
-				const hash = location.hash.substring(1).replaceAll('%20', ' ')
-				const ele = document.getElementById(hash)
-				if (ele) window.scrollTo(0, ele.offsetTop + 350)
-			}		  
-		}
-	
-		router.events.on('routeChangeComplete', handleRouteChange)
-	
-		// If the component is unmounted, unsubscribe
-		// from the event with the `off` method:
-		return () => {
-		  router.events.off('routeChangeComplete', handleRouteChange)
-		}
-	}, [])	
+		setSlug(page.slug);
+	}, [page.slug])
 
 	const isHomePage = page.slug === 'home-page';
 	const isCheckout = page.slug === 'checkout';
 	const isCalculator = page.slug === 'calc';
-	const showCart = totalItems !== 0 && isCartVisible;
+	const showCart = totalItems !== 0 && isCartVisible
+	;
 
 	return page ? (
 		<>

@@ -117,11 +117,12 @@ const AddToCartButton = ({ item, small }) => {
 	return (
 		<>
 			{item.buttonLink !== '' && item.buttonLink !== undefined ? 
-				<Link href={item.buttonLink} passHref>
+				<Link href={`/${item.buttonLink}`} passHref>
 					<a>
 						<InnerButton buttonInfo={buttonInfo} icon={icon} hasLinkToPage={true} />
 					</a>
-				</Link> : 
+				</Link>
+			 	: 
 				<>
 					<InnerButton buttonInfo={buttonInfo} icon={icon} isMobile={true} onClick={handleAddToCart} handleUpdate={handleUpdate} isAdded={isAdded} quantity={quantity} small={small} />
 					<InnerButton buttonInfo={buttonInfo} icon={icon} isMobile={false} onClick={handleAddToCart} handleUpdate={handleUpdate} isAdded={isAdded} quantity={quantity} small={small} />

@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
+import { calculateFreeCandles, calculateDiscount }  from './utils/discounts'
 
 const CartContext = createContext();
 
@@ -9,6 +10,7 @@ export const CartProvider = ({ children }) => {
     const [customizations, setCustomizations] = useState({});
     const [isCartVisible, setIsCartVisible] = useState(false);
     const [slug, setSlug] = useState('');
+    const [coupon, setCoupon] = useState(null);
 
     // Load cart and customizations from sessionStorage on first render
     useEffect(() => {
@@ -72,10 +74,18 @@ export const CartProvider = ({ children }) => {
     };
 
     // Get total number of items in the cart
-    const getTotalItems = () => cart?.reduce((total, item) => total + item.quantity, 0);
+    const getTotalItems = () => {
+        const totalItems = cart?.reduce((total, item) => total + item.quantity, 0)
+        return totalItems
+    } 
 
     // Get total cost of items in the cart
-    const getSubtotal = () => cart?.reduce((total, item) => total + item.price * item.quantity, 0);
+    // const getSubtotal = () => cart?.reduce((total, item) => total + item.price * item.quantity, 0);
+    const getSubtotal = () => {
+        let subtotal = cart?.reduce((total, item) => total + item.price * item.quantity, 0);
+        return subtotal;
+    };
+    
 
     const getTotalQuantityById = (id) => {
         const item = cart.find((cartItem) => cartItem.id === id);
@@ -88,11 +98,13 @@ export const CartProvider = ({ children }) => {
             setIsCartVisible((prev) => 
                 visible !== undefined && visible !== null ? visible : !prev
             )
+        } else {
+            setCoupon(null)
         }
     };
     
     const handleCustomizationChange = (id, index, field, value) => {
-        console.log("id, index, field, value :: ", id, index, field, value);
+        // console.log("id, index, field, value :: ", id, index, field, value);
 
         setCustomizations((prev) => {
             const existingEntries = prev[id] || []; // Ensure an array exists
@@ -104,14 +116,14 @@ export const CartProvider = ({ children }) => {
                 [field]: value, // Update only the changed field
             };
 
-            console.log("updatedEntries", updatedEntries)
+            // console.log("updatedEntries", updatedEntries)
     
             return { ...prev, [id]: updatedEntries };
         });
     };
 
     const handleRemoveCustomCandle = (id, index) => {
-        console.log("Removing customization:", id, index);
+        // console.log("Removing customization:", id, index);
 
         setCustomizations((prev) => {
             if (!prev[id]) return prev; // If no customizations exist, return unchanged
@@ -159,7 +171,7 @@ export const CartProvider = ({ children }) => {
             // console.log("updatedCart :: ", updatedCart);
     
             if (updatedCart) {
-                console.log("Cart successfully verified and updated!");
+                // console.log("Cart successfully verified and updated!");
                 sessionStorage.setItem('cart', JSON.stringify(updatedCart));
                 setCart(updatedCart);
                 return true;
@@ -172,17 +184,16 @@ export const CartProvider = ({ children }) => {
             return false;
         }
     };
+
+    const calculateSubTotal = () => {
+        return Math.max(0, getSubtotal() - calculateDiscount(cart, coupon))
+    }
     
     const calculateTaxes = () => {
         const state = shippingInformation?.state || ""
         const taxRate = state === "PA" ? 0.06 : 0;
-        return getSubtotal() * taxRate;
+        return calculateSubTotal() * taxRate;
     };
-
-    const calculateHandling = () => {
-        const state = shippingInformation?.state || ""
-        return 0 // 2.00
-    }
 
     /*
         Caja individual 9oz => 5x5x5 = 1ox 3/4oz = 0.109
@@ -204,9 +215,20 @@ export const CartProvider = ({ children }) => {
 
     const FREE_SHIPPING_THRESHOLD = 99; // Free shipping at $99
 
+    const freeShippingThreshold = () => {
+        const subTotal = calculateSubTotal()
+        return Math.max(0, (FREE_SHIPPING_THRESHOLD - subTotal) + 1)
+    }    
+
     const calculateShipping = () => {
-        return getSubtotal() >= FREE_SHIPPING_THRESHOLD ? 0 : 7.49;
+        const subTotal = calculateSubTotal()
+        return subTotal === 0 || subTotal > FREE_SHIPPING_THRESHOLD ? 0 : 7.49;
     }
+
+    const calculateHandling = () => {
+        const state = shippingInformation?.state || ""
+        return 0 // 2.00
+    }    
 
     const calculateFees = (total) => {
         const percentageFee = 0.029; // 2.9%
@@ -219,25 +241,27 @@ export const CartProvider = ({ children }) => {
         const processingFee = totalWithFees - total;
     
         // Round to match Square's behavior
-        return Math.round(processingFee * 100) / 100;
+        return total === 0 ? 0 : Math.round(processingFee * 100) / 100;
     };
-    
 
-    const freeShippingThreshold = () => {
-        return FREE_SHIPPING_THRESHOLD - getSubtotal()
-    }
-
+    const applyCoupon = (coupon) => {
+        setCoupon(coupon); 
+        calculateTotals();
+    };
+   
     const calculateTotals = () => {
         const subtotal = getSubtotal()
         const taxes = calculateTaxes()
         const shipping = calculateShipping()
         const handling = calculateHandling()
-        const total = subtotal + taxes + shipping + handling
+        const discount = calculateDiscount(cart, coupon)
+        const total = Math.max(0, (subtotal - discount) + taxes + shipping + handling)
         const fees = calculateFees(total)
         const charge = total + fees
-
+    
         const totals = {
             subtotal,
+            discount,
             taxes,
             shipping,
             handling,
@@ -245,23 +269,15 @@ export const CartProvider = ({ children }) => {
             fees,
             charge,
             freeShippingThreshold
-        }
+        };
 
-        setTotalOrderCosts(totals)
-
-        return totals
-    }
-
-    const calculateFreeCandles = () => {
-        const eligibleItems = cart.filter(item => item.type.includes("candle") && item.weight === "9");
-        const eligibleQuantity = eligibleItems.reduce((total, item) => total + item.quantity, 0);
-        
-        const freeCandles = Math.floor(eligibleQuantity / 3);
-        const candlesNeededForNext = 3 - (eligibleQuantity % 3); // How many more 9oz candles are needed
+        // console.log("Totals", totals)
     
-        return { freeCandles, candlesNeededForNext };
+        setTotalOrderCosts(totals);
+    
+        return totals;
     };
-    
+   
 
     return (
         <CartContext.Provider value={{ 
@@ -271,7 +287,8 @@ export const CartProvider = ({ children }) => {
             removeFromCart, 
             updateQuantity, 
             getTotalItems, 
-            getSubtotal, 
+            getSubtotal,
+            calculateSubTotal,
             getTotalQuantityById,
             toggleCart, 
             isCartVisible,
@@ -297,7 +314,10 @@ export const CartProvider = ({ children }) => {
             setShippingInformation,
 
             calculateFreeCandles,
-            freeShippingThreshold
+            freeShippingThreshold,
+
+            coupon,
+            applyCoupon,
             
         }}>
             {children}

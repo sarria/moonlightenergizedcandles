@@ -9,7 +9,7 @@ const CustomCandleForm = ({ id, candleNum, customizationData, onCustomizationCha
     // const { cart, addToCart } = useCart();
     const [wordError, setWordError] = useState('');
 
-    console.log("customizationData", customizationData)
+    // console.log("customizationData", customizationData)
 
     const handleWordChange = (e) => {
         const value = e.target.value;

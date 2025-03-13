@@ -9,8 +9,8 @@ import Summary from './Summary'
 
 const Checkout = () => {
     const { 
-        cart, setCart, verifyProducts, customizations, getTotalItems, getSubtotal, calculateTotals, totalOrderCosts, setTotalOrderCosts, setCustomizations,
-        shippingInformation, setShippingInformation, calculateFreeCandles
+        cart, setCart, verifyProducts, customizations, getTotalItems, calculateSubTotal, calculateTotals, totalOrderCosts, setTotalOrderCosts, setCustomizations,
+        shippingInformation, setShippingInformation, calculateFreeCandles, coupon
     } = useCart();
 
     const router = useRouter();
@@ -23,6 +23,7 @@ const Checkout = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [paymentInstance, setPaymentInstance] = useState(null);
     const totalItems = getTotalItems();
+    const subTotal = calculateSubTotal()
     
     useEffect(() => {
         async function initializePayment() {
@@ -36,7 +37,7 @@ const Checkout = () => {
             }
     
             if (window.Square) {
-                console.log("✅ Square SDK exists on Checkout");
+                // console.log("✅ Square SDK exists on Checkout");
             } else {
                 console.error("❌ Square SDK failed to load after retries.");
                 return;
@@ -51,7 +52,7 @@ const Checkout = () => {
     
                 const cardContainer = document.getElementById("card-container");
                 if (cardContainer?.children.length > 0) {
-                    cardContainer.innerHTML = "";
+                    cardContainer.innerHTML = ""; // Clean Up
                 }
     
                 const card = await payments.card();
@@ -93,16 +94,16 @@ const Checkout = () => {
     
         try {
             const order = await createOrder();
-            console.log("order ::", order);
+            // console.log("order ::", order);
     
             if (order?.order?.id) {
-                console.log("==> order id: ", order.order.id);
+                // console.log("==> order id: ", order.order.id);
                 const payment = await createPayment({ orderId: order.order.id });
-                console.log("payment ::", payment);
+                // console.log("payment ::", payment);
     
                 if (payment?.payment?.id) {
                     // ✅ Send Email Confirmation
-                    const { freeCandles } = calculateFreeCandles()
+                    const { freeCandles } = calculateFreeCandles(cart, coupon)
                     const data = { 
                         orderId: order.order.id,
                         paymentId: payment.payment.id,
@@ -132,7 +133,37 @@ const Checkout = () => {
             setIsSubmittingPayment(false);
         }
     };
-    
+
+    function generateRandomId(length) {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < length; i++) {
+          result += characters.charAt(Math.floor(Math.random() * characters.length));
+        }
+        return result;
+    }
+      
+    const handleSubmitFreeOrder = async () => {
+        const { freeCandles } = calculateFreeCandles(cart, coupon)
+        const data = { 
+            orderId: '',
+            paymentId: '',
+            shippingInformation, 
+            cart, 
+            totalOrderCosts, 
+            customizations,
+            freeCandles
+        }
+
+        await fetch("/api/sendReceipt", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+
+        setIsPaymentCompleted(true);
+        closeSession(); // Reset Cart & Data
+    }    
 
     const createOrder = async () => {
         if (!paymentInstance) return;
@@ -162,7 +193,7 @@ const Checkout = () => {
             const data = await response.json();
 
             if (response.ok) {
-                console.log("Payment result ::", data)
+                // console.log("Payment result ::", data)
                 return data
             } else {
                 setErrorMessage(data.error);
@@ -176,7 +207,7 @@ const Checkout = () => {
     }
 
     const createPayment = async ({orderId}) => {
-        console.log("createPayment orderId", orderId)
+        // console.log("createPayment orderId", orderId)
 
         if (!paymentInstance) return;
 
@@ -202,7 +233,7 @@ const Checkout = () => {
             const data = await response.json();
 
             if (response.ok) {
-                console.log("Payment result ::", data)
+                // console.log("Payment result ::", data)
                 return data
             } else {
                 setErrorMessage(data.error);
@@ -259,7 +290,7 @@ const Checkout = () => {
                             Subtotal ({totalItems} item{totalItems === 1 ? '' : 's'})
                         </div>
                         {totalItems > 0 && <div className={styles.money}>
-                            ${getSubtotal()}
+                           ${subTotal}
                         </div>}
                     </div>   
 
@@ -282,7 +313,7 @@ const Checkout = () => {
                     }
                 </div>
 
-                {totalItems > 0 && <div className={cx(styles.paymentScreen, {[styles.show]: showSummary}, {[styles.hide]: !showSummary})}>
+                <div className={cx(styles.paymentScreen, {[styles.show]: showSummary}, {[styles.hide]: !showSummary})}>
                     <div className={styles.orderSummary}>
                         <Summary 
                             // shippingInformation={shippingInformation} 
@@ -290,22 +321,29 @@ const Checkout = () => {
                         />
                     </div>
 
-                    <div className={styles.paymentInfo}>
-                        <h3>Payment</h3>
-                        <p>All transactions are secure and encrypted.</p>
+                    <div className={cx({[styles.hide] : subTotal === 0})}>
+                        <div className={styles.paymentInfo}>
+                            <h3>Payment</h3>
+                            <p>All transactions are secure and encrypted.</p>
 
-                        <div className={styles.payment}>
-                            <div id="card-container"></div>
-                            {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+                            <div className={styles.payment}>
+                                <div id="card-container"></div>
+                                {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+                            </div>
                         </div>
+
+                        {!isPaymentCompleted && <button className={styles.checkoutBtn} onClick={handlePayment} disabled={!shippingInformation || isSubmittingPayment}>
+                            {isSubmittingPayment ? <div className={styles.loader}></div> : "Submit Payment"}
+                        </button>}
+
+                        {isPaymentCompleted && <div className={styles.paymentCompletedLabel}>Payment completed!</div>}
                     </div>
-
-                    {!isPaymentCompleted && <button className={styles.checkoutBtn} onClick={handlePayment} disabled={!shippingInformation || isSubmittingPayment}>
-                        {isSubmittingPayment ? <div className={styles.loader}></div> : "Submit Payment"}
-                    </button>}
-
-                    {isPaymentCompleted && <div className={styles.paymentCompletedLabel}>Payment completed!</div>}
-                </div>}
+                    <div className={cx(styles.hide, {[styles.show] : subTotal === 0})}>
+                        <button className={styles.checkoutBtn} onClick={handleSubmitFreeOrder}>
+                            {isSubmittingPayment ? <div className={styles.loader}></div> : "Submit Free Order"}
+                        </button>
+                    </div>
+                </div>
                 
             </div>
         </div>

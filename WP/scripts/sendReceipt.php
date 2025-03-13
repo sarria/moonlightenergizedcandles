@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -19,8 +21,24 @@ $data = json_decode(file_get_contents("php://input"), true);
 // print_r($data);
 
 // Validate required fields
-if (!isset($data['orderId'], $data['paymentId'], $data['shippingInformation'], $data['cart'], $data['totalOrderCosts'])) {
-    echo json_encode(["error" => "Missing required fields"]);
+if (!isset($data['orderId'])) {
+    echo json_encode(["error" => "Missing orderId"]);
+    exit;
+}
+if (!isset($data['paymentId'])) {
+    echo json_encode(["error" => "Missing paymentId"]);
+    exit;
+}
+if (!isset($data['shippingInformation'])) {
+    echo json_encode(["error" => "Missing shippingInformation"]);
+    exit;
+}
+if (!isset($data['cart'])) {
+    echo json_encode(["error" => "Missing cart"]);
+    exit;
+}
+if (!isset($data['totalOrderCosts'])) {
+    echo json_encode(["error" => "Missing totalOrderCosts"]);
     exit;
 }
 
@@ -43,6 +61,8 @@ $freeShippingHtml = ($totalOrderCosts['shipping'] == 0) ? "<p>🎉 Congratulatio
 
 // Extract order totals
 $subtotal = number_format($totalOrderCosts['subtotal'], 2);
+$discount = number_format($totalOrderCosts['discount'], 2);
+$afterDiscount = number_format($totalOrderCosts['subtotal'] - $totalOrderCosts['discount'], 2);
 $taxes = number_format($totalOrderCosts['taxes'], 2);
 $shippingHandling = number_format($totalOrderCosts['shipping'] + $totalOrderCosts['handling'], 2);
 $fees = number_format($totalOrderCosts['fees'], 2);
@@ -80,6 +100,22 @@ $shippingHtml = "
     <strong>Email:</strong> {$shipping['email']}<br>
 ";
 
+$orderPaymentIdsHtml = $orderId == "" ? "" : "
+    <p>Order Id: <strong>$orderId</strong></p>
+    <p>Payment Id: <strong>$paymentId</strong></p>
+";
+
+$afterDiscountHtml = $totalOrderCosts['discount'] == 0 ? "" : "
+    <tr>
+        <td>Discount:</td>
+        <td>-\$$discount</td>
+    </tr>
+    <tr>
+        <td>Subtotal after discount:</td>
+        <td>\$$afterDiscount</td>
+    </tr>                        
+";
+
 if (!empty($shipping['joinMailingList'])) {
     $shippingHtml .= "<strong>Subscribed to Mailing List</strong><br>";
 }
@@ -114,7 +150,7 @@ try {
     $mail->isHTML(true);
     $mail->CharSet = 'UTF-8';
     $mail->Encoding = 'base64';
-    $mail->Subject = "Your Order Receipt " . $shipping['firstName'];
+    $mail->Subject = "Your Order Receipt " . $shipping['firstName']; 
 
     // Email Body with Full Order Breakdown
     $mail->Body = "
@@ -122,13 +158,13 @@ try {
         <body style='font-family: Arial, sans-serif;'>
             <h2>Thank you for your order, $name!</h2>
             <p>Your order has been confirmed.</p>
-            <p>Order Id: <strong>$orderId</strong></p>
-            <p>Payment Id: <strong>$paymentId</strong></p>
+            
+            $orderPaymentIdsHtml
 
             <h3>Order Summary</h3>
             <table border='1' cellspacing='0' cellpadding='8' style='border-collapse: collapse;'>
                 <thead>
-                    <tr style='background-color: #f8f8f8;'>
+                    <tr style='background-color:rgb(202, 202, 202);'>
                         <th>Item</th>
                         <th>Qty</th>
                         <th>Price</th>
@@ -151,6 +187,9 @@ try {
                         <td>Subtotal:</td>
                         <td>\$$subtotal</td>
                     </tr>
+
+                    $afterDiscountHtml
+
                     <tr>
                         <td>Taxes:</td>
                         <td>\$$taxes</td>
@@ -163,7 +202,7 @@ try {
                         <td>Processing Fees:</td>
                         <td>\$$fees</td>
                     </tr>
-                    <tr style='font-weight: bold; background-color: #f8f8f8;'>
+                    <tr style='font-weight: bold; background-color: rgb(202, 202, 202);'>
                         <td>Total:</td>
                         <td>\$$total</td>
                     </tr>

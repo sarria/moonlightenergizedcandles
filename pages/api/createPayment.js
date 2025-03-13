@@ -13,7 +13,7 @@ export default async function handler(req, res) {
             shippingInformation            
         } = req.body;
 
-        console.log("\nEntra createPayment\n")
+        // console.log("\nEntra createPayment\n")
 
         if (!token || !orderId || !totalOrderCosts || !shippingInformation) {
             return res.status(400).json({ error: 'Missing required data' });
@@ -25,7 +25,7 @@ export default async function handler(req, res) {
         const idempotencyKey = crypto.randomUUID();
         const squareAPI = process.env['SQUARE_API_' + ENV];
 
-        console.log("\nProcessing payment:\n", { orderId, totalOrderCosts, shippingInformation });
+        // console.log("\nProcessing payment:\n", { orderId, totalOrderCosts, shippingInformation });
 
         // ✅ Build Square API payment request body
         const requestBody = {
@@ -53,7 +53,7 @@ export default async function handler(req, res) {
             requestBody.source_id = "cnon:card-nonce-ok"
         }
 
-        console.log("\nFinal payment Request:\n", JSON.stringify(requestBody, null, 2));
+        // console.log("\nFinal payment Request:\n", JSON.stringify(requestBody, null, 2));
 
         // ✅ Submit request to Square API
         const response = await fetch(squareAPI + 'payments', {
@@ -68,7 +68,7 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
-        console.log("\nPayment Response:\n", data);
+        // console.log("\nPayment Response:\n", data);
 
         if (response.ok && !data.errors) {
             return res.status(200).json(data);
