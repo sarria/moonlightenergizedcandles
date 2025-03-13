@@ -9,8 +9,8 @@ import Summary from './Summary'
 
 const Checkout = () => {
     const { 
-        cart, setCart, verifyProducts, customizations, getTotalItems, calculateSubTotal, calculateTotals, totalOrderCosts, setTotalOrderCosts, setCustomizations,
-        shippingInformation, setShippingInformation, calculateFreeCandles, coupon
+        cart, verifyProducts, customizations, getTotalItems, calculateSubTotal, calculateTotals, totalOrderCosts,
+        shippingInformation, setShippingInformation, calculateFreeCandles, coupon, clearSession
     } = useCart();
 
     const router = useRouter();
@@ -82,10 +82,7 @@ const Checkout = () => {
     }
 
     const closeSession = () => {
-        setCart([])
-        setShippingInformation({})
-        setTotalOrderCosts({})
-        setCustomizations({})
+        clearSession()
         router.push(`/thank-you`); // ✅ Redirect to than you page
     }
 
@@ -102,8 +99,8 @@ const Checkout = () => {
                 // console.log("payment ::", payment);
     
                 if (payment?.payment?.id) {
-                    // ✅ Send Email Confirmation
                     const { freeCandles } = calculateFreeCandles(cart, coupon)
+                    
                     const data = { 
                         orderId: order.order.id,
                         paymentId: payment.payment.id,
@@ -113,12 +110,21 @@ const Checkout = () => {
                         customizations,
                         freeCandles
                     }
+
                     await fetch("/api/sendReceipt", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(data),
                     });
-    
+
+                    if (coupon?.code !== "") {
+                        await fetch("/api/updateCoupon", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ couponCode: coupon.code }),
+                        });                    
+                    }
+
                     setIsPaymentCompleted(true);
                     closeSession(); // Reset Cart & Data
                 } else {
@@ -323,7 +329,7 @@ const Checkout = () => {
 
                     <div className={cx({[styles.hide] : subTotal === 0})}>
                         <div className={styles.paymentInfo}>
-                            <h3>Payment</h3>
+                            <h3 className={styles.center}>Payment</h3>
                             <p>All transactions are secure and encrypted.</p>
 
                             <div className={styles.payment}>
@@ -332,9 +338,11 @@ const Checkout = () => {
                             </div>
                         </div>
 
-                        {!isPaymentCompleted && <button className={styles.checkoutBtn} onClick={handlePayment} disabled={!shippingInformation || isSubmittingPayment}>
-                            {isSubmittingPayment ? <div className={styles.loader}></div> : "Submit Payment"}
-                        </button>}
+                        {!isPaymentCompleted && <div className={styles.center}>
+                            <button className={styles.checkoutBtn} onClick={handlePayment} disabled={!shippingInformation || isSubmittingPayment}>
+                                {isSubmittingPayment ? <div className={styles.loader}></div> : "Submit Payment"}
+                            </button>
+                        </div>}
 
                         {isPaymentCompleted && <div className={styles.paymentCompletedLabel}>Payment completed!</div>}
                     </div>

@@ -277,6 +277,14 @@ export const CartProvider = ({ children }) => {
     
         return totals;
     };
+
+    const clearSession = () => {
+        setCart([])
+        setShippingInformation({})
+        setTotalOrderCosts({})
+        setCustomizations({})
+        setCoupon(null)        
+    }
    
 
     return (
@@ -318,6 +326,8 @@ export const CartProvider = ({ children }) => {
 
             coupon,
             applyCoupon,
+
+            clearSession
             
         }}>
             {children}

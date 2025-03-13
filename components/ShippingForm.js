@@ -192,7 +192,7 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
                 </div>
               </div>
               <div className={cx(styles.field, styles.button)}>
-                <button className={styles.applyCouponBtn} onClick={handleCheckCoupon} >
+                <button className={styles.applyCouponBtn} onClick={handleCheckCoupon} disabled={isApplyingCoupon} >
                     {isApplyingCoupon ? <div className={styles.loader}></div> : "Apply Coupon"}
                 </button>
               </div>

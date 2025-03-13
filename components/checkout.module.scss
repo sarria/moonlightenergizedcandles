@@ -85,15 +85,6 @@
 			}
 		}
 		
-		.hide {
-			display: none;
-		}
-
-		.show {
-			display: flex;
-		}
-
-
 		.errorMessage {
 			color: red;
 			font-weight: bold;
@@ -136,6 +127,18 @@
 		@keyframes spin {
 			0% { transform: rotate(0deg); }
 			100% { transform: rotate(360deg); }
+		}
+
+		.center {
+			text-align: center;
+		}
+
+		.hide {
+			display: none;
+		}
+
+		.show {
+			display: flex;
 		}
 
 		

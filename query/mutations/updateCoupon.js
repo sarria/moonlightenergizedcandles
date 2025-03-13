@@ -1,7 +1,16 @@
-mutation {
-    useCoupon(input: {code: "GetMyCandle"}) {
-      success
-      message
-      remainingQuantity
-    }
+export default function couponsQuery(couponCode) {
+  const Query = `
+    mutation {
+      useCoupon(input: {code: "${couponCode}"}) {
+        success
+        message
+        remainingQuantity
+      }
+    }    
+  `.replace(/\s\s+/g, ' ');
+
+  // console.log('couponsQuery', Query)
+
+  return Query;    
 }
+
