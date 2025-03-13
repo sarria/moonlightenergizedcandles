@@ -320,7 +320,7 @@ add_action('graphql_register_types', function() {
 
             return [
                 'success' => true,
-                'message' => 'Coupon applied successfully',
+                'message' => 'Coupon updated successfully',
                 'remainingQuantity' => max(0, $coupon->quantity - 1)
             ];
         }

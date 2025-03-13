@@ -25,7 +25,7 @@ export default async function handler(req, res) {
 
         const result = await response.json();
 
-        console.log("updateCoupon.js", result);
+        // console.log("updateCoupon.js", result);
 
         if (!result || result.errors) {
             return res.status(500).json({ error: result.errors || "Failed to update coupon" });

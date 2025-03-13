@@ -273,7 +273,7 @@ const Checkout = () => {
                 }),
             });
             
-            console.log("updateCoupon", updateCoupon)
+            // console.log("updateCoupon", updateCoupon)
         }
 
         clearSession()
