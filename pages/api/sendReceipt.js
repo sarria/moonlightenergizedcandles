@@ -18,7 +18,8 @@ export default async function handler(req, res) {
             cart,
             totalOrderCosts,
             customizations,
-            freeCandles
+            freeCandles,
+            env: process.env.ENV,
         };
 
         // console.log("sendReceipt", orderData)

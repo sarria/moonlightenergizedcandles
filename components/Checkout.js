@@ -112,16 +112,8 @@ const Checkout = () => {
                         body: JSON.stringify(data),
                     });
 
-                    if (coupon?.code !== "") {
-                        await fetch("/api/updateCoupon", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({ couponCode: coupon.code }),
-                        });                    
-                    }
-
                     setIsPaymentCompleted(true);
-                    closeSession(); // Reset Cart & Data
+                    await closeSession(); // Reset Cart & Data
                 } else {
                     setErrorMessage("Payment could not be made.");    
                 }
@@ -154,7 +146,7 @@ const Checkout = () => {
         });
 
         setIsPaymentCompleted(true);
-        closeSession(); // Reset Cart & Data
+        await closeSession(); // Reset Cart & Data
     }    
 
     const createOrder = async () => {
@@ -269,7 +261,19 @@ const Checkout = () => {
         return isValid
     }
 
-    const closeSession = () => {
+    const closeSession = async () => {
+        console.log("coupon", coupon)
+
+        if (coupon?.code !== "") {
+            const updateCoupon = await fetch("/api/updateCoupon", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ couponCode: coupon.code }),
+            });
+            
+            console.log("updateCoupon", updateCoupon)
+        }
+
         clearSession()
         router.push(`/thank-you`);
     }    

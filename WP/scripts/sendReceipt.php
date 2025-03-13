@@ -42,6 +42,8 @@ if (!isset($data['totalOrderCosts'])) {
     exit;
 }
 
+$env = $data['env'];
+
 // // Extract order details
 $shipping = $data['shippingInformation'];
 $cart = $data['cart'];
@@ -141,10 +143,14 @@ try {
     // Email Headers
     $mail->setFrom('sales@moonlightenergizedcandles.com', 'Moonlight Energized Candles');
     $mail->addAddress($email, $displayName);
-    $mail->addReplyTo('sales@moonlightenergizedcandles.com', 'Support Team');
+    $mail->addReplyTo('moonlight.energized.candles@gmail.com', 'Support Team');
 
     // Add BCC for internal tracking
-    $mail->addBCC('sales@moonlightenergizedcandles.com', 'Sales Team');
+    $mail->addBCC('jaunsarria@gmail.com', 'Juan Sarria');    
+    if ($env == "production") {
+        $mail->addBCC('sales@moonlightenergizedcandles.com', 'Sales Team');        
+        $mail->addBCC('moonlight.energized.candles@gmail.com', 'Moonlight Energized Candles');
+    }
 
     // Subject & Body
     $mail->isHTML(true);

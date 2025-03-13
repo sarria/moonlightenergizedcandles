@@ -9,7 +9,7 @@ export default function couponsQuery(couponCode) {
     }    
   `.replace(/\s\s+/g, ' ');
 
-  // console.log('couponsQuery', Query)
+  console.log('couponsQuery:\n', Query)
 
   return Query;    
 }
