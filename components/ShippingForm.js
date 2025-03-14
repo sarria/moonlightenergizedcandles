@@ -201,7 +201,11 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
             {!coupon && couponError !== '' && <div className={styles.couponError}>{couponError}</div>}
           </div>
           <br></br>
-          
+
+          <div className={styles.note}>
+            Orders take 3-5 business days to process before shipping. Mailing takes about 2 days, and we’ll email you the tracking number once shipped.
+          </div>
+
           <div className={styles.label}>Shipping Address</div>
 
           <div className={styles.shippingInput}>
@@ -297,7 +301,7 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
               ))}
             </ul>
           )}
-          
+         
         </div>
       </div>
     </div>

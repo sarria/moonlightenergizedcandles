@@ -260,7 +260,8 @@ const Checkout = () => {
     const closeSession = async () => {
         // console.log("coupon", coupon)
 
-        if (coupon?.code !== "") {
+        if (coupon && coupon?.code !== "") {
+            console.log("Updating coupon quantity", coupon)
             const updateCoupon = await fetch("/api/updateCoupon", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

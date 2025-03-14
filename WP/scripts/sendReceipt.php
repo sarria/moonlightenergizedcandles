@@ -55,6 +55,7 @@ $email = $shipping['email'];
 $name = $shipping['firstName'];
 $orderId = $data['orderId'];
 $paymentId = $data['paymentId'];
+$transaction = substr($paymentId, -8);
 $orderDate = date("F j, Y, g:i a"); // Order date
 
 $freeCandles = isset($data['freeCandles']) ? (int)$data['freeCandles'] : 0;
@@ -103,8 +104,7 @@ $shippingHtml = "
 ";
 
 $orderPaymentIdsHtml = $orderId == "" ? "" : "
-    <p>Order Id: <strong>$orderId</strong></p>
-    <p>Payment Id: <strong>$paymentId</strong></p>
+    <p>Transaction Id: <strong>$transaction</strong></p>
 ";
 
 $afterDiscountHtml = $totalOrderCosts['discount'] == 0 ? "" : "
@@ -217,6 +217,8 @@ try {
 
             <h3>Shipping Details</h3>
             <p>$shippingHtml</p>
+
+            <p><strong>Orders take 3-5 business days to process before shipping. Mailing takes about 2 days, and we’ll email you the tracking number once shipped.</strong></p>
 
             <p>If you have any questions, please reply to this email.</p>
             <p>Thank you for choosing <strong>Moonlight Energized Candles</strong>!</p>
