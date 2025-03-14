@@ -55,7 +55,7 @@ $email = $shipping['email'];
 $name = $shipping['firstName'];
 $orderId = $data['orderId'];
 $paymentId = $data['paymentId'];
-$transaction = substr($paymentId, -8);
+$transaction = substr($orderId, -8);
 $orderDate = date("F j, Y, g:i a"); // Order date
 
 $freeCandles = isset($data['freeCandles']) ? (int)$data['freeCandles'] : 0;
@@ -103,8 +103,11 @@ $shippingHtml = "
     <strong>Email:</strong> {$shipping['email']}<br>
 ";
 
-$orderPaymentIdsHtml = $orderId == "" ? "" : "
-    <p>Transaction Id: <strong>$transaction</strong></p>
+// <p>Order Id: <strong>$orderId</strong></p>
+// <p>Payment Id: <strong>$paymentId</strong></p>
+
+$orderPaymentIdsHtml = $transaction == "" ? "" : "
+    <p>Transaction Id: <strong>$paymentId</strong></p>
 ";
 
 $afterDiscountHtml = $totalOrderCosts['discount'] == 0 ? "" : "
