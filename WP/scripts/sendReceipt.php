@@ -161,7 +161,7 @@ try {
     // Email Body with Full Order Breakdown
     $mail->Body = "
         <html>
-        <body style='font-family: Arial, sans-serif;'>
+        <body style='font-family: Arial, sans-serif; font-size:18px'>
             <h2>Thank you for your order, $name!</h2>
             <p>Your order has been confirmed.</p>
             
