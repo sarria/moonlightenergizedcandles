@@ -60,7 +60,7 @@ const Header = ({ seo }) => {
 			<meta name="twitter:image" content={seo.image.sourceUrl || seo.image} />
 
 			<meta name="robots" content="index, follow" />
-			<meta name="author" content={seo.title} />
+			<meta name="author" content="Moonlight Energized Candles" />
 
 			<link rel="canonical" href="https://www.moonlightenergizedcandles.com/" />
 		</Head>
