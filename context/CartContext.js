@@ -188,10 +188,12 @@ export const CartProvider = ({ children }) => {
     const calculateSubTotal = () => {
         return Math.max(0, getSubtotal() - calculateDiscount(cart, coupon))
     }
+
+    const PA_Tax = 0.06
     
     const calculateTaxes = () => {
         const state = shippingInformation?.state || ""
-        const taxRate = state === "PA" ? 0.06 : 0;
+        const taxRate = shippingInformation?.pickup ? PA_Tax : (state === "PA" ? PA_Tax : 0);
         return calculateSubTotal() * taxRate;
     };
 
@@ -221,6 +223,7 @@ export const CartProvider = ({ children }) => {
     }    
 
     const calculateShipping = () => {
+        if (shippingInformation?.pickup) return 0
         const subTotal = calculateSubTotal()
         return subTotal === 0 || subTotal > FREE_SHIPPING_THRESHOLD ? 0 : 7.49;
     }

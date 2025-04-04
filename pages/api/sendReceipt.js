@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     }
 
     try {
-        const { orderId, paymentId, shippingInformation, cart, totalOrderCosts, customizations, freeCandles } = req.body;
+        const { orderId, paymentId, shippingInformation, pickupInstructions, cart, totalOrderCosts, customizations, freeCandles } = req.body;
 
         if (!shippingInformation || !cart || cart.length === 0) {
             return res.status(400).json({ error: "Missing required data" });
@@ -19,14 +19,14 @@ export default async function handler(req, res) {
             totalOrderCosts,
             customizations,
             freeCandles,
-            env: process.env.ENV,
+            pickupInstructions,
+            env: process.env.ENV
         };
 
         // console.log("sendReceipt", orderData)
 
         // Send order data to WordPress PHP script
-        const wordpressEndpoint = "http://cms.moonlightenergizedcandles.com/scripts/sendReceipt.php";
-        // console.log("wordpressEndpoint",wordpressEndpoint)
+        const wordpressEndpoint = "http://cms.moonlightenergizedcandles.com/scripts/" + (process.env.ENV == "production" ? "sendReceipt.php": "sendReceipt_sandbox.php")
         const response = await fetch(wordpressEndpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
         if (response.ok) {
             return res.status(200).json({ message: "Email sent successfully", data });
         } else {
-            return res.status(400).json({ error: "Failed to send email: " + (response?.error), details: data });
+            return res.status(400).json({ error: "Failed to send email", response, orderData });
         }
     } catch (error) {
         console.error("Error sending email:", error);

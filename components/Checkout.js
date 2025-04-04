@@ -7,7 +7,7 @@ import { useCart } from '../context/CartContext'
 import styles from './checkout.module.scss'
 import Summary from './Summary'
 
-const Checkout = () => {
+const Checkout = ({global}) => {
     const { 
         cart, verifyProducts, customizations, getTotalItems, calculateSubTotal, calculateTotals, totalOrderCosts,
         shippingInformation, setShippingInformation, calculateFreeCandles, coupon, clearSession
@@ -24,6 +24,7 @@ const Checkout = () => {
     const [paymentInstance, setPaymentInstance] = useState(null);
     const totalItems = getTotalItems();
     const subTotal = calculateSubTotal()
+    const pickupInstructions = global.pickupInstructions.replace(/\n/g, '<br>')
     
     useEffect(() => {
         async function initializePayment() {
@@ -99,7 +100,8 @@ const Checkout = () => {
                         cart, 
                         totalOrderCosts, 
                         customizations,
-                        freeCandles
+                        freeCandles,
+                        pickupInstructions
                     }
 
                     await fetch("/api/sendReceipt", {
@@ -132,8 +134,11 @@ const Checkout = () => {
             cart, 
             totalOrderCosts, 
             customizations,
-            freeCandles
+            freeCandles,
+            pickupInstructions
         }
+
+        // console.log("handleSubmitFreeOrder", data)
 
         await fetch("/api/sendReceipt", {
             method: "POST",
@@ -252,7 +257,7 @@ const Checkout = () => {
 
     const checkRequiredFields = () => {
         if (!shippingInformation) return false;
-        const requiredFields = [...addressFields, ...contactFields]
+        const requiredFields = shippingInformation?.pickup ? [...contactFields] : [...addressFields, ...contactFields]
         const isValid = requiredFields.every(field => shippingInformation[field]?.trim());
         return isValid
     }
@@ -278,6 +283,9 @@ const Checkout = () => {
     }    
 
     const areShippingFieldsOk = checkRequiredFields() && isValidEmail(shippingInformation.email)
+    const continueToPayment = areShippingFieldsOk && !isVerifyingAddress && !fetchingSuggestions
+
+    // console.log("areShippingFieldsOk", areShippingFieldsOk, !isVerifyingAddress, !fetchingSuggestions, areShippingFieldsOk && !isVerifyingAddress && !fetchingSuggestions)
 
     return (
         <div className={styles.root}>
@@ -305,7 +313,7 @@ const Checkout = () => {
                                 checkAddressFields={checkAddressFields}
                             />
 
-                            <button className={styles.continueToPaymentBtn} onClick={handleContinueToPayment} disabled={!areShippingFieldsOk || isVerifyingAddress || fetchingSuggestions}>
+                            <button className={styles.continueToPaymentBtn} onClick={handleContinueToPayment} disabled={!continueToPayment}>
                                 {isVerifyingAddress || fetchingSuggestions ? <div className={styles.loader}></div> : "Continue"}
                             </button>
 
@@ -318,7 +326,8 @@ const Checkout = () => {
                     <div className={styles.orderSummary}>
                         <Summary 
                             // shippingInformation={shippingInformation} 
-                            handleShowSummary={handleShowSummary}                            
+                            handleShowSummary={handleShowSummary}
+                            global={global}
                         />
                     </div>
 

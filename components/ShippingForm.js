@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { useCart } from '../context/CartContext'
+import { useCart } from '../context/CartContext';
 import cx from 'classnames';
 import styles from "./shippingForm.module.scss";
 import { isValidEmail } from './utils/shared';
-import { finished } from "stream";
 
 const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddressFields }) => { 
   const { shippingInformation, setShippingInformation, applyCoupon, coupon } = useCart();
@@ -13,8 +12,8 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
   const [couponError, setCouponError] = useState('');
 
-  const isAddressSelected = false;
-  
+  let isAddressSelected = false;
+
   const handleAddressChange = (e) => {
     const value = e.target.value;
 
@@ -28,45 +27,49 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
       zipCode: ""         
     }));    
 
-    isAddressSelected = false
-    fetchPlaces(value)
+    isAddressSelected = false;
+    fetchPlaces(value);
   };
 
   const handleFieldChange = (e) => {
     const key = e.target.name;
     let value = e.target.value;
 
-    // Limit "notes" field to 500 characters
     if (key === "notes" && value.length > 500) {
-        value = value.slice(0, 500); // Trim the value if it exceeds 500 characters
+      value = value.slice(0, 500);
     }
 
     setShippingInformation((prev) => ({ 
       ...prev, 
       [key]: value
     }));
-};
+  };
 
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setShippingInformation((prev) => ({ 
+      ...prev, 
+      [name]: checked
+    }));
+  };
 
-  // Fetch Places API Autocomplete Results
   const fetchPlaces = async (inputText) => {
     if (!inputText) {
       setSuggestions([]);
       return;
     }
-  
+
     setFetchingSuggestions(true);
-  
+
     try {
       const response = await fetch("/api/google-autocomplete", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ inputText }),
       });
-  
+
       const data = await response.json();
-      // console.log("Autocomplete results:", data);
-  
+
       if (data.suggestions?.length > 0) {
         const formattedSuggestions = data.suggestions.map((s) => ({
           description: s.placePrediction.text.text,
@@ -79,15 +82,13 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
     } catch (error) {
       console.error("Error fetching places:", error);
     } finally {
-      setFetchingSuggestions(false); // ✅ Runs no matter what (success or error)
+      setFetchingSuggestions(false);
     }
   };
-  
 
-  // Handle Address Selection
   const handleSelectAddress = async (selectedAddress, placeId) => {
-    setIsVerifyingAddress(true)
-    isAddressSelected = true
+    setIsVerifyingAddress(true);
+    isAddressSelected = true;
     setShippingInformation((prev) => ({ 
       ...prev, 
       placeId,
@@ -97,14 +98,6 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
     await fetchPlaceDetails(selectedAddress, placeId);
   };
 
-  const handleCheckboxChange = (e) => {
-    setShippingInformation((prev) => ({ 
-      ...prev, 
-      joinMailingList: e.target.checked
-    }));
-  };  
-
-  // Fetch and validate address components
   const fetchPlaceDetails = async (selectedAddress, placeId) => {
     try {
       const response = await fetch("/api/google-place-details", {
@@ -128,49 +121,45 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
         setShippingInformation((prev) => ({ 
           ...prev, 
           ...addressParts
-        }));        
-
+        }));
       }
-      setIsVerifyingAddress(false)
+      setIsVerifyingAddress(false);
     } catch (error) {
       console.error("Error fetching place details:", error);
-      setIsVerifyingAddress(false)
+      setIsVerifyingAddress(false);
     }
   };
 
   const missingField = (field) => {
     if (!shippingInformation) return false;
-    return typeof shippingInformation[field] === "string" && !shippingInformation[field]?.trim()
-  }
+    return typeof shippingInformation[field] === "string" && !shippingInformation[field]?.trim();
+  };
 
   const handleCheckCoupon = async () => {
     setIsApplyingCoupon(true);
-    applyCoupon(null)
-    setCouponError('')
+    applyCoupon(null);
+    setCouponError('');
 
     try {
-        const response = await fetch("/api/validateCoupon", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ couponCode }),
-        });
+      const response = await fetch("/api/validateCoupon", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ couponCode }),
+      });
 
-        const data = await response.json();        
-        // console.log("coupon data", data?.data?.data?.coupons); 
+      const data = await response.json();
+      const coupon = data?.data?.data?.coupons;
 
-        const coupon = data?.data?.data?.coupons
-
-        if (response.ok && coupon?.length) {
-            applyCoupon(coupon[0]); // Apply coupon with type
-        } else {
-            // Invalid or expired coupon
-            applyCoupon(null)
-            setCouponError('Invalid or expired coupon.')
-        }
+      if (response.ok && coupon?.length) {
+        applyCoupon(coupon[0]);
+      } else {
+        applyCoupon(null);
+        setCouponError('Invalid or expired coupon.');
+      }
     } catch (error) {
-        console.error("Error validating coupon:", error);
+      console.error("Error validating coupon:", error);
     } finally {
-        setIsApplyingCoupon(false);
+      setIsApplyingCoupon(false);
     }
   };
 
@@ -184,52 +173,64 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
               <div className={cx(styles.field, {[styles.missingField]: missingField('firstName')})}>
                 <div className={styles.input}>
                   <input 
-                      type="text" 
-                      placeholder="Enter coupon code" 
-                      value={couponCode} 
-                      onChange={(e) => setCouponCode(e.target.value)} 
+                    type="text" 
+                    placeholder="Enter coupon code" 
+                    value={couponCode} 
+                    onChange={(e) => setCouponCode(e.target.value)} 
                   />
                 </div>
               </div>
               <div className={cx(styles.field, styles.button)}>
                 <button className={styles.applyCouponBtn} onClick={handleCheckCoupon} disabled={isApplyingCoupon} >
-                    {isApplyingCoupon ? <div className={styles.loader}></div> : "Apply Coupon"}
+                  {isApplyingCoupon ? <div className={styles.loader}></div> : "Apply Coupon"}
                 </button>
               </div>
             </div>
             {coupon && <div className={styles.couponApplied}>{coupon.message}</div>}
             {!coupon && couponError !== '' && <div className={styles.couponError}>{couponError}</div>}
           </div>
-          <br></br>
+
+          <br />
 
           <div className={styles.note}>
             Orders take 3-5 business days to process before shipping. Mailing takes about 2 days, and we’ll email you the tracking number once shipped.
           </div>
 
-          <div className={styles.label}>Shipping Address</div>
+          <div className={styles.checkboxField}>
+            <input 
+              type="checkbox" 
+              id="pickup" 
+              name="pickup"
+              checked={shippingInformation?.pickup || false}
+              onChange={handleCheckboxChange}
+            />
+            <label htmlFor="pickup"><strong>I'll pick up my order locally</strong></label>
+          </div><br/>
+
+          <div className={styles.label}>Your information</div>
 
           <div className={styles.shippingInput}>
             <div className={styles.inputs}>
               <div className={cx(styles.field, {[styles.missingField]: missingField('firstName')})}>
                 <div className={styles.input}>
-                    <input 
-                      type="text" 
-                      name="firstName" 
-                      value={shippingInformation?.firstName || ''}
-                      placeholder="First name"
-                      onChange={handleFieldChange}
-                    />
+                  <input 
+                    type="text" 
+                    name="firstName" 
+                    value={shippingInformation?.firstName || ''}
+                    placeholder="First name"
+                    onChange={handleFieldChange}
+                  />
                 </div>
               </div>
               <div className={cx(styles.field, {[styles.missingField]: missingField('lastName')})}>
                 <div className={styles.input}>
-                    <input 
-                        type="text" 
-                        name="lastName" 
-                        value={shippingInformation?.lastName || ''}
-                        placeholder="Last name"
-                        onChange={handleFieldChange}
-                    />
+                  <input 
+                    type="text" 
+                    name="lastName" 
+                    value={shippingInformation?.lastName || ''}
+                    placeholder="Last name"
+                    onChange={handleFieldChange}
+                  />
                 </div>
               </div>              
             </div>
@@ -237,7 +238,7 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
 
           <div className={styles.shippingInput}>
             <div className={cx(styles.inputs, styles.column)}>
-            <div className={cx(styles.field, {[styles.missingField]: missingField('email') || !isValidEmail(shippingInformation?.email)})}>
+              <div className={cx(styles.field, {[styles.missingField]: missingField('email') || !isValidEmail(shippingInformation?.email)})}>
                 <div className={styles.input}>
                   <input
                     type="text"
@@ -257,7 +258,7 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
                   onChange={handleCheckboxChange}
                 />
                 <label htmlFor="mailingList">Join our mailing list for updates and promotions</label>
-              </div>                            
+              </div>
               <div className={styles.field}>
                 <div className={styles.input}>
                   <textarea
@@ -265,43 +266,49 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
                     name="notes"
                     value={shippingInformation?.notes || ''}
                     onChange={handleFieldChange}
-                    placeholder="Any special delivery instructions?"
+                    placeholder="Any special instructions?"
                   />
                 </div>
               </div>              
             </div>
           </div>        
 
-          <div className={styles.note}>
-            Please type your address and select one from the suggestions to validate and continue
-          </div>
+          {!shippingInformation?.pickup && (
+            <>
+              <br/>
+              <div className={styles.label}>Shipping Address</div>
 
-          <div className={styles.shippingInput}>
-            <div className={styles.inputs}>
-              <div className={cx(styles.field, {[styles.missingField]: missingField('address') || !checkAddressFields()})}>
-                <div className={styles.input}>
-                  <input
-                    type="text"
-                    name="address"
-                    value={shippingInformation?.address || ''}
-                    onChange={handleAddressChange}
-                    placeholder="Enter your shipping address here"
-                  />
+              <div className={styles.note}>
+                Please type your address and select one from the suggestions to validate and continue
+              </div>
+
+              <div className={styles.shippingInput}>
+                <div className={styles.inputs}>
+                  <div className={cx(styles.field, {[styles.missingField]: missingField('address') || !checkAddressFields()})}>
+                    <div className={styles.input}>
+                      <input
+                        type="text"
+                        name="address"
+                        value={shippingInformation?.address || ''}
+                        onChange={handleAddressChange}
+                        placeholder="Enter your shipping address here"
+                      />
+                    </div>
+                  </div>              
                 </div>
-              </div>              
-            </div>
-          </div>          
+              </div>
 
-          {!isAddressSelected && suggestions.length > 0 && (
-            <ul className={styles["autocomplete-dropdown"]}>
-              {suggestions.map((suggestion, index) => (
-                <li key={index} onClick={() => handleSelectAddress(suggestion.description, suggestion.placeId)}>
-                  {suggestion.description}
-                </li>
-              ))}
-            </ul>
+              {!isAddressSelected && suggestions.length > 0 && (
+                <ul className={styles["autocomplete-dropdown"]}>
+                  {suggestions.map((suggestion, index) => (
+                    <li key={index} onClick={() => handleSelectAddress(suggestion.description, suggestion.placeId)}>
+                      {suggestion.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
           )}
-         
         </div>
       </div>
     </div>

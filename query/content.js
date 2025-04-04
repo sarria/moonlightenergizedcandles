@@ -38,6 +38,7 @@ export default function query(slug) {
 							title
 						}
 					}
+					pickupInstructions
 					instagramFeedHeader
 					instagramFeed {
 						link

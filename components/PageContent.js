@@ -138,7 +138,7 @@ function PageContentWithCart({page, global}) {
 							}
 							{isCheckout && 
 								<>
-									<Checkout />
+									<Checkout global={global} />
 								</>
 							}
 							{isCalculator && 
