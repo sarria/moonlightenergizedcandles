@@ -194,6 +194,7 @@ export const CartProvider = ({ children }) => {
     const PA_Tax = 0.06
     
     const calculateTaxes = () => {
+        if (coupon?.kind === "fixed_1") return 0;
         const state = shippingInformation?.state || ""
         const taxRate = shippingInformation?.pickup ? PA_Tax : (state === "PA" ? PA_Tax : 0);
         return calculateSubTotal() * taxRate;
@@ -225,6 +226,7 @@ export const CartProvider = ({ children }) => {
     }    
 
     const calculateShipping = () => {
+        if (coupon?.kind === "fixed_1") return 0;
         if (shippingInformation?.pickup) return 0
         const subTotal = calculateSubTotal()
         return subTotal === 0 || subTotal > FREE_SHIPPING_THRESHOLD ? 0 : 7.49;
@@ -255,15 +257,17 @@ export const CartProvider = ({ children }) => {
     };
    
     const calculateTotals = () => {
-        const subtotal = getSubtotal()
-        const taxes = calculateTaxes()
-        const shipping = calculateShipping()
-        const handling = calculateHandling()
-        const discount = calculateDiscount(cart, coupon)
-        const total = Math.max(0, (subtotal - discount) + taxes + shipping + handling)
+        const isFixed1 = coupon?.kind === "fixed_1";
+        const itemCount = cart.reduce((t, item) => t + item.quantity, 0);
+        const subtotal = isFixed1 ? itemCount : calculateSubTotal()
+        const taxes = isFixed1 ? 0 : calculateTaxes()
+        const shipping = isFixed1 ? 0 : calculateShipping()
+        const handling = isFixed1 ? 0 : calculateHandling()
+        const discount = isFixed1 ? 0 : calculateDiscount(cart, coupon)
+        const total = Math.max(0, subtotal + taxes + shipping + handling)
         const fees = calculateFees(total)
         const charge = total + fees
-    
+
         const totals = {
             subtotal,
             discount,
@@ -273,7 +277,8 @@ export const CartProvider = ({ children }) => {
             total,
             fees,
             charge,
-            freeShippingThreshold
+            freeShippingThreshold,
+            couponKind: coupon?.kind || null
         };
 
         // console.log("Totals", totals)

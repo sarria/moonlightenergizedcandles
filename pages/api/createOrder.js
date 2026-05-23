@@ -27,12 +27,14 @@ export default async function handler(req, res) {
         // console.log("Processing order:", { cart, shippingInformation, totals, customizations });
 
         // ✅ Generate line items dynamically
+        const isFixed1 = totalOrderCosts?.couponKind === "fixed_1";
+
         const lineItems = cart.map((item, index) => {
             const baseLineItem = {
                 quantity: item.quantity.toString(),
                 name: item.title,
                 base_price_money: {
-                    amount: Math.round(item.price * 100), // Convert to cents
+                    amount: isFixed1 ? 100 : Math.round(item.price * 100), // $1 in test mode
                     currency: "USD"
                 }
             };
@@ -64,7 +66,7 @@ export default async function handler(req, res) {
               "taxes": [
                     {
                         "name": "Sales Tax",
-                        "percentage": (shippingInformation.state === "PA" ? "6.00" : "0.00"),
+                        "percentage": (isFixed1 || shippingInformation.state !== "PA") ? "0.00" : "6.00",
                         "scope": "ORDER"
                     }
                 ],

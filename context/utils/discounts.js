@@ -6,10 +6,8 @@ export const calculateDiscount = (cart, coupon) => {
         return discountedCandle ? Number(discountedCandle.price) : 0;
     }
     if (coupon?.kind === "free_shipping") {
-
     }
     if (coupon?.kind === "free_processing") {
-
     }
 
     return 0;
