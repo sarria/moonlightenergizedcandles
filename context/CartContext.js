@@ -5,7 +5,9 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState([]);
-    const [shippingInformation, setShippingInformation] = useState({});
+    const [shippingInformation, setShippingInformation] = useState({
+        firstName: "", lastName: "", email: "", phone: ""
+    });
     const [totalOrderCosts, setTotalOrderCosts] = useState({});
     const [customizations, setCustomizations] = useState({});
     const [isCartVisible, setIsCartVisible] = useState(false);
@@ -283,7 +285,7 @@ export const CartProvider = ({ children }) => {
 
     const clearSession = () => {
         setCart([])
-        setShippingInformation({})
+        setShippingInformation({ firstName: "", lastName: "", email: "", phone: "" })
         setTotalOrderCosts({})
         setCustomizations({})
         setCoupon(null)        

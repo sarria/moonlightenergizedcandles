@@ -246,7 +246,8 @@ const Checkout = ({global}) => {
     const contactFields = [
         "firstName",
         "lastName",
-        "email"
+        "email",
+        "phone"
     ]
 
     const checkAddressFields = () => {

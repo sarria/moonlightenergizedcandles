@@ -92,6 +92,10 @@
                         padding: 0;
                     }
 
+                    &.filledField {
+                        border-color: #4CAF50;
+                    }
+
                     &.missingField {
                         border-color: #a82826;
                     }

@@ -135,6 +135,8 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
     return typeof shippingInformation[field] === "string" && !shippingInformation[field]?.trim();
   };
 
+  const filledField = (field) => !!shippingInformation?.[field]?.trim();
+
   const handleCheckCoupon = async () => {
     setIsApplyingCoupon(true);
     applyCoupon(null);
@@ -170,13 +172,13 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
 
           <div className={styles.shippingInput}>
             <div className={styles.inputs}>
-              <div className={cx(styles.field, {[styles.missingField]: missingField('firstName')})}>
+              <div className={styles.field}>
                 <div className={styles.input}>
-                  <input 
-                    type="text" 
-                    placeholder="Enter coupon code" 
-                    value={couponCode} 
-                    onChange={(e) => setCouponCode(e.target.value)} 
+                  <input
+                    type="text"
+                    placeholder="Enter coupon code"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
                   />
                 </div>
               </div>
@@ -211,22 +213,22 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
 
           <div className={styles.shippingInput}>
             <div className={styles.inputs}>
-              <div className={cx(styles.field, {[styles.missingField]: missingField('firstName')})}>
+              <div className={cx(styles.field, {[styles.filledField]: filledField('firstName'), [styles.missingField]: missingField('firstName')})}>
                 <div className={styles.input}>
-                  <input 
-                    type="text" 
-                    name="firstName" 
+                  <input
+                    type="text"
+                    name="firstName"
                     value={shippingInformation?.firstName || ''}
                     placeholder="First name"
                     onChange={handleFieldChange}
                   />
                 </div>
               </div>
-              <div className={cx(styles.field, {[styles.missingField]: missingField('lastName')})}>
+              <div className={cx(styles.field, {[styles.filledField]: filledField('lastName'), [styles.missingField]: missingField('lastName')})}>
                 <div className={styles.input}>
-                  <input 
-                    type="text" 
-                    name="lastName" 
+                  <input
+                    type="text"
+                    name="lastName"
                     value={shippingInformation?.lastName || ''}
                     placeholder="Last name"
                     onChange={handleFieldChange}
@@ -238,7 +240,7 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
 
           <div className={styles.shippingInput}>
             <div className={cx(styles.inputs, styles.column)}>
-              <div className={cx(styles.field, {[styles.missingField]: missingField('email') || !isValidEmail(shippingInformation?.email)})}>
+              <div className={cx(styles.field, {[styles.filledField]: filledField('email') && isValidEmail(shippingInformation?.email), [styles.missingField]: missingField('email') || !isValidEmail(shippingInformation?.email)})}>
                 <div className={styles.input}>
                   <input
                     type="text"
@@ -249,10 +251,21 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
                   />
                 </div>
               </div>
+              <div className={cx(styles.field, {[styles.filledField]: filledField('phone'), [styles.missingField]: missingField('phone')})}>
+                <div className={styles.input}>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={shippingInformation?.phone || ''}
+                    onChange={handleFieldChange}
+                    placeholder="Phone number"
+                  />
+                </div>
+              </div>
               <div className={styles.checkboxField}>
-                <input 
-                  type="checkbox" 
-                  id="mailingList" 
+                <input
+                  type="checkbox"
+                  id="mailingList"
                   name="joinMailingList"
                   checked={shippingInformation?.joinMailingList || false}
                   onChange={handleCheckboxChange}
@@ -284,7 +297,7 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
 
               <div className={styles.shippingInput}>
                 <div className={styles.inputs}>
-                  <div className={cx(styles.field, {[styles.missingField]: missingField('address') || !checkAddressFields()})}>
+                  <div className={cx(styles.field, {[styles.filledField]: checkAddressFields(), [styles.missingField]: missingField('address') || !checkAddressFields()})}>
                     <div className={styles.input}>
                       <input
                         type="text"
@@ -294,9 +307,27 @@ const ShippingForm = ({ setIsVerifyingAddress, setFetchingSuggestions, checkAddr
                         placeholder="Enter your shipping address here"
                       />
                     </div>
-                  </div>              
+                  </div>
                 </div>
               </div>
+
+              {checkAddressFields() && (
+                <div className={styles.shippingInput}>
+                  <div className={cx(styles.inputs, styles.column)}>
+                    <div className={styles.field}>
+                      <div className={styles.input}>
+                        <input
+                          type="text"
+                          name="addressLine2"
+                          value={shippingInformation?.addressLine2 || ''}
+                          onChange={handleFieldChange}
+                          placeholder="Apt, Suite, Unit (optional)"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {!isAddressSelected && suggestions.length > 0 && (
                 <ul className={styles["autocomplete-dropdown"]}>

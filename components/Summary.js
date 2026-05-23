@@ -41,11 +41,9 @@ const Summary = ({ handleShowSummary, global }) => {
               <div className={styles.label}>
                 Order Summary ({totalItems} item{totalItems === 1 ? '' : 's'})
               </div>
-              <div className={styles.expand}>
-                <div 
-                  className={`${styles.toogleIcon} ${isSummaryOpen ? styles.rotate : ''}`} 
-                  onClick={toggleSummary}
-                >
+              <div className={styles.expand} onClick={toggleSummary}>
+                <span className={styles.toggleText}>{isSummaryOpen ? 'Hide' : 'Show'}</span>
+                <div className={`${styles.toogleIcon} ${isSummaryOpen ? styles.rotate : ''}`}>
                   <Image src={faDown} layout="fill" title="Toggle Summary" />
                 </div>
               </div>
@@ -145,13 +143,16 @@ const Summary = ({ handleShowSummary, global }) => {
 
           <p><strong>Name:</strong> <span>{shippingInformation?.firstName} {shippingInformation?.lastName}</span></p>
           <p><strong>Email:</strong> <span>{shippingInformation?.email}</span></p>
+          <p><strong>Phone:</strong> <span>{shippingInformation?.phone}</span></p>
 
           {isPickUp ? (
             <div className={styles.pickupMessage}>
                 {parse(global.pickupInstructions.replace(/\n/g, '<br>'))}
             </div>
           ) : (
-            <p><strong>Address:</strong> <span>{shippingInformation?.addressLine1}, {shippingInformation?.city}, {shippingInformation?.state} {shippingInformation?.zipCode}</span></p>
+            <>
+              <p><strong>Address:</strong> <span>{shippingInformation?.addressLine1}{shippingInformation?.addressLine2 ? `, ${shippingInformation.addressLine2}` : ''}, {shippingInformation?.city}, {shippingInformation?.state} {shippingInformation?.zipCode}</span></p>
+            </>
           )}
 
           {shippingInformation?.notes && (
