@@ -42,7 +42,7 @@ if (!isset($data['totalOrderCosts'])) {
     exit;
 }
 
-$env = $data['env'];
+$env = isset($data['env']) ? $data['env'] : "sandbox";
 
 // // Extract order details
 $shipping = $data['shippingInformation'];
@@ -56,11 +56,13 @@ $name = $shipping['firstName'];
 $orderId = $data['orderId'];
 $paymentId = $data['paymentId'];
 $transaction = substr($orderId, -8);
-$orderDate = date("F j, Y, g:i a"); // Order date
+$orderDate = date("F j, Y, g:i a");
+$isPickUp = isset($shipping['pickup']) && !empty($shipping['pickup']);
+$pickupInstructions = isset($data['pickupInstructions']) ? $data['pickupInstructions'] : "";
 
 $freeCandles = isset($data['freeCandles']) ? (int)$data['freeCandles'] : 0;
 $freeCandlesHtml = $freeCandles > 0 ? "<p>🎁 Congratulations! You've received <strong>{$freeCandles} FREE 3.5 oz Protection Candle".($freeCandles === 1 ? "" : "s")."</strong> as part of our promotion.</p>" : "";
-$freeShippingHtml = ($totalOrderCosts['shipping'] == 0) ? "<p>🎉 Congratulations! You've qualified for <strong>Free Shipping!</strong></p>" : "";
+$freeShippingHtml = ($totalOrderCosts['shipping'] == 0 && !$isPickUp) ? "<p>🎉 Congratulations! You've qualified for <strong>Free Shipping!</strong></p>" : "";
 
 // Extract order totals
 $subtotal = number_format($totalOrderCosts['subtotal'], 2);
@@ -95,19 +97,36 @@ foreach ($cart as $item) {
 }
 
 // 📦 Shipping Information
-$shippingHtml = "
-    <strong>Shipping To:</strong><br>
-    {$shipping['firstName']} {$shipping['lastName']}<br>
-    {$shipping['addressLine1']}<br>
-    {$shipping['city']}, {$shipping['state']} {$shipping['zipCode']}<br>
-    <strong>Email:</strong> {$shipping['email']}<br>
-";
+if ($isPickUp) {
+    $shippingHtml = "
+        <h3>Pickup Details</h3>
+        
+        {$shipping['firstName']} {$shipping['lastName']}<br>
+        {$shipping['email']}<br>
+
+        <p>$pickupInstructions</p>
+    ";
+} else {
+    $shippingHtml = "
+        <h3>Shipping Details</h3>
+
+        <p><strong>Orders take 3-5 business days to process before shipping. Mailing takes about 2 days, and we’ll email you the tracking number once shipped.</strong></p>
+        
+        <strong>Shipping To:</strong><br>
+        {$shipping['firstName']} {$shipping['lastName']}<br>
+        {$shipping['addressLine1']}<br>
+        {$shipping['addressLine2']}<br>
+        {$shipping['city']}, {$shipping['state']} {$shipping['zipCode']}<br>
+        <strong>Email:</strong> {$shipping['email']}<br>
+        <strong>Phone:</strong> {$shipping['phone']}<br>
+    ";
+}
 
 // <p>Order Id: <strong>$orderId</strong></p>
 // <p>Payment Id: <strong>$paymentId</strong></p>
 
 $orderPaymentIdsHtml = $transaction == "" ? "" : "
-    <p>Transaction Id: <strong>$paymentId</strong></p>
+    <p>Transaction Id: <strong>" . substr($paymentId, -4) . "</strong></p>
 ";
 
 $afterDiscountHtml = $totalOrderCosts['discount'] == 0 ? "" : "
@@ -128,7 +147,6 @@ if (!empty($shipping['joinMailingList'])) {
 if (!empty($shipping['notes'])) {
     $shippingHtml .= "<br><strong>Notes:</strong> {$shipping['notes']}<br>";
 }
-
 
 // Setup PHPMailer
 $mail = new PHPMailer(true);
@@ -159,7 +177,7 @@ try {
     $mail->isHTML(true);
     $mail->CharSet = 'UTF-8';
     $mail->Encoding = 'base64';
-    $mail->Subject = "Your Order Receipt " . $shipping['firstName']; 
+    $mail->Subject = "Your Order Receipt " . trim($shipping['firstName']) . " #" . substr($paymentId, -4);
 
     // Email Body with Full Order Breakdown
     $mail->Body = "
@@ -218,10 +236,7 @@ try {
                 </tbody>
             </table>
 
-            <h3>Shipping Details</h3>
             <p>$shippingHtml</p>
-
-            <p><strong>Orders take 3-5 business days to process before shipping. Mailing takes about 2 days, and we’ll email you the tracking number once shipped.</strong></p>
 
             <p>If you have any questions, please reply to this email.</p>
             <p>Thank you for choosing <strong>Moonlight Energized Candles</strong>!</p>

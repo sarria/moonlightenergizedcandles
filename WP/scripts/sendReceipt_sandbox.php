@@ -115,8 +115,10 @@ if ($isPickUp) {
         <strong>Shipping To:</strong><br>
         {$shipping['firstName']} {$shipping['lastName']}<br>
         {$shipping['addressLine1']}<br>
+        {$shipping['addressLine2']}<br>
         {$shipping['city']}, {$shipping['state']} {$shipping['zipCode']}<br>
         <strong>Email:</strong> {$shipping['email']}<br>
+        <strong>Phone:</strong> {$shipping['phone']}<br>
     ";
 }
 
@@ -124,7 +126,7 @@ if ($isPickUp) {
 // <p>Payment Id: <strong>$paymentId</strong></p>
 
 $orderPaymentIdsHtml = $transaction == "" ? "" : "
-    <p>Transaction Id: <strong>$paymentId</strong></p>
+    <p>Transaction Id: <strong>" . substr($paymentId, -4) . "</strong></p>
 ";
 
 $afterDiscountHtml = $totalOrderCosts['discount'] == 0 ? "" : "
@@ -175,7 +177,7 @@ try {
     $mail->isHTML(true);
     $mail->CharSet = 'UTF-8';
     $mail->Encoding = 'base64';
-    $mail->Subject = "Your Order Receipt " . $shipping['firstName']; 
+    $mail->Subject = "Your Order Receipt " . trim($shipping['firstName']) . " #" . substr($paymentId, -4);
 
     // Email Body with Full Order Breakdown
     $mail->Body = "
